@@ -2,7 +2,7 @@
 
 # alcohol-duty-performance-tests
 
-Performance test suite for the `<digital service name>`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
+Performance test suite for the `Alcoho Duty`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
 
 ## Pre-requisites
 
@@ -17,7 +17,7 @@ docker run --rm -d -p 27017:27017 --name mongo mongo:4.4
 Start `PLATFORM_EXAMPLE_UI_TESTS` services as follows:
 
 ```bash
-sm2 --start PLATFORM_EXAMPLE_UI_TESTS
+sm2 --start ALCOHOL_DUTY_ALL
 ```
 
 ### Logging
