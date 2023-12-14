@@ -30,5 +30,19 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
 
   setup("get-alcohol-by-volume-question-page", "Get alcohol by volume question page") withRequests getAlcoholbyVolumeQuestion
 
+  setup("post-alcohol-by-volume-question-page", "Post alcohol by volume question page") withRequests postAlcoholbyVolume
+
+  setup("get-draught-relief-question-page", "Get draught relief question page") withRequests getDraughtReliefQuestion
+
+  setup("post-draught-relief-question-page", "Post draught relief question page") withRequests postDraughtReliefQuestion
+
+  setup("get-small-producer-relief-question-page", "Get small producer relief question page") withRequests getSmallProducerReliefQuestion
+
+  setup("post-small-producer-relief-question-page", "Post small producer relief question page") withRequests postSmallProducerReliefQuestion
+
+  setup("get-declare-duty-suspended-deliveries-question-page", "Get declare duty suspended deliveries question page") withRequests getdeclareDutySuspendedDeliveriesQuestion
+
+  setup("post-declare-duty-suspended-deliveries-question-page", "Post declare duty suspended deliveries question page") withRequests postdeclareDutySuspendedDeliveriesQuestion
+
   runSimulation()
 }
