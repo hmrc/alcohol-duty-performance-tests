@@ -20,29 +20,19 @@ import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.example.AlcoholDutyRequests._
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
-  setup("auth-login-page", "Auth login page") withRequests getAuthLoginPage
 
-  setup("login-authloginstub-page", "Login authloginstub page") withRequests loginWithAuthLoginStub
-
-  setup("product-name-page", "Product name page") withRequests navigateToProductNamePage
-
-  setup("post-product-name", "Post product name") withRequests postProductName
-
-  setup("get-alcohol-by-volume-question-page", "Get alcohol by volume question page") withRequests getAlcoholbyVolumeQuestion
-
-  setup("post-alcohol-by-volume-question-page", "Post alcohol by volume question page") withRequests postAlcoholbyVolume
-
-  setup("get-draught-relief-question-page", "Get draught relief question page") withRequests getDraughtReliefQuestion
-
-  setup("post-draught-relief-question-page", "Post draught relief question page") withRequests postDraughtReliefQuestion
-
-  setup("get-small-producer-relief-question-page", "Get small producer relief question page") withRequests getSmallProducerReliefQuestion
-
-  setup("post-small-producer-relief-question-page", "Post small producer relief question page") withRequests postSmallProducerReliefQuestion
-
-  setup("get-declare-duty-suspended-deliveries-question-page", "Get declare duty suspended deliveries question page") withRequests getdeclareDutySuspendedDeliveriesQuestion
-
-  setup("post-declare-duty-suspended-deliveries-question-page", "Post declare duty suspended deliveries question page") withRequests postdeclareDutySuspendedDeliveriesQuestion
-
+  setup("alcoholduty-returns-journey", "alcoholduty returns journey") withRequests
+    (
+      getAuthLoginPage,
+      loginWithAuthLoginStub,
+      navigateToProductNamePage,
+      postProductName,
+      getAlcoholbyVolumeQuestion,
+      postAlcoholbyVolume,
+      getDraughtReliefQuestion,
+      postDraughtReliefQuestion,
+      getSmallProducerReliefQuestion,
+      postSmallProducerReliefQuestion,
+    )
   runSimulation()
 }
