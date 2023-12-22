@@ -16,23 +16,27 @@
 
 package uk.gov.hmrc.perftests.example
 
+import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.example.AlcoholDutyRequests._
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
-  setup("alcoholduty-returns-journey", "alcoholduty returns journey") withRequests
-    (
+  val AlcoholDutyReturnsJourney: List[ActionBuilder] =
+    List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
       navigateToProductNamePage,
       postProductName,
-      getAlcoholbyVolumeQuestion,
-      postAlcoholbyVolume,
+      getAlcoholByVolumeQuestion,
+      postAlcoholByVolume,
       getDraughtReliefQuestion,
       postDraughtReliefQuestion,
       getSmallProducerReliefQuestion,
-      postSmallProducerReliefQuestion,
+      postSmallProducerReliefQuestion
     )
+
+  setup("alcoholduty-returns-journey", "alcoholduty returns journey") withActions
+    (AlcoholDutyReturnsJourney: _*)
   runSimulation()
 }
