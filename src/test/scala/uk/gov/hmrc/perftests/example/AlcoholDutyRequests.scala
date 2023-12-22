@@ -27,17 +27,19 @@ object AlcoholDutyRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
   val route: String   = "manage-alcohol-duty"
-  val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)""""
+  val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)"""
   val authUrl: String = baseUrlFor("auth-login-stub")
+
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
+
   def getAuthLoginPage: HttpRequestBuilder =
     http("Navigate to auth login stub page")
       .get(s"$authUrl/auth-login-stub/gg-sign-in")
       .check(status.is(200))
       .check(regex("Authority Wizard").exists)
       .check(regex("CredID").exists)
-  def loginWithAuthLoginStub(): HttpRequestBuilder =
 
+  def loginWithAuthLoginStub: HttpRequestBuilder =
     http("Login with user credentials")
       .post(s"$authUrl/auth-login-stub/gg-sign-in")
       .formParam("credentialStrength", "strong")
@@ -55,13 +57,13 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"$baseUrl/$route/productName": String))
 
-  val navigateToProductNamePage: HttpRequestBuilder =
+  def navigateToProductNamePage: HttpRequestBuilder =
     http("Navigate to product Name Page")
       .get(s"$baseUrl/$route/productName")
       .check(status.is(200))
       .check(saveCsrfToken())
 
-  val postProductName: HttpRequestBuilder =
+  def postProductName: HttpRequestBuilder =
     http("Post Product Name")
       .post(s"$baseUrl/$route/productName")
       .formParam("csrfToken", "${csrfToken}")
@@ -69,13 +71,13 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"/$route/alcoholByVolumeQuestion": String))
 
-  val getAlcoholbyVolumeQuestion: HttpRequestBuilder =
+  def getAlcoholByVolumeQuestion: HttpRequestBuilder =
     http("Get Alcohol By Volume Question Page")
       .get(s"$baseUrl/$route/alcoholByVolumeQuestion": String)
       .check(status.is(200))
       .check(saveCsrfToken())
 
-  val postAlcoholbyVolume: HttpRequestBuilder =
+  def postAlcoholByVolume: HttpRequestBuilder =
     http("Post Alcohol By Volume")
       .post(s"$baseUrl/$route/alcoholByVolumeQuestion")
       .formParam("csrfToken", "${csrfToken}")
@@ -83,13 +85,13 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"/$route/draughtReliefQuestion": String))
 
-  val getDraughtReliefQuestion: HttpRequestBuilder =
+  def getDraughtReliefQuestion: HttpRequestBuilder =
     http("Get Draught Relief Question Page")
       .get(s"$baseUrl/$route/draughtReliefQuestion": String)
       .check(status.is(200))
       .check(saveCsrfToken())
 
-  val postDraughtReliefQuestion: HttpRequestBuilder =
+  def postDraughtReliefQuestion: HttpRequestBuilder =
     http("Post Draught Relief Question")
       .post(s"$baseUrl/$route/draughtReliefQuestion")
       .formParam("csrfToken", "${csrfToken}")
@@ -97,26 +99,26 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"/$route/smallProducerReliefQuestion": String))
 
-  val getSmallProducerReliefQuestion: HttpRequestBuilder =
+  def getSmallProducerReliefQuestion: HttpRequestBuilder =
     http("Get Small Producer Relief Question Page")
       .get(s"$baseUrl/$route/smallProducerReliefQuestion": String)
       .check(status.is(200))
       .check(saveCsrfToken())
 
-  val postSmallProducerReliefQuestion: HttpRequestBuilder =
+  def postSmallProducerReliefQuestion: HttpRequestBuilder =
     http("Post Draught Relief Question")
       .post(s"$baseUrl/$route/smallProducerReliefQuestion")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("small-producer-relief-input", "true")
       .check(status.is(303))
 
-  val getdeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
+  def getDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
     http("Get Declare Duty Suspended Deliveries Question Page")
       .get(s"$baseUrl/$route/declareDutySuspendedDeliveriesQuestion": String)
       .check(status.is(200))
       .check(saveCsrfToken())
 
-  val postdeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
+  def postDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
     http("Post Declare Duty Suspended Deliveries Question")
       .post(s"$baseUrl/$route/declareDutySuspendedDeliveriesQuestion")
       .formParam("csrfToken", "${csrfToken}")
