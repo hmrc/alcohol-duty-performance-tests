@@ -27,7 +27,7 @@ object AlcoholDutyRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
   val route: String   = "manage-alcohol-duty"
-  val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)"""
+  val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)""""
   val authUrl: String = baseUrlFor("auth-login-stub")
 
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
@@ -62,6 +62,7 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/productName")
       .check(status.is(200))
       .check(saveCsrfToken())
+      .check(regex("What name do you want to give this product?"))
 
   def postProductName: HttpRequestBuilder =
     http("Post Product Name")
@@ -90,6 +91,7 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/draughtReliefQuestion": String)
       .check(status.is(200))
       .check(saveCsrfToken())
+      .check(regex("Is this product eligible for Draught Relief?"))
 
   def postDraughtReliefQuestion: HttpRequestBuilder =
     http("Post Draught Relief Question")
@@ -104,24 +106,12 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/smallProducerReliefQuestion": String)
       .check(status.is(200))
       .check(saveCsrfToken())
+      .check(regex("Is this product eligible for Small Producer Relief?"))
 
   def postSmallProducerReliefQuestion: HttpRequestBuilder =
     http("Post Draught Relief Question")
       .post(s"$baseUrl/$route/smallProducerReliefQuestion")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("small-producer-relief-input", "true")
-      .check(status.is(303))
-
-  def getDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
-    http("Get Declare Duty Suspended Deliveries Question Page")
-      .get(s"$baseUrl/$route/declareDutySuspendedDeliveriesQuestion": String)
-      .check(status.is(200))
-      .check(saveCsrfToken())
-
-  def postDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
-    http("Post Declare Duty Suspended Deliveries Question")
-      .post(s"$baseUrl/$route/declareDutySuspendedDeliveriesQuestion")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("declare-duty-suspended-deliveries-input", "true")
       .check(status.is(303))
 }
