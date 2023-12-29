@@ -28,7 +28,6 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
   val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
   val route: String   = "manage-alcohol-duty"
   val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)""""
-  val authUrl: String = baseUrlFor("auth-login-stub")
 
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
 
