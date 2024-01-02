@@ -19,6 +19,7 @@ package uk.gov.hmrc.perftests.example
 import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.example.AlcoholDutyRequests._
+import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
@@ -36,7 +37,29 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postSmallProducerReliefQuestion
     )
 
-  setup("alcoholduty-returns-journey", "alcoholduty returns journey") withActions
+  setup("alcohol-duty-returns-journey", "Alcohol Duty Returns Journey") withActions
     (AlcoholDutyReturnsJourney: _*)
+
+  val DeclareDutySuspendedDeliveriesJourney: List[ActionBuilder] =
+    List[ActionBuilder](
+      getAuthLoginPage,
+      loginWithAuthLoginStub,
+      navigateToProductNamePage,
+      postProductName,
+      getDeclareDutySuspendedDeliveriesQuestion,
+      postDeclareDutySuspendedDeliveriesQuestion,
+      getDutySuspendedDeliveriesGuidance,
+      getDeclareDutySuspendedDeliveriesOutsideUk,
+      postDeclareDutySuspendedDeliveriesOutsideUk,
+      getDeclareDutySuspendedDeliveriesInsideUk,
+      postDeclareDutySuspendedDeliveriesInsideUk,
+      getDeclareDutySuspendedReceived,
+      postDeclareDutySuspendedReceived,
+      getCheckYourAnswersDutySuspendedDeliveries
+      //postCheckYourAnswersDutySuspendedDeliveries
+    )
+  setup("declare-duty-suspended-deliveries-journey", "Declare Duty Suspended Deliveries Journey") withActions
+    (DeclareDutySuspendedDeliveriesJourney: _*)
+
   runSimulation()
 }
