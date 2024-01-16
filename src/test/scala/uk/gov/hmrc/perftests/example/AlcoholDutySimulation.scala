@@ -27,6 +27,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
+      getDeclareAlcoholDutyQuestion
+        postDeclareAlcoholDutyQuiestion
+        getProductEntryGuidancePage
+        postProductEntryGuidancePage
       navigateToProductNamePage,
       postProductName,
       getAlcoholByVolumeQuestion,
@@ -35,6 +39,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDraughtReliefQuestion,
       getSmallProducerReliefQuestion,
       postSmallProducerReliefQuestion
+      getTaxTypeCode
+        postTaxTypeCode
+      getProductVolumePage
+        postProductVolumePage
     )
 
   setup("alcohol-duty-returns-journey", "Alcohol Duty Returns Journey") withActions
