@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,32 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"$baseUrl/$route/productName": String))
 
+  def getDeclareAlcoholDutyQuestion: HttpRequestBuilder  =
+    http("Navigate to declare alcohol Duty Question Page")
+      .get(s"$baseUrl/$route/declareAlcoholDutyQuestion")
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Do you need to declare duty on any alcoholic products?"))
+  def postDeclareAlcoholDutyQuestion: HttpRequestBuilder =
+    http("Post Declare Alcohol Duty Question")
+      .post(s"$baseUrl/$route/declareAlcoholDutyQuestion")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("declareAlcoholDutyQuestion-yesNoValue", "true")
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/productEntryGuidance": String))
+
+  def getProductEntryGuidancePage: HttpRequestBuilder  =
+    http("Navigate to product entry Guidance Page")
+      .get(s"$baseUrl/$route/productEntryGuidance")
+      .check(status.is(200))
+//      .check(saveCsrfToken())
+      .check(regex("Tell us about your alcohol"))
+//  def postProductEntryGuidancePage: HttpRequestBuilder =
+//    http("Post product entry Guidance")
+//      .post(s"$baseUrl/$route/productEntryGuidance")
+//      .check(status.is(303))
+//      .check(header("Location").is(s"/$route/productName": String))
+
   def navigateToProductNamePage: HttpRequestBuilder =
     http("Navigate to product Name Page")
       .get(s"$baseUrl/$route/productName")
@@ -93,11 +119,12 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Is this product eligible for Draught Relief?"))
 
-  def postDraughtReliefQuestion: HttpRequestBuilder =
+  def postDraughtReliefQuestion(trueOrFalse: Boolean): HttpRequestBuilder =
     http("Post Draught Relief Question")
       .post(s"$baseUrl/$route/draughtReliefQuestion")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("draught-relief-input", "true")
+//      .formParam("draught-relief-input", "true")
+      .formParam("draught-relief-input", trueOrFalse)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/smallProducerReliefQuestion": String))
 
@@ -108,10 +135,63 @@ object AlcoholDutyRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Is this product eligible for Small Producer Relief?"))
 
-  def postSmallProducerReliefQuestion: HttpRequestBuilder =
+  def postSmallProducerReliefQuestion(trueOrFalse: Boolean): HttpRequestBuilder =
     http("Post Draught Relief Question")
       .post(s"$baseUrl/$route/smallProducerReliefQuestion")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("small-producer-relief-input", "true")
+//      .formParam("small-producer-relief-input", "true")
+      .formParam("small-producer-relief-input", trueOrFalse)
+      .check(status.is(303))
+
+  def getTaxTypeCode: HttpRequestBuilder                         =
+    http("Get TaxType Code Page")
+      .get(s"$baseUrl/$route/taxType": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Your product’s tax type code"))
+  def postTaxTypeCode(idTaxTypeCode: String,smallProducerRelief: Boolean = true): HttpRequestBuilder = {
+    val idTaxTypeCodeID = idTaxTypeCode match {
+      case "Beer, tax type code 321"                     => "321_Beer"
+      case "Cider, tax type code 321"                    => "321_Cider"
+      case "Wine, tax type code 378"                     => "378_Wine"
+      case "Other fermented products, tax type code 321" => "321_OtherFermentedProduct"
+      case "Spirits, tax type code 321"                  => "321_Spirits"
+      case _                                             => throw new IllegalArgumentException("TaxType Code not found")
+    }
+    http("Post TaxType Code")
+      .post(s"$baseUrl/$route/taxType": String)
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("value", idTaxTypeCodeID)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/${
+        if (smallProducerRelief) "declareSmallProducerReliefDutyRate"
+        else "productVolume"
+      }": String))
+  }
+  def getDeclareSmallProducerReliefDutyRate: HttpRequestBuilder =
+    http("Get Declare Small Producer Relief DutyRate Page")
+      .get(s"$baseUrl/$route/declareSmallProducerReliefDutyRate": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+
+  def postDeclareSmallProducerReliefDutyRate: HttpRequestBuilder =
+    http("Post Declare Small Producer Relief DutyRate")
+      .post(s"$baseUrl/$route/declareSmallProducerReliefDutyRate")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("declareSmallProducerReliefDutyRate-input", 10.11)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/productVolume": String))
+
+  def getProductVolumePage: HttpRequestBuilder =
+    http("Get Product Volume Page")
+      .get(s"$baseUrl/$route/productVolume": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+
+  def postProductVolumePage: HttpRequestBuilder =
+    http("Post Product Volume")
+      .post(s"$baseUrl/$route/productVolume")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("product-volume-input", 32.87)
       .check(status.is(303))
 }

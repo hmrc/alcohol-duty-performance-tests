@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,31 +27,61 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
-      getDeclareAlcoholDutyQuestion
-        postDeclareAlcoholDutyQuiestion
-        getProductEntryGuidancePage
-        postProductEntryGuidancePage
+      getDeclareAlcoholDutyQuestion,
+      postDeclareAlcoholDutyQuestion,
+      getProductEntryGuidancePage,
+//      postProductEntryGuidancePage,
       navigateToProductNamePage,
       postProductName,
       getAlcoholByVolumeQuestion,
       postAlcoholByVolume,
       getDraughtReliefQuestion,
-      postDraughtReliefQuestion,
+      postDraughtReliefQuestion(true),
       getSmallProducerReliefQuestion,
-      postSmallProducerReliefQuestion
-      getTaxTypeCode
-        postTaxTypeCode
-      getProductVolumePage
-        postProductVolumePage
+      postSmallProducerReliefQuestion(true),
+      getTaxTypeCode,
+      postTaxTypeCode("Wine, tax type code 378"),
+      getDeclareSmallProducerReliefDutyRate,
+      postDeclareSmallProducerReliefDutyRate,
+      getProductVolumePage,
+      postProductVolumePage
     )
 
-  setup("alcohol-duty-returns-journey", "Alcohol Duty Returns Journey") withActions
+  setup("alcohol-duty-returns-journey", "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected Yes") withActions
     (AlcoholDutyReturnsJourney: _*)
+
+  val AlcoholDutyReturnsJourney2: List[ActionBuilder] =
+    List[ActionBuilder](
+      getAuthLoginPage,
+      loginWithAuthLoginStub,
+      getDeclareAlcoholDutyQuestion,
+      postDeclareAlcoholDutyQuestion,
+      getProductEntryGuidancePage,
+      //      postProductEntryGuidancePage,
+      navigateToProductNamePage,
+      postProductName,
+      getAlcoholByVolumeQuestion,
+      postAlcoholByVolume,
+      getDraughtReliefQuestion,
+      postDraughtReliefQuestion(false),
+      getSmallProducerReliefQuestion,
+      postSmallProducerReliefQuestion(false),
+      getTaxTypeCode,
+      postTaxTypeCode("Beer, tax type code 321",false),
+      getProductVolumePage,
+      postProductVolumePage
+    )
+  setup("alcohol-duty-returns-journey2", "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected No") withActions
+    (AlcoholDutyReturnsJourney2: _*)
 
   val DeclareDutySuspendedDeliveriesJourney: List[ActionBuilder] =
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
+      getDeclareAlcoholDutyQuestion,
+      postDeclareAlcoholDutyQuestion,
+      getProductEntryGuidancePage,
+//      postProductEntryGuidancePage,
       navigateToProductNamePage,
       postProductName,
       getDeclareDutySuspendedDeliveriesQuestion,
@@ -64,7 +94,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDeclareDutySuspendedReceived,
       postDeclareDutySuspendedReceived,
       getCheckYourAnswersDutySuspendedDeliveries
-      //postCheckYourAnswersDutySuspendedDeliveries
+      // postCheckYourAnswersDutySuspendedDeliveries
     )
   setup("declare-duty-suspended-deliveries-journey", "Declare Duty Suspended Deliveries Journey") withActions
     (DeclareDutySuspendedDeliveriesJourney: _*)
