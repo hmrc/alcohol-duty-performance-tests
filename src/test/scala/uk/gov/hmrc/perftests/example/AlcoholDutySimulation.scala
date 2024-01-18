@@ -18,19 +18,19 @@ package uk.gov.hmrc.perftests.example
 
 import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.AlcoholDutyRequests._
+import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
+import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests._
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
-  val AlcoholDutyReturnsJourney: List[ActionBuilder] =
+  val AlcoholDutyReturnsJourneyWithSPRYes: List[ActionBuilder] =
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
       getDeclareAlcoholDutyQuestion,
       postDeclareAlcoholDutyQuestion,
       getProductEntryGuidancePage,
-//      postProductEntryGuidancePage,
       navigateToProductNamePage,
       postProductName,
       getAlcoholByVolumeQuestion,
@@ -47,17 +47,19 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postProductVolumePage
     )
 
-  setup("alcohol-duty-returns-journey", "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected Yes") withActions
-    (AlcoholDutyReturnsJourney: _*)
+  setup(
+    "alcohol-duty-returns-with-SPR-Yes-journey",
+    "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected Yes"
+  ) withActions
+    (AlcoholDutyReturnsJourneyWithSPRYes: _*)
 
-  val AlcoholDutyReturnsJourney2: List[ActionBuilder] =
+  val AlcoholDutyReturnsJourneyWithSPRNo: List[ActionBuilder] =
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
       getDeclareAlcoholDutyQuestion,
       postDeclareAlcoholDutyQuestion,
       getProductEntryGuidancePage,
-      //      postProductEntryGuidancePage,
       navigateToProductNamePage,
       postProductName,
       getAlcoholByVolumeQuestion,
@@ -67,12 +69,15 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getSmallProducerReliefQuestion,
       postSmallProducerReliefQuestion(false),
       getTaxTypeCode,
-      postTaxTypeCode("Beer, tax type code 321",false),
+      postTaxTypeCode("Beer, tax type code 321", false),
       getProductVolumePage,
       postProductVolumePage
     )
-  setup("alcohol-duty-returns-journey2", "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected No") withActions
-    (AlcoholDutyReturnsJourney2: _*)
+  setup(
+    "alcohol-duty-returns-with-SPR-No-journey",
+    "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected No"
+  ) withActions
+    (AlcoholDutyReturnsJourneyWithSPRNo: _*)
 
   val DeclareDutySuspendedDeliveriesJourney: List[ActionBuilder] =
     List[ActionBuilder](
@@ -81,7 +86,6 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDeclareAlcoholDutyQuestion,
       postDeclareAlcoholDutyQuestion,
       getProductEntryGuidancePage,
-//      postProductEntryGuidancePage,
       navigateToProductNamePage,
       postProductName,
       getDeclareDutySuspendedDeliveriesQuestion,
@@ -98,6 +102,23 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     )
   setup("declare-duty-suspended-deliveries-journey", "Declare Duty Suspended Deliveries Journey") withActions
     (DeclareDutySuspendedDeliveriesJourney: _*)
+
+  val DeclareQuarterlySpiritsQuestionsJourney: List[ActionBuilder] =
+    List[ActionBuilder](
+      getAuthLoginPage,
+      loginWithAuthLoginStub,
+      getDeclareAlcoholDutyQuestion,
+      postDeclareAlcoholDutyQuestion,
+      getQuarterlySpiritsReturnsGuidancePage,
+      getDeclareSpiritsTotalPage,
+      postDeclareSpiritsTotal,
+      getDeclareScotchWhiskyPage,
+      postDeclareScotchWhisky,
+      getDeclareIrishWhiskeyPage,
+      postDeclareIrishWhiskey
+    )
+  setup("declare-quarterly-spirits-questions-journey", "Declare Quarterly Spirits Questions Journey") withActions
+    (DeclareQuarterlySpiritsQuestionsJourney: _*)
 
   runSimulation()
 }
