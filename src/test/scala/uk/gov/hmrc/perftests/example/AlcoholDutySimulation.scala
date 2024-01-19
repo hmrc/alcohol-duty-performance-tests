@@ -24,7 +24,7 @@ import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests._
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
-  val AlcoholDutyReturnsJourneyWithSPRYes: List[ActionBuilder] =
+  val AlcoholDutyReturnsJourneyWithSPRandDRYes: List[ActionBuilder] =
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
@@ -48,12 +48,12 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     )
 
   setup(
-    "alcohol-duty-returns-with-SPR-Yes-journey",
+    "alcohol-duty-returns-with-SPR-and-DR-Yes-journey",
     "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected Yes"
   ) withActions
-    (AlcoholDutyReturnsJourneyWithSPRYes: _*)
+    (AlcoholDutyReturnsJourneyWithSPRandDRYes: _*)
 
-  val AlcoholDutyReturnsJourneyWithSPRNo: List[ActionBuilder] =
+  val AlcoholDutyReturnsJourneyWithSPRandDRNo: List[ActionBuilder] =
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
@@ -74,10 +74,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postProductVolumePage
     )
   setup(
-    "alcohol-duty-returns-with-SPR-No-journey",
+    "alcohol-duty-returns-with-SPR-and-DR-No-journey",
     "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected No"
   ) withActions
-    (AlcoholDutyReturnsJourneyWithSPRNo: _*)
+    (AlcoholDutyReturnsJourneyWithSPRandDRNo: _*)
 
   val DeclareDutySuspendedDeliveriesJourney: List[ActionBuilder] =
     List[ActionBuilder](

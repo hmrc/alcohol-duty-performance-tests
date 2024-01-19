@@ -148,7 +148,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     val idTaxTypeCodeID = idTaxTypeCode match {
       case "Beer, tax type code 321" => "321_Beer"
       case "Wine, tax type code 378" => "378_Wine"
-      case _                         => throw new IllegalArgumentException("TaxType Code not found")
+      case _                         => throw new IllegalArgumentException("Tax Type Code not found")
     }
     http("Post TaxType Code")
       .post(s"$baseUrl/$route/taxType": String)
