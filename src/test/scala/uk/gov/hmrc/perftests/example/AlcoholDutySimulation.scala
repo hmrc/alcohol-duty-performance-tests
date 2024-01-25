@@ -20,7 +20,7 @@ import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
-import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests._
+import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{getDeclareIrishWhiskeyPage, _}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
@@ -115,7 +115,17 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDeclareScotchWhiskyPage,
       postDeclareScotchWhisky,
       getDeclareIrishWhiskeyPage,
-      postDeclareIrishWhiskey
+      postDeclareIrishWhiskey,
+      getWhichOfTheseSpiritsHaveYouMadePage,
+      postWhichOfTheseSpiritsHaveYouMade("Malt spirits"),
+      postWhichOfTheseSpiritsHaveYouMade("Neutral spirits of agricultural origin"),
+      postWhichOfTheseSpiritsHaveYouMade("Spirits produced from beer"),
+      getHowMuchUnmaltedGrainHaveYouUsedPage,
+      postHowMuchUnmaltedGrainHaveYouUsed,
+      getHowMuchMaltedBarleyHaveYouUsedPage,
+      postHowMuchMaltedBarleyHaveYouUsed,
+      getHowMuchRyeHaveYouUsedPage,
+      postHowMuchRyeHaveYouUsed
     )
   setup("declare-quarterly-spirits-questions-journey", "Declare Quarterly Spirits Questions Journey") withActions
     (DeclareQuarterlySpiritsQuestionsJourney: _*)

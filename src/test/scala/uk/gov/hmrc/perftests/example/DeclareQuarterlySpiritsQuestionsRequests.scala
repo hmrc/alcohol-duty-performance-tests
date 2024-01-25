@@ -80,4 +80,71 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-irish-whiskey-input", 13)
       .check(status.is(303))
+
+  def getWhichOfTheseSpiritsHaveYouMadePage: HttpRequestBuilder =
+    http("Get Which Of These Spirits Have You Made Page")
+      .get(s"$baseUrl/$route/which-of-these-spirits-have-you-made": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex(" Which of these spirits have you made?"))
+
+  def postWhichOfTheseSpiritsHaveYouMade(idSpiritType: String): HttpRequestBuilder = {
+    val idSpiritTypeID = idSpiritType match {
+      case "Malt spirits"                           => "value_maltSpirits"
+      case "Neutral spirits of agricultural origin" =>
+        "value_neutralAgriculturalOrigin"
+      case "Spirits produced from beer"             => "value_beer"
+      case _                                        => throw new IllegalArgumentException("Spirit Type not found")
+    }
+    http("Post Which Of These Spirits Have You Made")
+      .post(s"$baseUrl/$route/which-of-these-spirits-have-you-made")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("value", idSpiritTypeID)
+      .check(status.is(303))
+  }
+
+  def getHowMuchUnmaltedGrainHaveYouUsedPage: HttpRequestBuilder =
+    http("Get How Much Unmalted Grain Have You Used Page")
+      .get(s"$baseUrl/$route/how-much-unmalted-grain-have-you-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much unmalted grain have you used?"))
+
+  def postHowMuchUnmaltedGrainHaveYouUsed: HttpRequestBuilder =
+    http("Post How Much Unmalted Grain Have You Used")
+      .post(s"$baseUrl/$route/how-much-unmalted-grain-have-you-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("unmalted-grain-used-input", 75)
+      .check(status.is(303))
+//      .check(header("Location").is(s"/$route/declareIrishWhiskey": String))
+
+  def getHowMuchMaltedBarleyHaveYouUsedPage: HttpRequestBuilder =
+    http("Get How Much Malted Barley Have You Used Page")
+      .get(s"$baseUrl/$route/how-much-malted-barley-have-you-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much malted barley have you used?"))
+
+  def postHowMuchMaltedBarleyHaveYouUsed: HttpRequestBuilder =
+    http("Post How Much Malted Barley Have You Used Used")
+      .post(s"$baseUrl/$route/how-much-malted-barley-have-you-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("malted-barley-used-input", 75)
+      .check(status.is(303))
+//  .check (header ("Location").is (s"/$route/declareIrishWhiskey": String) )
+
+  def getHowMuchRyeHaveYouUsedPage: HttpRequestBuilder =
+    http("Get How Much Rye Have You Used Page")
+      .get(s"$baseUrl/$route/how-much-rye-have-you-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much rye have you used?"))
+
+  def postHowMuchRyeHaveYouUsed: HttpRequestBuilder =
+    http("Post How Much Rye Have You Used Used")
+      .post(s"$baseUrl/$route/how-much-rye-have-you-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("rye-used-input", 75)
+      .check(status.is(303))
+//      .check(header("Location").is(s"/$route/declareIrishWhiskey": String))
 }
