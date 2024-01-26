@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.perftests.example
 
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker
 import io.gatling.core.Predef._
 import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
@@ -88,20 +89,14 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex(" Which of these spirits have you made?"))
 
-  def postWhichOfTheseSpiritsHaveYouMade(idSpiritType: String): HttpRequestBuilder = {
-    val idSpiritTypeID = idSpiritType match {
-      case "Malt spirits"                           => "value_maltSpirits"
-      case "Neutral spirits of agricultural origin" =>
-        "value_neutralAgriculturalOrigin"
-      case "Spirits produced from beer"             => "value_beer"
-      case _                                        => throw new IllegalArgumentException("Spirit Type not found")
-    }
+  def postWhichOfTheseSpiritsHaveYouMade: HttpRequestBuilder =
     http("Post Which Of These Spirits Have You Made")
       .post(s"$baseUrl/$route/which-of-these-spirits-have-you-made")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("value", idSpiritTypeID)
+      .formParam("value[0]", "maltSpirits")
+      .formParam("value[2]", "neutralAgriculturalOrigin")
+      .formParam("value[4]", "beer")
       .check(status.is(303))
-  }
 
   def getHowMuchUnmaltedGrainHaveYouUsedPage: HttpRequestBuilder =
     http("Get How Much Unmalted Grain Have You Used Page")
