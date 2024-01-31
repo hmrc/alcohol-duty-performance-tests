@@ -18,9 +18,9 @@ package uk.gov.hmrc.perftests.example
 
 import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
+import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests.{getPureAlcoholPage, _}
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
-import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{getDeclareIrishWhiskeyPage, _}
+import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{getDeclareIrishWhiskeyPage, getHowMuchRyeHaveYouUsedPage, _}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
@@ -44,7 +44,9 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDeclareSmallProducerReliefDutyRate,
       postDeclareSmallProducerReliefDutyRate,
       getProductVolumePage,
-      postProductVolumePage
+      postProductVolumePage,
+      getPureAlcoholPage,
+      getProductDutyRatePage("£16.61")
     )
 
   setup(
@@ -71,7 +73,9 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getTaxTypeCode,
       postTaxTypeCode("Beer, tax type code 321", false),
       getProductVolumePage,
-      postProductVolumePage
+      postProductVolumePage,
+      getPureAlcoholPage,
+      getProductDutyRatePage("£34.52")
     )
   setup(
     "alcohol-duty-returns-with-SPR-and-DR-No-journey",
@@ -123,7 +127,9 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getHowMuchMaltedBarleyHaveYouUsedPage,
       postHowMuchMaltedBarleyHaveYouUsed,
       getHowMuchRyeHaveYouUsedPage,
-      postHowMuchRyeHaveYouUsed
+      postHowMuchRyeHaveYouUsed,
+      getHowMuchWheatHaveYouUsedPage,
+      postHowMuchWheatHaveYouUsed
     )
   setup("declare-quarterly-spirits-questions-journey", "Declare Quarterly Spirits Questions Journey") withActions
     (DeclareQuarterlySpiritsQuestionsJourney: _*)

@@ -81,6 +81,7 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-irish-whiskey-input", 13)
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/which-of-these-spirits-have-you-made": String))
 
   def getWhichOfTheseSpiritsHaveYouMadePage: HttpRequestBuilder =
     http("Get Which Of These Spirits Have You Made Page")
@@ -111,7 +112,6 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("unmalted-grain-used-input", 75)
       .check(status.is(303))
-//      .check(header("Location").is(s"/$route/declareIrishWhiskey": String))
 
   def getHowMuchMaltedBarleyHaveYouUsedPage: HttpRequestBuilder =
     http("Get How Much Malted Barley Have You Used Page")
@@ -126,7 +126,6 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("malted-barley-used-input", 75)
       .check(status.is(303))
-//  .check (header ("Location").is (s"/$route/declareIrishWhiskey": String) )
 
   def getHowMuchRyeHaveYouUsedPage: HttpRequestBuilder =
     http("Get How Much Rye Have You Used Page")
@@ -141,5 +140,18 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("rye-used-input", 75)
       .check(status.is(303))
-//      .check(header("Location").is(s"/$route/declareIrishWhiskey": String))
+
+  def getHowMuchWheatHaveYouUsedPage: HttpRequestBuilder =
+    http("Get How Much Wheat Have You Used Page")
+      .get(s"$baseUrl/$route/how-much-wheat-have-you-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much wheat have you used?"))
+
+  def postHowMuchWheatHaveYouUsed: HttpRequestBuilder =
+    http("Post How Much Wheat Have You Used Used")
+      .post(s"$baseUrl/$route/how-much-wheat-have-you-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("wheat-used-input", 65.45)
+      .check(status.is(303))
 }

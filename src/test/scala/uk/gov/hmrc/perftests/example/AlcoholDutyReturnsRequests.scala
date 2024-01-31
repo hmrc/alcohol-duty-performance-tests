@@ -136,6 +136,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("small-producer-relief-input", trueOrFalse)
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/taxType": String))
 
   def getTaxTypeCode: HttpRequestBuilder =
     http("Get TaxType Code Page")
@@ -187,4 +188,17 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("product-volume-input", 32.87)
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/you-have-declared-this-many-litres-of-pure-alcohol": String))
+
+  def getPureAlcoholPage: HttpRequestBuilder =
+    http("Get Pure Alcohol Page")
+      .get(s"$baseUrl/$route/you-have-declared-this-many-litres-of-pure-alcohol": String)
+      .check(status.is(200))
+      .check(regex("This product has 1.643 litres of pure alcohol"))
+
+  def getProductDutyRatePage(dutyRate: String): HttpRequestBuilder =
+    http("Get Product Duty Rate Page")
+      .get(s"$baseUrl/$route/the-duty-due-on-this-product": String)
+      .check(status.is(200))
+      .check(regex(s"""The duty due on this product is $dutyRate"""))
 }
