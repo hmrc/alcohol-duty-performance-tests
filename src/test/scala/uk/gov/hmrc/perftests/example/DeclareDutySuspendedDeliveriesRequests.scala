@@ -33,72 +33,72 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
 
   def getDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
     http("Get Declare Duty Suspended Deliveries Question Page")
-      .get(s"$baseUrl/$route/declareDutySuspendedDeliveriesQuestion": String)
+      .get(s"$baseUrl/$route/do-you-need-to-declare-delivered-received-duty-suspended": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Do you need to declare alcohol you delivered or received duty suspended?"))
 
   def postDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
     http("Post Declare Duty Suspended Deliveries Question")
-      .post(s"$baseUrl/$route/declareDutySuspendedDeliveriesQuestion")
+      .post(s"$baseUrl/$route/do-you-need-to-declare-delivered-received-duty-suspended")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-duty-suspended-deliveries-input", "true")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/dutySuspendedDeliveriesGuidance": String))
+      .check(header("Location").is(s"/$route/tell-us-about-your-duty-suspended-deliveries": String))
 
   def getDutySuspendedDeliveriesGuidance: HttpRequestBuilder =
     http("Get Duty Suspended Deliveries Guidance")
-      .get(s"$baseUrl/$route/dutySuspendedDeliveriesGuidance": String)
+      .get(s"$baseUrl/$route/tell-us-about-your-duty-suspended-deliveries": String)
       .check(status.is(200))
       .check(regex("Tell us about alcohol you delivered or received duty suspended"))
 
   def postDutySuspendedDeliveriesGuidance: HttpRequestBuilder =
     http("Test2 Post Duty Suspended Deliveries Guidance")
-      .post(s"$baseUrl/$route/dutySuspendedDeliveriesGuidance")
+      .post(s"$baseUrl/$route/tell-us-about-your-duty-suspended-deliveries")
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(200))
-      .check(header("Location").is(s"/$route/declareDutySuspendedDeliveriesOutsideUk": String))
+      .check(header("Location").is(s"/$route/how-much-have-you-delivered-duty-suspended-outside-of-the-uk": String))
 
   def getDeclareDutySuspendedDeliveriesOutsideUk: HttpRequestBuilder =
     http("Get Declare Duty Suspended Deliveries Outside UK")
-      .get(s"$baseUrl/$route/declareDutySuspendedDeliveriesOutsideUk": String)
+      .get(s"$baseUrl/$route/how-much-have-you-delivered-duty-suspended-outside-of-the-uk": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("How much have you delivered duty suspended outside of the UK?"))
 
   def postDeclareDutySuspendedDeliveriesOutsideUk: HttpRequestBuilder =
     http("Post Declare Duty Suspended Deliveries Outside UK")
-      .post(s"$baseUrl/$route/declareDutySuspendedDeliveriesOutsideUk")
+      .post(s"$baseUrl/$route/how-much-have-you-delivered-duty-suspended-outside-of-the-uk")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-duty-suspended-deliveries-outside-uk-input", 77)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/dutySuspendedDeliveries": String))
+      .check(header("Location").is(s"/$route/how-much-have-you-delivered-duty-suspended-within-the-uk": String))
 
   def getDeclareDutySuspendedDeliveriesInsideUk: HttpRequestBuilder =
     http("Get Declare Duty Suspended Deliveries Inside UK")
-      .get(s"$baseUrl/$route/dutySuspendedDeliveries": String)
+      .get(s"$baseUrl/$route/how-much-have-you-delivered-duty-suspended-within-the-uk": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("How much have you delivered duty suspended within the UK?"))
 
   def postDeclareDutySuspendedDeliveriesInsideUk: HttpRequestBuilder =
     http("Post Declare Duty Suspended Deliveries Inside UK")
-      .post(s"$baseUrl/$route/dutySuspendedDeliveries")
+      .post(s"$baseUrl/$route/how-much-have-you-delivered-duty-suspended-within-the-uk")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("duty-suspended-deliveries-input", 88)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/declareDutySuspendedReceived": String))
+      .check(header("Location").is(s"/$route/how-much-have-you-received-suspended": String))
 
   def getDeclareDutySuspendedReceived: HttpRequestBuilder =
     http("Get Declare Duty Suspended Received")
-      .get(s"$baseUrl/$route/declareDutySuspendedReceived": String)
+      .get(s"$baseUrl/$route/how-much-have-you-received-suspended": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("How much have you received duty suspended?"))
 
   def postDeclareDutySuspendedReceived: HttpRequestBuilder =
     http("Post Declare Duty Suspended Received")
-      .post(s"$baseUrl/$route/declareDutySuspendedReceived")
+      .post(s"$baseUrl/$route/how-much-have-you-received-suspended")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-duty-suspended-received-input", 99)
       .check(status.is(303))

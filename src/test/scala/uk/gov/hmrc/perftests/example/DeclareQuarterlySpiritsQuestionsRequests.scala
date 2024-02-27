@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.perftests.example
 
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker
 import io.gatling.core.Predef._
 import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
@@ -34,50 +33,50 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
 
   def getQuarterlySpiritsReturnsGuidancePage: HttpRequestBuilder =
     http("Get Quarterly Spirits Returns Guidance Page")
-      .get(s"$baseUrl/$route/quarterlySpiritsReturnGuidance": String)
+      .get(s"$baseUrl/$route/tell-us-about-the-spirits-and-ingredients-you-have-used": String)
       .check(status.is(200))
       .check(regex("Tell us about your ingredients and spirits"))
 
   def getDeclareSpiritsTotalPage: HttpRequestBuilder =
     http("Get Declare Spirits Total Page")
-      .get(s"$baseUrl/$route/declareSpiritsTotal": String)
+      .get(s"$baseUrl/$route/what-is-the-total-volume-of-spirits-you-made-this-quarter": String)
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(200))
       .check(regex("What is the total volume of spirits you made this quarter?"))
 
   def postDeclareSpiritsTotal: HttpRequestBuilder =
     http("Post Declare Spirits Total")
-      .post(s"$baseUrl/$route/declareSpiritsTotal")
+      .post(s"$baseUrl/$route/what-is-the-total-volume-of-spirits-you-made-this-quarter")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-spirits-total-input", 35)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/declareScotchWhisky": String))
+      .check(header("Location").is(s"/$route/how-much-scotch-whisky-have-you-made": String))
 
   def getDeclareScotchWhiskyPage: HttpRequestBuilder =
     http("Get Declare Scotch Whisky Page")
-      .get(s"$baseUrl/$route/declareScotchWhisky": String)
+      .get(s"$baseUrl/$route/how-much-scotch-whisky-have-you-made": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("How much Scotch Whisky have you made?"))
 
   def postDeclareScotchWhisky: HttpRequestBuilder =
     http("Post Declare Scotch Whisky")
-      .post(s"$baseUrl/$route/declareScotchWhisky")
+      .post(s"$baseUrl/$route/how-much-scotch-whisky-have-you-made")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-scotch-whisky-input", 11)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/declareIrishWhiskey": String))
+      .check(header("Location").is(s"/$route/how-much-irish-whiskey-have-you-made": String))
 
   def getDeclareIrishWhiskeyPage: HttpRequestBuilder =
     http("Get Declare Irish Whiskey Page")
-      .get(s"$baseUrl/$route/declareIrishWhiskey": String)
+      .get(s"$baseUrl/$route/how-much-irish-whiskey-have-you-made": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("How much Irish Whiskey have you made?"))
 
   def postDeclareIrishWhiskey: HttpRequestBuilder =
     http("Post Declare Irish Whiskey")
-      .post(s"$baseUrl/$route/declareIrishWhiskey")
+      .post(s"$baseUrl/$route/how-much-irish-whiskey-have-you-made")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-irish-whiskey-input", 13)
       .check(status.is(303))
