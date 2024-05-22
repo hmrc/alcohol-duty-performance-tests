@@ -19,7 +19,7 @@ package uk.gov.hmrc.perftests.example
 import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests.{getPureAlcoholPage, _}
-import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
+import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests.{getCheckYourAnswersDutySuspendedDeliveries, _}
 import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{getDeclareIrishWhiskeyPage, getHowMuchRyeHaveYouUsedPage, _}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
@@ -87,22 +87,25 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
-      getDeclareAlcoholDutyQuestion,
-      postDeclareAlcoholDutyQuestion,
-      getProductEntryGuidancePage,
-      navigateToProductNamePage,
-      postProductName,
+      getBeforeYouStartPage,
+      getTaskListPage,
+      postTaskListPage,
       getDeclareDutySuspendedDeliveriesQuestion,
       postDeclareDutySuspendedDeliveriesQuestion,
       getDutySuspendedDeliveriesGuidance,
-      getDeclareDutySuspendedDeliveriesOutsideUk,
-      postDeclareDutySuspendedDeliveriesOutsideUk,
-      getDeclareDutySuspendedDeliveriesInsideUk,
-      postDeclareDutySuspendedDeliveriesInsideUk,
-      getDeclareDutySuspendedReceived,
-      postDeclareDutySuspendedReceived,
+      getDutySuspendedBeer,
+      postDutySuspendedBeer,
+      getDutySuspendedCider,
+      postDutySuspendedCider,
+      getDutySuspendedWine,
+      postDutySuspendedWine,
+      getDutySuspendedSpirits,
+      postDutySuspendedSpirits,
+      getDutySuspendedOtherFermentedProducts,
+      postDutySuspendedOtherFermentedProducts,
       getCheckYourAnswersDutySuspendedDeliveries
-      // postCheckYourAnswersDutySuspendedDeliveries
+        postCheckYourAnswersDutySuspendedDeliveries
+        getTaskListPage,
     )
   setup("declare-duty-suspended-deliveries-journey", "Declare Duty Suspended Deliveries Journey") withActions
     (DeclareDutySuspendedDeliveriesJourney: _*)
