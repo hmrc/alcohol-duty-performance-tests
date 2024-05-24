@@ -86,10 +86,12 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
   val DeclareDutySuspendedDeliveriesJourney: List[ActionBuilder] =
     List[ActionBuilder](
       getAuthLoginPage,
+      postClearData,
+      getAuthLoginPage,
       loginWithAuthLoginStub,
       getBeforeYouStartPage,
+      postBeforeYouStartPage,
       getTaskListPage,
-      postTaskListPage,
       getDeclareDutySuspendedDeliveriesQuestion,
       postDeclareDutySuspendedDeliveriesQuestion,
       getDutySuspendedDeliveriesGuidance,
@@ -103,9 +105,9 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDutySuspendedSpirits,
       getDutySuspendedOtherFermentedProducts,
       postDutySuspendedOtherFermentedProducts,
-      getCheckYourAnswersDutySuspendedDeliveries
-        postCheckYourAnswersDutySuspendedDeliveries
-        getTaskListPage,
+      getCheckYourAnswersDutySuspendedDeliveries,
+      postCheckYourAnswersDutySuspendedDeliveries,
+      getTaskListPage,
     )
   setup("declare-duty-suspended-deliveries-journey", "Declare Duty Suspended Deliveries Journey") withActions
     (DeclareDutySuspendedDeliveriesJourney: _*)
