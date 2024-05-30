@@ -83,17 +83,16 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
   ) withActions
     (AlcoholDutyReturnsJourneyWithSPRandDRNo: _*)
 
-  val DeclareDutySuspendedDeliveriesJourney: List[ActionBuilder] =
+  val DeclareDutySuspendedDeliveriesJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
-      getAuthLoginPage,
-      postClearData,
+      getClearData,
       getAuthLoginPage,
       loginWithAuthLoginStub,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
       getDeclareDutySuspendedDeliveriesQuestion,
-      postDeclareDutySuspendedDeliveriesQuestion,
+      postDeclareDutySuspendedDeliveriesQuestion(),
       getDutySuspendedDeliveriesGuidance,
       getDutySuspendedBeer,
       postDutySuspendedBeer,
@@ -106,11 +105,25 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDutySuspendedOtherFermentedProducts,
       postDutySuspendedOtherFermentedProducts,
       getCheckYourAnswersDutySuspendedDeliveries,
-      postCheckYourAnswersDutySuspendedDeliveries,
-      getTaskListPage,
+      getTaskListPage
     )
-  setup("declare-duty-suspended-deliveries-journey", "Declare Duty Suspended Deliveries Journey") withActions
-    (DeclareDutySuspendedDeliveriesJourney: _*)
+  setup("declare-duty-suspended-deliveries-journey-with-option-yes", "Declare Duty Suspended Deliveries Journey With Option Yes") withActions
+    (DeclareDutySuspendedDeliveriesJourneyWithOptionYes: _*)
+
+  val DeclareDutySuspendedDeliveriesJourneyWithOptionNo: List[ActionBuilder] =
+    List[ActionBuilder](
+      getClearData,
+      getAuthLoginPage,
+      loginWithAuthLoginStub,
+      getBeforeYouStartPage,
+      postBeforeYouStartPage,
+      getTaskListPage,
+      getDeclareDutySuspendedDeliveriesQuestion,
+      postDeclareDutySuspendedDeliveriesQuestion(false),
+      getTaskListPage
+    )
+  setup("declare-duty-suspended-deliveries-journey-with-option-no", "Declare Duty Suspended Deliveries Journey With Option No") withActions
+    (DeclareDutySuspendedDeliveriesJourneyWithOptionNo: _*)
 
   val DeclareQuarterlySpiritsQuestionsJourney: List[ActionBuilder] =
     List[ActionBuilder](

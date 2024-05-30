@@ -58,26 +58,23 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Do you need to declare alcohol you delivered or received duty suspended?"))
 
-  def postDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
+  def postDeclareDutySuspendedDeliveriesQuestion(declareDSDQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post Declare Duty Suspended Deliveries Question")
       .post(s"$baseUrl/$route/do-you-need-to-declare-delivered-received-duty-suspended")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("declare-duty-suspended-deliveries-input", "true")
+      .formParam("declare-duty-suspended-deliveries-input", declareDSDQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-your-duty-suspended-deliveries": String))
+      .check(header("Location").is(s"/$route/${
+          if (declareDSDQuestion) "tell-us-about-your-duty-suspended-deliveries"
+          else "task-list/your-alcohol-duty-return"
+        }": String))
+  }
 
   def getDutySuspendedDeliveriesGuidance: HttpRequestBuilder =
     http("Get Duty Suspended Deliveries Guidance")
       .get(s"$baseUrl/$route/tell-us-about-your-duty-suspended-deliveries": String)
       .check(status.is(200))
       .check(regex("Tell us about your duty suspended alcohol"))
-
-  def postDutySuspendedDeliveriesGuidance: HttpRequestBuilder =
-    http("Post Duty Suspended Deliveries Guidance")
-      .post(s"$baseUrl/$route/tell-us-about-your-duty-suspended-deliveries")
-      .formParam("csrfToken", "${csrfToken}")
-      .check(status.is(200))
-      .check(header("Location").is(s"/$route/tell-us-about-your-beer-in-duty-suspense": String))
 
   def getDutySuspendedBeer: HttpRequestBuilder =
     http("Get Duty Suspended Beer")
@@ -165,10 +162,4 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
       .check(status.is(200))
       .check(regex("Check your answers"))
 
-  def postCheckYourAnswersDutySuspendedDeliveries: HttpRequestBuilder =
-    http("Post Check Your Answers Duty Suspended Deliveries")
-      .post(s"$baseUrl/$route/check-your-duty-suspended-deliveries")
-      .formParam("csrfToken", "${csrfToken}")
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 }
