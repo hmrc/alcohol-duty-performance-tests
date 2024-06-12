@@ -23,12 +23,33 @@ import uk.gov.hmrc.performance.conf.ServicesConfiguration
 import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
 
+import java.time.LocalDate
+
 object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
   val route: String   = "manage-alcohol-duty"
   val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)""""
   val authUrl: String = baseUrlFor("auth-login-stub")
+  val Year: Int = LocalDate.now().getYear()
+  val Month: Int = LocalDate.now().getMonthValue()
+  def periodKey(): String = s"""${generateYear(Year: Int).toString.takeRight(2)}A${(generateMonth(Month: Int) + 64).toChar}"""
+  def generateYear(Year: Int): Int = {
+    if (generateMonth(Month: Int) == 12)
+      Year - 1
+    else
+      Year
+  }
+  def generateMonth(Month: Int): Int = {
+    if ((Month - 1) == 3 || (Month - 1) == 4 || (Month - 1) == 5)
+      3
+    else if ((Month - 1) == 6 || (Month - 1) == 7 || (Month - 1) == 8)
+      6
+    else if ((Month - 1) == 9 || (Month - 1) == 10 || (Month - 1) == 11)
+      9
+    else
+      12
+  }
 
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
 
@@ -48,14 +69,19 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("groupIdentifier", "")
       .formParam("email", "user@test.com")
       .formParam("credentialRole", "User")
-      .formParam("affinityGroup", "Individual")
+      .formParam("affinityGroup", "Organisation")
       .formParam("enrolment[0].state", "Activated")
-      .formParam("enrolment[0].name", "")
-      .formParam("enrolment[0].taxIdentifier[0].name", "")
-      .formParam("enrolment[0].taxIdentifier[0].value", "")
-      .formParam("redirectionUrl", s"$baseUrl/$route/what-name-do-you-want-to-give-this-product")
+      .formParam("enrolment[0].name", "HMRC-AD-ORG")
+      .formParam("enrolment[0].taxIdentifier[0].name", "APPAID")
+      .formParam("enrolment[0].taxIdentifier[0].value", "XMADP0000100208")
+      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey())
       .check(status.is(303))
-      .check(header("Location").is(s"$baseUrl/$route/what-name-do-you-want-to-give-this-product": String))
+      .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey(): String))
+
+  def getClearData: HttpRequestBuilder =
+    http("Clear Data")
+      .get(s"$baseUrl/$route/test-only/clear-all": String)
+      .check(status.is(200))
 
   def getDeclareAlcoholDutyQuestion: HttpRequestBuilder =
     http("Navigate to Declare Alcohol Duty Question Page")
