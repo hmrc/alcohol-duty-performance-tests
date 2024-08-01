@@ -134,20 +134,25 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getQuarterlySpiritsReturnsGuidancePage,
       getDeclareSpiritsTotalPage,
       postDeclareSpiritsTotal,
-      getDeclareScotchWhiskyPage,
-      postDeclareScotchWhisky,
-      getDeclareIrishWhiskeyPage,
-      postDeclareIrishWhiskey,
+      getDeclareWhiskeyPage,
+      postDeclareWhiskey,
       getWhichOfTheseSpiritsHaveYouMadePage,
       postWhichOfTheseSpiritsHaveYouMade,
+      getOtherSpiritsProducedPage,
+      postOtherSpiritsProduced,
+      getHowMuchGrainhaveYouUsedPage,
+      postHowMuchGrainhaveYouUsed,
+      getOtherMaltedGrainsPage,
+      postOtherMaltedGrains,
+      getHowMuchAlcoholHaveYouUsedPage,
+      postHowMuchAlcoholHaveYouUsed,
+      getDeclareEthyleneGasOrMolassesPage,
+      postDeclareEthyleneGasOrMolasses,
+      getDeclareOtherIngredientsPage,
+      postDeclareOtherIngredients,
+      getQuarterlySpiritsCheckYourAnswersPage
       getHowMuchUnmaltedGrainHaveYouUsedPage,
-      postHowMuchUnmaltedGrainHaveYouUsed,
-      getHowMuchMaltedBarleyHaveYouUsedPage,
-      postHowMuchMaltedBarleyHaveYouUsed,
-      getHowMuchRyeHaveYouUsedPage,
-      postHowMuchRyeHaveYouUsed,
-      getHowMuchWheatHaveYouUsedPage,
-      postHowMuchWheatHaveYouUsed
+      getTaskListPage
     )
   setup("declare-quarterly-spirits-questions-journey", "Declare Quarterly Spirits Questions Journey") withActions
     (DeclareQuarterlySpiritsQuestionsJourney: _*)
