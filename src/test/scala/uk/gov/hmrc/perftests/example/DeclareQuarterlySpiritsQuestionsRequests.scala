@@ -141,4 +141,81 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       }": String))
   }
 
+  def getOtherMaltedGrainsPage: HttpRequestBuilder =
+    http("Get Other Malted Grains Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-other-malted-grains-you-have-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Tell us about the other malted grains you have used"))
+
+  def postOtherMaltedGrains: HttpRequestBuilder =
+    http("Post Other Malted Grains")
+      .post(s"$baseUrl/$route/tell-us-about-the-other-malted-grains-you-have-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("otherMaltedGrainsTypes", "Test Grains")
+      .formParam("otherMaltedGrainsQuantity", 356.50)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/tell-us-about-the-alcohol-you-have-used": String))
+
+  def getHowMuchAlcoholHaveYouUsedPage: HttpRequestBuilder =
+    http("Get How Much Alcohol Have You Used Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-alcohol-you-have-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much alcohol have you used this quarter?"))
+
+  def postHowMuchAlcoholHaveYouUsed: HttpRequestBuilder =
+    http("Post How Much Alcohol Have You Used")
+      .post(s"$baseUrl/$route/tell-us-about-the-alcohol-you-have-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("beer", 555.55)
+      .formParam("wine", 666.66)
+      .formParam("madeWine", 777.77)
+      .formParam("ciderOrPerry", 888.88)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/tell-us-about-the-gas-or-molasses-you-have-used": String))
+
+  def getDeclareEthyleneGasOrMolassesPage: HttpRequestBuilder =
+    http("Get Declare Ethylene Gas Or Molasses Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-gas-or-molasses-you-have-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much ethylene gas or molasses have you used?"))
+
+  def postDeclareEthyleneGasOrMolasses(otherIngredientsQuestion: Boolean = true): HttpRequestBuilder = {
+    http("Post Declare Ethylene Gas Or Molasses")
+      .post(s"$baseUrl/$route/tell-us-about-the-gas-or-molasses-you-have-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("ethyleneGas", 465.55)
+      .formParam("molasses", 745.66)
+      .formParam("otherIngredients", otherIngredientsQuestion)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/${
+        if (otherIngredientsQuestion) "tell-us-about-the-other-ingredients-you-have-used"
+        else "spirits-check-your-answers"
+      }": String))
+  }
+
+  def getDeclareOtherIngredientsPage: HttpRequestBuilder =
+    http("Get Declare Other Ingredients Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-other-ingredients-you-have-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much alcohol have you used this quarter?"))
+
+  def postDeclareOtherIngredients: HttpRequestBuilder =
+    http("Post Declare Other Ingredients")
+      .post(s"$baseUrl/$route/tell-us-about-the-other-ingredients-you-have-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("otherIngredientsUsedTypes", "Test Other Ingredients")
+      .formParam("otherIngredientsUsedQuantity", 2045.55)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/spirits-check-your-answers": String))
+
+  def getQuarterlySpiritsCheckYourAnswersPage: HttpRequestBuilder =
+    http("Get Quarterly Spirits Check Your Answers Page")
+      .get(s"$baseUrl/$route/spirits-check-your-answers": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Check your answers"))
 }

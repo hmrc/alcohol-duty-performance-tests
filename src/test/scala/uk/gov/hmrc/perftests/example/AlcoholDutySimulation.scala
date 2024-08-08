@@ -150,8 +150,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDeclareEthyleneGasOrMolasses,
       getDeclareOtherIngredientsPage,
       postDeclareOtherIngredients,
-      getQuarterlySpiritsCheckYourAnswersPage
-      getHowMuchUnmaltedGrainHaveYouUsedPage,
+      getQuarterlySpiritsCheckYourAnswersPage,
       getTaskListPage
     )
   setup("declare-quarterly-spirits-questions-journey", "Declare Quarterly Spirits Questions Journey") withActions
