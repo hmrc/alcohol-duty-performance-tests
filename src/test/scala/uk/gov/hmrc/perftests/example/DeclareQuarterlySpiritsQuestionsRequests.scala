@@ -37,7 +37,7 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .check(status.is(200))
       .check(regex("Tell us about your ingredients and spirits"))
 
-  def postQuarterlySpiritsReturnsGuidancePagen(declareQSRQuestion: Boolean = true): HttpRequestBuilder = {
+  def postQuarterlySpiritsReturnsGuidancePage(declareQSRQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post Quarterly Spirits Returns Guidance")
       .post(s"$baseUrl/$route/tell-us-about-the-spirits-and-ingredients-you-have-used")
       .formParam("csrfToken", "${csrfToken}")

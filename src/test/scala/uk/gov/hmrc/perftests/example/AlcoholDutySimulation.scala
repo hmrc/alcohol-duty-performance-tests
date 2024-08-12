@@ -20,7 +20,7 @@ import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests.{getPureAlcoholPage, _}
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests.{getCheckYourAnswersDutySuspendedDeliveries, _}
-import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{getDeclareIrishWhiskeyPage, getHowMuchRyeHaveYouUsedPage, _}
+import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{postQuarterlySpiritsReturnsGuidancePage, _}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
@@ -125,13 +125,15 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
   setup("declare-duty-suspended-deliveries-journey-with-option-no", "Declare Duty Suspended Deliveries Journey With Option No") withActions
     (DeclareDutySuspendedDeliveriesJourneyWithOptionNo: _*)
 
-  val DeclareQuarterlySpiritsQuestionsJourney: List[ActionBuilder] =
+  val DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
       getAuthLoginPage,
       loginWithAuthLoginStub,
-      getDeclareAlcoholDutyQuestion,
-      postDeclareAlcoholDutyQuestion,
+      getBeforeYouStartPage,
+      postBeforeYouStartPage,
+      getTaskListPage,
       getQuarterlySpiritsReturnsGuidancePage,
+      postQuarterlySpiritsReturnsGuidancePage(),
       getDeclareSpiritsTotalPage,
       postDeclareSpiritsTotal,
       getDeclareWhiskeyPage,
@@ -141,20 +143,35 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getOtherSpiritsProducedPage,
       postOtherSpiritsProduced,
       getHowMuchGrainhaveYouUsedPage,
-      postHowMuchGrainhaveYouUsed,
+      postHowMuchGrainhaveYouUsed(),
       getOtherMaltedGrainsPage,
       postOtherMaltedGrains,
       getHowMuchAlcoholHaveYouUsedPage,
       postHowMuchAlcoholHaveYouUsed,
       getDeclareEthyleneGasOrMolassesPage,
-      postDeclareEthyleneGasOrMolasses,
+      postDeclareEthyleneGasOrMolasses(),
       getDeclareOtherIngredientsPage,
       postDeclareOtherIngredients,
       getQuarterlySpiritsCheckYourAnswersPage,
       getTaskListPage
     )
-  setup("declare-quarterly-spirits-questions-journey", "Declare Quarterly Spirits Questions Journey") withActions
-    (DeclareQuarterlySpiritsQuestionsJourney: _*)
+  setup("declare-quarterly-spirits-questions-journey-with-option-yes", "Declare Quarterly Spirits Questions Journey With Option Yes") withActions
+    (DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: _*)
+
+  val DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: List[ActionBuilder] =
+    List[ActionBuilder](
+      getClearData,
+      getAuthLoginPage,
+      loginWithAuthLoginStub,
+      getBeforeYouStartPage,
+      postBeforeYouStartPage,
+      getTaskListPage,
+      getQuarterlySpiritsReturnsGuidancePage,
+      postQuarterlySpiritsReturnsGuidancePage(false),
+      getTaskListPage
+    )
+  setup("declare-quarterly-spirits-questions-journey-with-option-no", "Declare Quarterly Spirits Questions Journey With Option No") withActions
+    (DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: _*)
 
   runSimulation()
 }
