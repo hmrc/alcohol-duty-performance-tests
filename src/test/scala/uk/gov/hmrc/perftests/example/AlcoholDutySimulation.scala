@@ -127,6 +127,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
 
   val DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
+      getClearData,
       getAuthLoginPage,
       loginWithAuthLoginStub,
       getBeforeYouStartPage,

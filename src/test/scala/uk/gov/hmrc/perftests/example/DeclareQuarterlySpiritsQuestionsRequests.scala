@@ -107,7 +107,7 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/tell-us-about-the-other-spirits-you-have-produced": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much Scotch whisky and Irish whiskey have you produced?"))
+      .check(regex("What other types of spirits have you produced this quarter?"))
 
   def postOtherSpiritsProduced: HttpRequestBuilder =
     http("Post Other Spirits Produced")
@@ -122,13 +122,13 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/tell-us-about-the-grains-you-have-used": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much Scotch whisky and Irish whiskey have you produced?"))
+      .check(regex("How much grain have you used this quarter?"))
 
   def postHowMuchGrainhaveYouUsed(usedMaltedGrainNotBarleyQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post How Much Grain have You Used Produced")
       .post(s"$baseUrl/$route/tell-us-about-the-grains-you-have-used")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("maltedBarleyQuantity", "Test Spirits")
+      .formParam("maltedBarleyQuantity", 56)
       .formParam("wheatQuantity", 34)
       .formParam("maizeQuantity", 45)
       .formParam("ryeQuantity", 50)
@@ -201,13 +201,14 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/tell-us-about-the-other-ingredients-you-have-used": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much alcohol have you used this quarter?"))
+      .check(regex("Tell us about the other ingredients you have used"))
 
   def postDeclareOtherIngredients: HttpRequestBuilder =
     http("Post Declare Other Ingredients")
       .post(s"$baseUrl/$route/tell-us-about-the-other-ingredients-you-have-used")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("otherIngredientsUsedTypes", "Test Other Ingredients")
+      .formParam("otherIngredientsUsedUnit", "Tonnes")
       .formParam("otherIngredientsUsedQuantity", 2045.55)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/spirits-check-your-answers": String))
@@ -216,6 +217,5 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
     http("Get Quarterly Spirits Check Your Answers Page")
       .get(s"$baseUrl/$route/spirits-check-your-answers": String)
       .check(status.is(200))
-      .check(saveCsrfToken())
       .check(regex("Check your answers"))
 }
