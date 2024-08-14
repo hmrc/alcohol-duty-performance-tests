@@ -37,12 +37,24 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .check(status.is(200))
       .check(regex("Tell us about your ingredients and spirits"))
 
+  def postQuarterlySpiritsReturnsGuidancePage(declareQSRQuestion: Boolean = true): HttpRequestBuilder = {
+    http("Post Quarterly Spirits Returns Guidance")
+      .post(s"$baseUrl/$route/tell-us-about-the-spirits-and-ingredients-you-have-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("declareQuarterlySpirits-yesNoValue", declareQSRQuestion)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/${
+        if (declareQSRQuestion) "what-is-the-total-volume-of-spirits-you-made-this-quarter"
+        else "task-list/your-alcohol-duty-return"
+      }": String))
+  }
+
   def getDeclareSpiritsTotalPage: HttpRequestBuilder =
     http("Get Declare Spirits Total Page")
       .get(s"$baseUrl/$route/what-is-the-total-volume-of-spirits-you-made-this-quarter": String)
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(200))
-      .check(regex("What is the total volume of spirits you made this quarter?"))
+      .check(regex("What is the total of all spirits taken this quarter?"))
 
   def postDeclareSpiritsTotal: HttpRequestBuilder =
     http("Post Declare Spirits Total")
@@ -50,35 +62,22 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-spirits-total-input", 35)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/how-much-scotch-whisky-have-you-made": String))
+      .check(header("Location").is(s"/$route/how-much-whiskey-have-you-made": String))
 
-  def getDeclareScotchWhiskyPage: HttpRequestBuilder =
-    http("Get Declare Scotch Whisky Page")
-      .get(s"$baseUrl/$route/how-much-scotch-whisky-have-you-made": String)
+
+  def getDeclareWhiskeyPage: HttpRequestBuilder =
+    http("Get Declare Whiskey Page")
+      .get(s"$baseUrl/$route/how-much-whiskey-have-you-made": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much Scotch Whisky have you made?"))
+      .check(regex("How much Scotch whisky and Irish whiskey have you produced?"))
 
-  def postDeclareScotchWhisky: HttpRequestBuilder =
-    http("Post Declare Scotch Whisky")
-      .post(s"$baseUrl/$route/how-much-scotch-whisky-have-you-made")
+  def postDeclareWhiskey: HttpRequestBuilder =
+    http("Post Declare Whiskey")
+      .post(s"$baseUrl/$route/how-much-whiskey-have-you-made")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("declare-scotch-whisky-input", 11)
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/how-much-irish-whiskey-have-you-made": String))
-
-  def getDeclareIrishWhiskeyPage: HttpRequestBuilder =
-    http("Get Declare Irish Whiskey Page")
-      .get(s"$baseUrl/$route/how-much-irish-whiskey-have-you-made": String)
-      .check(status.is(200))
-      .check(saveCsrfToken())
-      .check(regex("How much Irish Whiskey have you made?"))
-
-  def postDeclareIrishWhiskey: HttpRequestBuilder =
-    http("Post Declare Irish Whiskey")
-      .post(s"$baseUrl/$route/how-much-irish-whiskey-have-you-made")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("declare-irish-whiskey-input", 13)
+      .formParam("scotchWhisky", 11)
+      .formParam("irishWhiskey", 11)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/which-of-these-spirits-have-you-made": String))
 
@@ -94,63 +93,129 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .post(s"$baseUrl/$route/which-of-these-spirits-have-you-made")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("value[0]", "maltSpirits")
+      .formParam("value[1]", "grainSpirits")
       .formParam("value[2]", "neutralAgriculturalOrigin")
+      .formParam("value[3]", "neutralIndustrialOrigin")
       .formParam("value[4]", "beer")
+      .formParam("value[5]", "wineOrMadeWine")
+      .formParam("value[6]", "ciderOrPerry")
+      .formParam("value[7]", "other")
       .check(status.is(303))
 
-  def getHowMuchUnmaltedGrainHaveYouUsedPage: HttpRequestBuilder =
-    http("Get How Much Unmalted Grain Have You Used Page")
-      .get(s"$baseUrl/$route/how-much-unmalted-grain-have-you-used": String)
+  def getOtherSpiritsProducedPage: HttpRequestBuilder =
+    http("Get Other Spirits Produced Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-other-spirits-you-have-produced": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much unmalted grain have you used?"))
+      .check(regex("What other types of spirits have you produced this quarter?"))
 
-  def postHowMuchUnmaltedGrainHaveYouUsed: HttpRequestBuilder =
-    http("Post How Much Unmalted Grain Have You Used")
-      .post(s"$baseUrl/$route/how-much-unmalted-grain-have-you-used")
+  def postOtherSpiritsProduced: HttpRequestBuilder =
+    http("Post Other Spirits Produced")
+      .post(s"$baseUrl/$route/tell-us-about-the-other-spirits-you-have-produced")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("unmalted-grain-used-input", 75)
+      .formParam("otherSpiritsProduced", "Test Spirits")
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/tell-us-about-the-grains-you-have-used": String))
 
-  def getHowMuchMaltedBarleyHaveYouUsedPage: HttpRequestBuilder =
-    http("Get How Much Malted Barley Have You Used Page")
-      .get(s"$baseUrl/$route/how-much-malted-barley-have-you-used": String)
+  def getHowMuchGrainhaveYouUsedPage: HttpRequestBuilder =
+    http("Get How Much Grain have You Used Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-grains-you-have-used": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much malted barley have you used?"))
+      .check(regex("How much grain have you used this quarter?"))
 
-  def postHowMuchMaltedBarleyHaveYouUsed: HttpRequestBuilder =
-    http("Post How Much Malted Barley Have You Used Used")
-      .post(s"$baseUrl/$route/how-much-malted-barley-have-you-used")
+  def postHowMuchGrainhaveYouUsed(usedMaltedGrainNotBarleyQuestion: Boolean = true): HttpRequestBuilder = {
+    http("Post How Much Grain have You Used Produced")
+      .post(s"$baseUrl/$route/tell-us-about-the-grains-you-have-used")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("malted-barley-used-input", 75)
+      .formParam("maltedBarleyQuantity", 56)
+      .formParam("wheatQuantity", 34)
+      .formParam("maizeQuantity", 45)
+      .formParam("ryeQuantity", 50)
+      .formParam("unmaltedGrainQuantity", 56.78)
+      .formParam("usedMaltedGrainNotBarley", usedMaltedGrainNotBarleyQuestion)
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/${
+        if (usedMaltedGrainNotBarleyQuestion) "tell-us-about-the-other-malted-grains-you-have-used"
+        else "tell-us-about-the-alcohol-you-have-used"
+      }": String))
+  }
 
-  def getHowMuchRyeHaveYouUsedPage: HttpRequestBuilder =
-    http("Get How Much Rye Have You Used Page")
-      .get(s"$baseUrl/$route/how-much-rye-have-you-used": String)
+  def getOtherMaltedGrainsPage: HttpRequestBuilder =
+    http("Get Other Malted Grains Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-other-malted-grains-you-have-used": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much rye have you used?"))
+      .check(regex("Tell us about the other malted grains you have used"))
 
-  def postHowMuchRyeHaveYouUsed: HttpRequestBuilder =
-    http("Post How Much Rye Have You Used Used")
-      .post(s"$baseUrl/$route/how-much-rye-have-you-used")
+  def postOtherMaltedGrains: HttpRequestBuilder =
+    http("Post Other Malted Grains")
+      .post(s"$baseUrl/$route/tell-us-about-the-other-malted-grains-you-have-used")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("rye-used-input", 75)
+      .formParam("otherMaltedGrainsTypes", "Test Grains")
+      .formParam("otherMaltedGrainsQuantity", 356.50)
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/tell-us-about-the-alcohol-you-have-used": String))
 
-  def getHowMuchWheatHaveYouUsedPage: HttpRequestBuilder =
-    http("Get How Much Wheat Have You Used Page")
-      .get(s"$baseUrl/$route/how-much-wheat-have-you-used": String)
+  def getHowMuchAlcoholHaveYouUsedPage: HttpRequestBuilder =
+    http("Get How Much Alcohol Have You Used Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-alcohol-you-have-used": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much wheat have you used?"))
+      .check(regex("How much alcohol have you used this quarter?"))
 
-  def postHowMuchWheatHaveYouUsed: HttpRequestBuilder =
-    http("Post How Much Wheat Have You Used Used")
-      .post(s"$baseUrl/$route/how-much-wheat-have-you-used")
+  def postHowMuchAlcoholHaveYouUsed: HttpRequestBuilder =
+    http("Post How Much Alcohol Have You Used")
+      .post(s"$baseUrl/$route/tell-us-about-the-alcohol-you-have-used")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("wheat-used-input", 65.45)
+      .formParam("beer", 555.55)
+      .formParam("wine", 666.66)
+      .formParam("madeWine", 777.77)
+      .formParam("ciderOrPerry", 888.88)
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/tell-us-about-the-gas-or-molasses-you-have-used": String))
+
+  def getDeclareEthyleneGasOrMolassesPage: HttpRequestBuilder =
+    http("Get Declare Ethylene Gas Or Molasses Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-gas-or-molasses-you-have-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much ethylene gas or molasses have you used?"))
+
+  def postDeclareEthyleneGasOrMolasses(otherIngredientsQuestion: Boolean = true): HttpRequestBuilder = {
+    http("Post Declare Ethylene Gas Or Molasses")
+      .post(s"$baseUrl/$route/tell-us-about-the-gas-or-molasses-you-have-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("ethyleneGas", 465.55)
+      .formParam("molasses", 745.66)
+      .formParam("otherIngredients", otherIngredientsQuestion)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/${
+        if (otherIngredientsQuestion) "tell-us-about-the-other-ingredients-you-have-used"
+        else "spirits-check-your-answers"
+      }": String))
+  }
+
+  def getDeclareOtherIngredientsPage: HttpRequestBuilder =
+    http("Get Declare Other Ingredients Page")
+      .get(s"$baseUrl/$route/tell-us-about-the-other-ingredients-you-have-used": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Tell us about the other ingredients you have used"))
+
+  def postDeclareOtherIngredients: HttpRequestBuilder =
+    http("Post Declare Other Ingredients")
+      .post(s"$baseUrl/$route/tell-us-about-the-other-ingredients-you-have-used")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("otherIngredientsUsedTypes", "Test Other Ingredients")
+      .formParam("otherIngredientsUsedUnit", "Tonnes")
+      .formParam("otherIngredientsUsedQuantity", 2045.55)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/spirits-check-your-answers": String))
+
+  def getQuarterlySpiritsCheckYourAnswersPage: HttpRequestBuilder =
+    http("Get Quarterly Spirits Check Your Answers Page")
+      .get(s"$baseUrl/$route/spirits-check-your-answers": String)
+      .check(status.is(200))
+      .check(regex("Check your answers"))
 }
