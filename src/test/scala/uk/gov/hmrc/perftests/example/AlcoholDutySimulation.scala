@@ -18,76 +18,48 @@ package uk.gov.hmrc.perftests.example
 
 import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests.{getPureAlcoholPage, _}
+import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests.{getCheckYourAnswersDutySuspendedDeliveries, _}
 import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{postQuarterlySpiritsReturnsGuidancePage, _}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
-  val AlcoholDutyReturnsJourneyWithSPRandDRYes: List[ActionBuilder] =
+  val AlcoholDutyReturnsJourneyWithMultipleSPRisSetToNo: List[ActionBuilder] =
     List[ActionBuilder](
+      getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
+      getBeforeYouStartPage,
+      postBeforeYouStartPage,
+      getTaskListPage,
       getDeclareAlcoholDutyQuestion,
       postDeclareAlcoholDutyQuestion,
-      getProductEntryGuidancePage,
-      navigateToProductNamePage,
-      postProductName,
-      getAlcoholByVolumeQuestion,
-      postAlcoholByVolume,
-      getDraughtReliefQuestion,
-      postDraughtReliefQuestion(true),
-      getSmallProducerReliefQuestion,
-      postSmallProducerReliefQuestion(true),
-      getTaxTypeCode,
-      postTaxTypeCode("Wine, tax type code 378"),
-      getDeclareSmallProducerReliefDutyRate,
-      postDeclareSmallProducerReliefDutyRate,
-      getProductVolumePage,
-      postProductVolumePage,
-      getPureAlcoholPage,
-      getProductDutyRatePage("£16.61")
-    )
-
-  setup(
-    "alcohol-duty-returns-with-SPR-and-DR-Yes-journey",
-    "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected Yes"
-  ) withActions
-    (AlcoholDutyReturnsJourneyWithSPRandDRYes: _*)
-
-  val AlcoholDutyReturnsJourneyWithSPRandDRNo: List[ActionBuilder] =
-    List[ActionBuilder](
-      getAuthLoginPage,
-      loginWithAuthLoginStub,
-      getDeclareAlcoholDutyQuestion,
-      postDeclareAlcoholDutyQuestion,
-      getProductEntryGuidancePage,
-      navigateToProductNamePage,
-      postProductName,
-      getAlcoholByVolumeQuestion,
-      postAlcoholByVolume,
-      getDraughtReliefQuestion,
-      postDraughtReliefQuestion(false),
-      getSmallProducerReliefQuestion,
-      postSmallProducerReliefQuestion(false),
-      getTaxTypeCode,
-      postTaxTypeCode("Beer, tax type code 321", false),
-      getProductVolumePage,
-      postProductVolumePage,
-      getPureAlcoholPage,
-      getProductDutyRatePage("£34.52")
+      getAlcoholTypesToDeclare,
+      postAlcoholTypesToDeclare,
+      getWhatDoYouNeedToDeclareBeerPage,
+      postWhatDoYouNeedToDeclareBeerPage,
+      getHowMuchYouNeedToDeclareBeerPage,
+      postHowMuchYouNeedToDeclareBeerPage,
+      getDoYouHaveMultipleSprDutyRateBeerPage,
+      postDoYouHaveMultipleSprDutyRateBeerPage,
+      getSingleSprRateBeerPage,
+      postSingleSprRateBeerPage,
+      getCheckYourAnswersReturnsBeerPage,
+      getDutyDueBeerPage,
+      postDutyDueBeerPage,
+      getTaskListPage
     )
   setup(
-    "alcohol-duty-returns-with-SPR-and-DR-No-journey",
-    "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected No"
+    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
+    "Alcohol Duty Returns Journey When Multiple SPR is set to No"
   ) withActions
-    (AlcoholDutyReturnsJourneyWithSPRandDRNo: _*)
+    (AlcoholDutyReturnsJourneyWithMultipleSPRisSetToNo: _*)
 
   val DeclareDutySuspendedDeliveriesJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
@@ -114,7 +86,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
@@ -129,7 +101,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
@@ -163,7 +135,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,

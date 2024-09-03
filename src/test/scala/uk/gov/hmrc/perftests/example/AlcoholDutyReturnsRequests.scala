@@ -27,20 +27,20 @@ import java.time.LocalDate
 
 object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
-  val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
-  val route: String   = "manage-alcohol-duty"
-  val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)""""
-  val authUrl: String = baseUrlFor("auth-login-stub")
-  val Year: Int = LocalDate.now().getYear()
-  val Month: Int = LocalDate.now().getMonthValue()
-  def periodKey(): String = s"""${generateYear(Year: Int).toString.takeRight(2)}A${(generateMonth(Month: Int) + 64).toChar}"""
-  def generateYear(Year: Int): Int = {
+  val baseUrl: String                = baseUrlFor("alcohol-duty-returns-frontend")
+  val route: String                  = "manage-alcohol-duty"
+  val CsrfPattern                    = """<input type="hidden" name="csrfToken" value="([^"]+)""""
+  val authUrl: String                = baseUrlFor("auth-login-stub")
+  val Year: Int                      = LocalDate.now().getYear
+  val Month: Int                     = LocalDate.now().getMonthValue
+  def periodKey(): String            =
+    s"""${generateYear(Year: Int).toString.takeRight(2)}A${(generateMonth(Month: Int) + 64).toChar}"""
+  def generateYear(Year: Int): Int   =
     if (generateMonth(Month: Int) == 12)
       Year - 1
     else
       Year
-  }
-  def generateMonth(Month: Int): Int = {
+  def generateMonth(Month: Int): Int =
     if ((Month - 1) == 3 || (Month - 1) == 4 || (Month - 1) == 5)
       3
     else if ((Month - 1) == 6 || (Month - 1) == 7 || (Month - 1) == 8)
@@ -49,9 +49,13 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       9
     else
       12
-  }
 
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
+
+  def getClearData: HttpRequestBuilder =
+    http("Clear Data")
+      .get(s"$baseUrl/$route/test-only/clear-all": String)
+      .check(status.is(200))
 
   def getAuthLoginPage: HttpRequestBuilder =
     http("Navigate to auth login stub page")
@@ -60,7 +64,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(regex("Authority Wizard").exists)
       .check(regex("CredID").exists)
 
-  def loginWithAuthLoginStub: HttpRequestBuilder =
+  def postAuthLoginPage: HttpRequestBuilder =
     http("Login with user credentials")
       .post(s"$authUrl/auth-login-stub/gg-sign-in")
       .formParam("credentialStrength", "strong")
@@ -78,153 +82,145 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey(): String))
 
-  def getClearData: HttpRequestBuilder =
-    http("Clear Data")
-      .get(s"$baseUrl/$route/test-only/clear-all": String)
-      .check(status.is(200))
-
   def getDeclareAlcoholDutyQuestion: HttpRequestBuilder =
-    http("Navigate to Declare Alcohol Duty Question Page")
+    http("Navigate to Declaring Your Alcohol Duty Page")
       .get(s"$baseUrl/$route/do-you-need-to-declare-duty": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Do you need to declare duty on any alcoholic products?"))
+      .check(regex("Declaring your alcohol duty"))
 
   def postDeclareAlcoholDutyQuestion: HttpRequestBuilder =
-    http("Post Declare Alcohol Duty Question")
+    http("Post Declaring Your Alcohol Duty Page")
       .post(s"$baseUrl/$route/do-you-need-to-declare-duty")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declareAlcoholDutyQuestion-yesNoValue", "true")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-your-alcohol": String))
+      .check(header("Location").is(s"/$route/which-types-do-you-need-to-declare": String))
 
-  def getProductEntryGuidancePage: HttpRequestBuilder =
-    http("Navigate to Product Entry Guidance Page")
-      .get(s"$baseUrl/$route/tell-us-about-your-alcohol": String)
-      .check(status.is(200))
-      .check(regex("Tell us about your alcohol"))
-
-  def navigateToProductNamePage: HttpRequestBuilder =
-    http("Navigate to Product Name Page")
-      .get(s"$baseUrl/$route/what-name-do-you-want-to-give-this-product": String)
+  def getAlcoholTypesToDeclare: HttpRequestBuilder =
+    http("Navigate to Alcohol Type to Declare Page")
+      .get(s"$baseUrl/$route/which-types-do-you-need-to-declare": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("What name do you want to give this product?"))
+      .check(regex("What alcohol do you need to declare on this return?"))
 
-  def postProductName: HttpRequestBuilder =
-    http("Post Product Name")
-      .post(s"$baseUrl/$route/what-name-do-you-want-to-give-this-product")
+  def postAlcoholTypesToDeclare: HttpRequestBuilder =
+    http("Post Alcohol Type to Declare Page")
+      .post(s"$baseUrl/$route/which-types-do-you-need-to-declare")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("product-name-input", "test")
+      .formParam("value[0]", "Beer")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/what-is-this-products-alcohol-by-volume-strength": String))
+      .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 
-  def getAlcoholByVolumeQuestion: HttpRequestBuilder =
-    http("Get Alcohol By Volume Question Page")
-      .get(s"$baseUrl/$route/what-is-this-products-alcohol-by-volume-strength": String)
+  def getWhatDoYouNeedToDeclareBeerPage: HttpRequestBuilder =
+    http("Navigate to What Do You Need To Declare Beer Page")
+      .get(s"$baseUrl/$route/what-do-you-need-to-declare/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-//      .check(regex("What is this product’s Alcohol by Volume (ABV) strength?"))
+      .check(regex("What do you need to declare?"))
 
-  def postAlcoholByVolume: HttpRequestBuilder =
-    http("Post Alcohol By Volume")
-      .post(s"$baseUrl/$route/what-is-this-products-alcohol-by-volume-strength")
+  def postWhatDoYouNeedToDeclareBeerPage: HttpRequestBuilder =
+    http("Post What Do You Need To Declare Beer Page")
+      .post(s"$baseUrl/$route/what-do-you-need-to-declare/Beer")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("alcohol-by-volume-input", 5)
+      .formParam("rateBand[311]", "311")
+      .formParam("rateBand[321]", "321")
+      .formParam("rateBand[331]", "331")
+      .formParam("rateBand[341]", "341")
+      .formParam("rateBand[351]", "351")
+      .formParam("rateBand[356]", "356")
+      .formParam("rateBand[361]", "361")
+      .formParam("rateBand[366]", "366")
+      .formParam("rateBand[371]", "371")
+      .formParam("rateBand[376]", "376")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/is-this-product-eligible-for-draught-relief": String))
+      .check(header("Location").is(s"/$route/how-much-do-you-need-to-declare/Beer": String))
 
-  def getDraughtReliefQuestion: HttpRequestBuilder =
-    http("Get Draught Relief Question Page")
-      .get(s"$baseUrl/$route/is-this-product-eligible-for-draught-relief": String)
+  def getHowMuchYouNeedToDeclareBeerPage: HttpRequestBuilder =
+    http("Navigate to How Much You Need To Declare Beer Page")
+      .get(s"$baseUrl/$route/how-much-do-you-need-to-declare/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Is this product eligible for Draught Relief?"))
+      .check(regex("Tell us about the beer you need to declare"))
 
-  def postDraughtReliefQuestion(trueOrFalse: Boolean): HttpRequestBuilder =
-    http("Post Draught Relief Question")
-      .post(s"$baseUrl/$route/is-this-product-eligible-for-draught-relief")
+  def postHowMuchYouNeedToDeclareBeerPage: HttpRequestBuilder =
+    http("Post How Much You Need To Declare Beer Page")
+      .post(s"$baseUrl/$route/how-much-do-you-need-to-declare/Beer")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("draught-relief-input", trueOrFalse)
+      .formParam("volumes[0].totalLitres", 945.55)
+      .formParam("volumes[0].pureAlcohol", 55.5555)
+      .formParam("volumes[1].totalLitres", 898.34)
+      .formParam("volumes[1].pureAlcohol", 77.55)
+      .formParam("volumes[2].totalLitres", 667.32)
+      .formParam("volumes[2].pureAlcohol", 66.34)
+      .formParam("volumes[3].totalLitres", 999.19)
+      .formParam("volumes[3].pureAlcohol", 99.13)
+      .formParam("volumes[4].totalLitres", 887.54)
+      .formParam("volumes[4].pureAlcohol", 66.44)
+      .formParam("volumes[5].totalLitres", 699.45)
+      .formParam("volumes[5].pureAlcohol", 66.89)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/is-this-product-eligible-for-small-producer-relief": String))
+      .check(header("Location").is(s"/$route/do-you-have-multiple-small-producer-relief-duty-rates/Beer": String))
 
-  def getSmallProducerReliefQuestion: HttpRequestBuilder =
-    http("Get Small Producer Relief Question Page")
-      .get(s"$baseUrl/$route/is-this-product-eligible-for-small-producer-relief": String)
+  def getDoYouHaveMultipleSprDutyRateBeerPage: HttpRequestBuilder =
+    http("Navigate to Do You Have Multiple Small Producer Relief Duty Rate Beer Page")
+      .get(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Is this product eligible for Small Producer Relief?"))
+      .check(regex("If you have more than one Small Producer Relief duty rate"))
 
-  def postSmallProducerReliefQuestion(trueOrFalse: Boolean): HttpRequestBuilder =
-    http("Post Draught Relief Question")
-      .post(s"$baseUrl/$route/is-this-product-eligible-for-small-producer-relief")
+  def postDoYouHaveMultipleSprDutyRateBeerPage: HttpRequestBuilder =
+    http("Post Do You Have Multiple Small Producer Relief Duty Rate Beer Page")
+      .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Beer")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("small-producer-relief-input", trueOrFalse)
+      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue-no", "true")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/what-is-this-products-tax-type": String))
+      .check(header("Location").is(s"/$route/tell-us-about-single-spr-rate/Beer": String))
 
-  def getTaxTypeCode: HttpRequestBuilder =
-    http("Get TaxType Code Page")
-      .get(s"$baseUrl/$route/what-is-this-products-tax-type": String)
+  def getSingleSprRateBeerPage: HttpRequestBuilder =
+    http("Navigate to Single Small Producer Relief Rate Beer Page")
+      .get(s"$baseUrl/$route/tell-us-about-single-spr-rate/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Your product’s tax type code"))
+      .check(regex("Tell us about the beer that is eligible for Small Producer Relief"))
 
-  def postTaxTypeCode(idTaxTypeCode: String, smallProducerRelief: Boolean = true): HttpRequestBuilder = {
-    val idTaxTypeCodeID = idTaxTypeCode match {
-      case "Beer, tax type code 321" => "321_Beer"
-      case "Wine, tax type code 378" => "378_Wine"
-      case _                         => throw new IllegalArgumentException("Tax Type Code not found")
-    }
-    http("Post TaxType Code")
-      .post(s"$baseUrl/$route/what-is-this-products-tax-type": String)
+  def postSingleSprRateBeerPage: HttpRequestBuilder =
+    http("Post How Much You Need To Declare Beer Page")
+      .post(s"$baseUrl/$route/tell-us-about-single-spr-rate/Beer")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("value", idTaxTypeCodeID)
+      .formParam("volumesWithRate_0_totalLitres", "888.88")
+      .formParam("volumesWithRate_0_pureAlcohol", "99.45")
+      .formParam("volumesWithRate_0_dutyRate", "15")
+      .formParam("volumesWithRate_1_totalLitres", "776.45")
+      .formParam("volumesWithRate_1_pureAlcohol", "78.9")
+      .formParam("volumesWithRate_1_dutyRate", "18")
+      .formParam("volumesWithRate_2_totalLitres", "776.89")
+      .formParam("volumesWithRate_2_pureAlcohol", "99.99")
+      .formParam("volumesWithRate_2_dutyRate", "15")
+      .formParam("volumesWithRate_3_totalLitres", "889.65")
+      .formParam("volumesWithRate_3_pureAlcohol", "66.54")
+      .formParam("volumesWithRate_3_dutyRate", "20")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/${if (smallProducerRelief) "what-is-your-small-producer-duty-rate"
-        else "how-much-of-this-product-do-you-need-to-declare"}": String))
-  }
+      .check(header("Location").is(s"/$route/return-check-your-answers/Beer": String))
 
-  def getDeclareSmallProducerReliefDutyRate: HttpRequestBuilder =
-    http("Get Declare Small Producer Relief DutyRate Page")
-      .get(s"$baseUrl/$route/what-is-your-small-producer-duty-rate": String)
+  def getCheckYourAnswersReturnsBeerPage: HttpRequestBuilder =
+    http("Navigate to Check Your Answers Returns Beer Page")
+      .get(s"$baseUrl/$route/return-check-your-answers/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("What is your Small Producer Relief duty rate?"))
+      .check(regex("Check your answers"))
 
-  def postDeclareSmallProducerReliefDutyRate: HttpRequestBuilder =
-    http("Post Declare Small Producer Relief DutyRate")
-      .post(s"$baseUrl/$route/what-is-your-small-producer-duty-rate")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("declareSmallProducerReliefDutyRate-input", 10.11)
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/how-much-of-this-product-do-you-need-to-declare": String))
-
-  def getProductVolumePage: HttpRequestBuilder =
-    http("Get Product Volume Page")
-      .get(s"$baseUrl/$route/how-much-of-this-product-do-you-need-to-declare": String)
+  def getDutyDueBeerPage: HttpRequestBuilder =
+    http("Navigate to Duty Due Page")
+      .get(s"$baseUrl/$route/duty-due/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("How much of this product do you need to declare?"))
+      .check(regex("You will owe £14,749.75"))
 
-  def postProductVolumePage: HttpRequestBuilder =
-    http("Post Product Volume")
-      .post(s"$baseUrl/$route/how-much-of-this-product-do-you-need-to-declare")
+  def postDutyDueBeerPage: HttpRequestBuilder =
+    http("Post Duty Due Page")
+      .post(s"$baseUrl/$route/duty-due/Beer")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("product-volume-input", 32.87)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/you-have-declared-this-many-litres-of-pure-alcohol": String))
-
-  def getPureAlcoholPage: HttpRequestBuilder =
-    http("Get Pure Alcohol Page")
-      .get(s"$baseUrl/$route/you-have-declared-this-many-litres-of-pure-alcohol": String)
-      .check(status.is(200))
-      .check(regex("This product has 1.643 litres of pure alcohol"))
-
-  def getProductDutyRatePage(dutyRate: String): HttpRequestBuilder =
-    http("Get Product Duty Rate Page")
-      .get(s"$baseUrl/$route/the-duty-due-on-this-product": String)
-      .check(status.is(200))
-      .check(regex(s"""The duty due on this product is $dutyRate"""))
+      .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 }
