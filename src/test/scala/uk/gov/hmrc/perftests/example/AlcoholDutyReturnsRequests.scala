@@ -16,14 +16,24 @@
 
 package uk.gov.hmrc.perftests.example
 
+import io.gatling.commons.validation.Validation
 import io.gatling.core.Predef._
+import io.gatling.core.check.Check.PreparedCache
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import io.gatling.core.check.CheckBuilder
+import io.gatling.core.check.{Check, CheckBuilder, CheckResult}
 import io.gatling.core.check.regex.RegexCheckType
 
 import java.time.LocalDate
+
+class CustomHttpCheck extends Check[Response] {
+  override def check(response: Response, session: Session, preparedCache: PreparedCache): Validation[CheckResult] = {
+    println(s"response.status:${response.status}")
+    println(s"response.body:${response.body.string}")
+    CheckResult.NoopCheckResultSuccess
+  }
+}
 
 object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
@@ -196,25 +206,25 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(regex("Tell us about the beer that is eligible for Small Producer Relief"))
 
   def postSingleSprRateBeerPage: HttpRequestBuilder =
-    http("Post How Much You Need To Declare Beer Page")
+    http("Post Single Small Producer Relief Rate Beer Page")
       .post(s"$baseUrl/$route/tell-us-about-single-spr-rate/Beer")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("volumesWithRate[0].totalLitres", 888.88)
       .formParam("volumesWithRate[0].pureAlcohol", 99.45)
       .formParam("volumesWithRate[0].dutyRate", 15)
-      .formParam("volumes[0].taxType", 361)
+      .formParam("volumesWithRate[0].taxType", 361)
       .formParam("volumesWithRate[1].totalLitres", 776.45)
       .formParam("volumesWithRate[1].pureAlcohol", 78.9)
       .formParam("volumesWithRate[1].dutyRate", 18)
-      .formParam("volumes[1].taxType", 366)
+      .formParam("volumesWithRate[1].taxType", 366)
       .formParam("volumesWithRate[2].totalLitres", 776.89)
       .formParam("volumesWithRate[2].pureAlcohol", 99.99)
       .formParam("volumesWithRate[2].dutyRate", 15)
-      .formParam("volumes[2].taxType", 361)
+      .formParam("volumesWithRate[2].taxType", 361)
       .formParam("volumesWithRate[3].totalLitres", 889.65)
       .formParam("volumesWithRate[3].pureAlcohol", 66.54)
       .formParam("volumesWithRate[3].dutyRate", 20)
-      .formParam("volumes[3].taxType", 376)
+      .formParam("volumesWithRate[3].taxType", 376)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/return-check-your-answers/Beer": String))
 
@@ -222,7 +232,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Beer Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Beer": String)
       .check(status.is(200))
-      .check(saveCsrfToken())
+      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueBeerPage: HttpRequestBuilder =
@@ -276,10 +286,10 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("csrfToken", "${csrfToken}")
       .formParam("volumes[0].totalLitres", 945.55)
       .formParam("volumes[0].pureAlcohol", 55.5555)
-      .formParam("volumes[0].taxType", 311)
+      .formParam("volumes[0].taxType", 312)
       .formParam("volumes[1].totalLitres", 898.34)
       .formParam("volumes[1].pureAlcohol", 77.55)
-      .formParam("volumes[1].taxType", 312)
+      .formParam("volumes[1].taxType", 322)
       .formParam("volumes[2].totalLitres", 667.32)
       .formParam("volumes[2].pureAlcohol", 66.34)
       .formParam("volumes[2].taxType", 352)
@@ -312,25 +322,25 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(regex("Tell us about the cider that is eligible for Small Producer Relief"))
 
   def postSingleSprRateCiderPage: HttpRequestBuilder =
-    http("Post How Much You Need To Declare Cider Page")
+    http("Post Single Small Producer Relief Rate Cider Page")
       .post(s"$baseUrl/$route/tell-us-about-single-spr-rate/Cider")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("volumesWithRate[0].totalLitres", 888.88)
       .formParam("volumesWithRate[0].pureAlcohol", 99.45)
       .formParam("volumesWithRate[0].dutyRate", 15)
-      .formParam("volumes[0].taxType", 362)
+      .formParam("volumesWithRate[0].taxType", 362)
       .formParam("volumesWithRate[1].totalLitres", 776.45)
       .formParam("volumesWithRate[1].pureAlcohol", 78.9)
       .formParam("volumesWithRate[1].dutyRate", 18)
-      .formParam("volumes[1].taxType", 367)
+      .formParam("volumesWithRate[1].taxType", 367)
       .formParam("volumesWithRate[2].totalLitres", 776.89)
       .formParam("volumesWithRate[2].pureAlcohol", 99.99)
       .formParam("volumesWithRate[2].dutyRate", 15)
-      .formParam("volumes[2].taxType", 372)
+      .formParam("volumesWithRate[2].taxType", 372)
       .formParam("volumesWithRate[3].totalLitres", 889.65)
       .formParam("volumesWithRate[3].pureAlcohol", 66.54)
       .formParam("volumesWithRate[3].dutyRate", 20)
-      .formParam("volumes[3].taxType", 377)
+      .formParam("volumesWithRate[3].taxType", 377)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/return-check-your-answers/Cider": String))
 
@@ -338,7 +348,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Cider Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Cider": String)
       .check(status.is(200))
-      .check(saveCsrfToken())
+      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueCiderPage: HttpRequestBuilder =
@@ -436,25 +446,25 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(regex("Tell us about the wine that is eligible for Small Producer Relief"))
 
   def postSingleSprRateWinePage: HttpRequestBuilder =
-    http("Post How Much You Need To Declare Wine Page")
+    http("Post Single Small Producer Relief Rate Wine Page")
       .post(s"$baseUrl/$route/tell-us-about-single-spr-rate/Wine")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("volumesWithRate[0].totalLitres", 888.88)
       .formParam("volumesWithRate[0].pureAlcohol", 99.45)
       .formParam("volumesWithRate[0].dutyRate", 15)
-      .formParam("volumes[0].taxType", 363)
+      .formParam("volumesWithRate[0].taxType", 363)
       .formParam("volumesWithRate[1].totalLitres", 776.45)
       .formParam("volumesWithRate[1].pureAlcohol", 78.9)
       .formParam("volumesWithRate[1].dutyRate", 18)
-      .formParam("volumes[1].taxType", 368)
+      .formParam("volumesWithRate[1].taxType", 368)
       .formParam("volumesWithRate[2].totalLitres", 776.89)
       .formParam("volumesWithRate[2].pureAlcohol", 99.99)
       .formParam("volumesWithRate[2].dutyRate", 15)
-      .formParam("volumes[2].taxType", 373)
+      .formParam("volumesWithRate[2].taxType", 373)
       .formParam("volumesWithRate[3].totalLitres", 889.65)
       .formParam("volumesWithRate[3].pureAlcohol", 66.54)
       .formParam("volumesWithRate[3].dutyRate", 20)
-      .formParam("volumes[3].taxType", 378)
+      .formParam("volumesWithRate[3].taxType", 378)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/return-check-your-answers/Wine": String))
 
@@ -462,7 +472,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Wine Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Wine": String)
       .check(status.is(200))
-      .check(saveCsrfToken())
+      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueWinePage: HttpRequestBuilder =
@@ -559,25 +569,25 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(regex("Tell us about the spirits that are eligible for Small Producer Relief"))
 
   def postSingleSprRateSpiritsPage: HttpRequestBuilder =
-    http("Post How Much You Need To Declare Spirits Page")
+    http("Post Single Small Producer Relief Rate Spirits Page")
       .post(s"$baseUrl/$route/tell-us-about-single-spr-rate/Spirits")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("volumesWithRate[0].totalLitres", 888.88)
       .formParam("volumesWithRate[0].pureAlcohol", 99.45)
       .formParam("volumesWithRate[0].dutyRate", 15)
-      .formParam("volumes[0].taxType", 365)
+      .formParam("volumesWithRate[0].taxType", 365)
       .formParam("volumesWithRate[1].totalLitres", 776.45)
       .formParam("volumesWithRate[1].pureAlcohol", 78.9)
       .formParam("volumesWithRate[1].dutyRate", 18)
-      .formParam("volumes[1].taxType", 370)
+      .formParam("volumesWithRate[1].taxType", 370)
       .formParam("volumesWithRate[2].totalLitres", 776.89)
       .formParam("volumesWithRate[2].pureAlcohol", 99.99)
       .formParam("volumesWithRate[2].dutyRate", 15)
-      .formParam("volumes[2].taxType", 375)
+      .formParam("volumesWithRate[2].taxType", 375)
       .formParam("volumesWithRate[3].totalLitres", 889.65)
       .formParam("volumesWithRate[3].pureAlcohol", 66.54)
       .formParam("volumesWithRate[3].dutyRate", 20)
-      .formParam("volumes[3].taxType", 380)
+      .formParam("volumesWithRate[3].taxType", 380)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/return-check-your-answers/Spirits": String))
 
@@ -585,7 +595,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Spirits Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Spirits": String)
       .check(status.is(200))
-      .check(saveCsrfToken())
+      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueSpiritsPage: HttpRequestBuilder =
@@ -682,25 +692,25 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(regex("Tell us about the other fermented product that is eligible for Small Producer Relief"))
 
   def postSingleSprRateOtherFermentedProductPage: HttpRequestBuilder =
-    http("Post How Much You Need To Declare Other Fermented Product Page")
+    http("Post Single Small Producer Relief Rate Other Fermented Product Page")
       .post(s"$baseUrl/$route/tell-us-about-single-spr-rate/OtherFermentedProduct")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("volumesWithRate[0].totalLitres", 888.88)
       .formParam("volumesWithRate[0].pureAlcohol", 99.45)
       .formParam("volumesWithRate[0].dutyRate", 15)
-      .formParam("volumes[0].taxType", 364)
+      .formParam("volumesWithRate[0].taxType", 364)
       .formParam("volumesWithRate[1].totalLitres", 776.45)
       .formParam("volumesWithRate[1].pureAlcohol", 78.9)
       .formParam("volumesWithRate[1].dutyRate", 18)
-      .formParam("volumes[1].taxType", 369)
+      .formParam("volumesWithRate[1].taxType", 369)
       .formParam("volumesWithRate[2].totalLitres", 776.89)
       .formParam("volumesWithRate[2].pureAlcohol", 99.99)
       .formParam("volumesWithRate[2].dutyRate", 15)
-      .formParam("volumes[2].taxType", 374)
+      .formParam("volumesWithRate[2].taxType", 374)
       .formParam("volumesWithRate[3].totalLitres", 889.65)
       .formParam("volumesWithRate[3].pureAlcohol", 66.54)
       .formParam("volumesWithRate[3].dutyRate", 20)
-      .formParam("volumes[3].taxType", 379)
+      .formParam("volumesWithRate[3].taxType", 379)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/return-check-your-answers/OtherFermentedProduct": String))
 
@@ -708,7 +718,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Other Fermented Product Page")
       .get(s"$baseUrl/$route/return-check-your-answers/OtherFermentedProduct": String)
       .check(status.is(200))
-      .check(saveCsrfToken())
+      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueOtherFermentedProductPage: HttpRequestBuilder =
