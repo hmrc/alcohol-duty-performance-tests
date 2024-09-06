@@ -24,6 +24,7 @@ import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 import io.gatling.core.check.{Check, CheckBuilder, CheckResult}
 import io.gatling.core.check.regex.RegexCheckType
+import io.gatling.http.check.{HttpCheck, HttpCheckScope}
 
 import java.time.LocalDate
 
@@ -87,7 +88,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("enrolment[0].state", "Activated")
       .formParam("enrolment[0].name", "HMRC-AD-ORG")
       .formParam("enrolment[0].taxIdentifier[0].name", "APPAID")
-      .formParam("enrolment[0].taxIdentifier[0].value", "XMADP0000100208")
+      .formParam("enrolment[0].taxIdentifier[0].value", "XMADN0000100208")
       .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey())
       .check(status.is(303))
       .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey(): String))
@@ -232,18 +233,17 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Beer Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Beer": String)
       .check(status.is(200))
-      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueBeerPage: HttpRequestBuilder =
-    http("Navigate to Duty Due Page")
+    http("Navigate to Duty Due Beer Page")
       .get(s"$baseUrl/$route/duty-due/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("You will owe £14,749.75"))
 
   def postDutyDueBeerPage: HttpRequestBuilder =
-    http("Post Duty Due Page")
+    http("Post Duty Due Beer Page")
       .post(s"$baseUrl/$route/duty-due/Beer")
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(303))
@@ -348,18 +348,17 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Cider Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Cider": String)
       .check(status.is(200))
-      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueCiderPage: HttpRequestBuilder =
-    http("Navigate to Duty Due Page")
+    http("Navigate to Duty Due Cider Page")
       .get(s"$baseUrl/$route/duty-due/Cider": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("You will owe £8,436.43"))
 
   def postDutyDueCiderPage: HttpRequestBuilder =
-    http("Post Duty Due Page")
+    http("Post Duty Due Cider Page")
       .post(s"$baseUrl/$route/duty-due/Cider")
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(303))
@@ -472,18 +471,17 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Wine Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Wine": String)
       .check(status.is(200))
-      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueWinePage: HttpRequestBuilder =
-    http("Navigate to Duty Due Page")
+    http("Navigate to Duty Due Wine Page")
       .get(s"$baseUrl/$route/duty-due/Wine": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("You will owe You will owe £15,041.34"))
+      .check(regex("You will owe £15,041.34"))
 
   def postDutyDueWinePage: HttpRequestBuilder =
-    http("Post Duty Due Page")
+    http("Post Duty Due Wine Page")
       .post(s"$baseUrl/$route/duty-due/Wine")
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(303))
@@ -595,18 +593,17 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Spirits Page")
       .get(s"$baseUrl/$route/return-check-your-answers/Spirits": String)
       .check(status.is(200))
-      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueSpiritsPage: HttpRequestBuilder =
-    http("Navigate to Duty Due Page")
+    http("Navigate to Duty Due Spirits Page")
       .get(s"$baseUrl/$route/duty-due/Spirits": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("You will owe £15,041.34"))
 
   def postDutyDueSpiritsPage: HttpRequestBuilder =
-    http("Post Duty Due Page")
+    http("Post Duty Due Spirits Page")
       .post(s"$baseUrl/$route/duty-due/Spirits")
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(303))
@@ -634,12 +631,13 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("rateBand[369]", "369")
       .formParam("rateBand[374]", "374")
       .formParam("rateBand[379]", "379")
+      .check(HttpCheck(new CustomHttpCheck(), HttpCheckScope.Body))
       .check(status.is(303))
       .check(header("Location").is(s"/$route/how-much-do-you-need-to-declare/OtherFermentedProduct": String))
 
   def getHowMuchYouNeedToDeclareOtherFermentedProductPage: HttpRequestBuilder =
     http("Navigate to How Much You Need To Declare Other Fermented Product Page")
-      .get(s"$baseUrl/$route/how-much-do-you-need-to-declare/Spirits": String)
+      .get(s"$baseUrl/$route/how-much-do-you-need-to-declare/OtherFermentedProduct": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Tell us about other fermented products you need to declare"))
@@ -718,18 +716,17 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Navigate to Check Your Answers Returns Other Fermented Product Page")
       .get(s"$baseUrl/$route/return-check-your-answers/OtherFermentedProduct": String)
       .check(status.is(200))
-      //.check(saveCsrfToken())
       .check(regex("Check your answers"))
 
   def getDutyDueOtherFermentedProductPage: HttpRequestBuilder =
-    http("Navigate to Duty Due Page")
+    http("Navigate to Duty Due Other Fermented Product Page")
       .get(s"$baseUrl/$route/duty-due/OtherFermentedProduct": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("You will owe £15,041.34"))
 
   def postDutyDueOtherFermentedProductPage: HttpRequestBuilder =
-    http("Post Duty Due Page")
+    http("Post Duty Due Other Fermented Product Page")
       .post(s"$baseUrl/$route/duty-due/OtherFermentedProduct")
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(303))

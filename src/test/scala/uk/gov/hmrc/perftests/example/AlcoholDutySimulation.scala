@@ -48,7 +48,6 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDutyDueBeerPage,
       postDutyDueBeerPage,
       getTaskListPage,
-
       getWhatDoYouNeedToDeclareCiderPage,
       postWhatDoYouNeedToDeclareCiderPage,
       getHowMuchYouNeedToDeclareCiderPage,
@@ -61,7 +60,6 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDutyDueCiderPage,
       postDutyDueCiderPage,
       getTaskListPage,
-
       getWhatDoYouNeedToDeclareWinePage,
       postWhatDoYouNeedToDeclareWinePage,
       getHowMuchYouNeedToDeclareWinePage,
@@ -74,7 +72,6 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDutyDueWinePage,
       postDutyDueWinePage,
       getTaskListPage,
-
       getWhatDoYouNeedToDeclareSpiritsPage,
       postWhatDoYouNeedToDeclareSpiritsPage,
       getHowMuchYouNeedToDeclareSpiritsPage,
@@ -87,7 +84,6 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getDutyDueSpiritsPage,
       postDutyDueSpiritsPage,
       getTaskListPage,
-
       getWhatDoYouNeedToDeclareOtherFermentedProductPage,
       postWhatDoYouNeedToDeclareOtherFermentedProductPage,
       getHowMuchYouNeedToDeclareOtherFermentedProductPage,
@@ -99,8 +95,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getCheckYourAnswersReturnsOtherFermentedProductPage,
       getDutyDueOtherFermentedProductPage,
       postDutyDueOtherFermentedProductPage,
-      getTaskListPage,
-
+      getTaskListPage
     )
   setup(
     "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
