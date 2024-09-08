@@ -16,25 +16,14 @@
 
 package uk.gov.hmrc.perftests.example
 
-import io.gatling.commons.validation.Validation
 import io.gatling.core.Predef._
-import io.gatling.core.check.Check.PreparedCache
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import io.gatling.core.check.{Check, CheckBuilder, CheckResult}
+import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
-import io.gatling.http.check.{HttpCheck, HttpCheckScope}
 
 import java.time.LocalDate
-
-class CustomHttpCheck extends Check[Response] {
-  override def check(response: Response, session: Session, preparedCache: PreparedCache): Validation[CheckResult] = {
-    println(s"response.status:${response.status}")
-    println(s"response.body:${response.body.string}")
-    CheckResult.NoopCheckResultSuccess
-  }
-}
 
 object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
