@@ -45,7 +45,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getSingleSprRateBeerPage,
       postSingleSprRateBeerPage,
       getCheckYourAnswersReturnsBeerPage,
-      getDutyDueBeerPage,
+      getDutyDueBeerPage("£14,749.75"),
       postDutyDueBeerPage,
       getTaskListPage,
       getWhatDoYouNeedToDeclareCiderPage,
@@ -57,7 +57,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getSingleSprRateCiderPage,
       postSingleSprRateCiderPage,
       getCheckYourAnswersReturnsCiderPage,
-      getDutyDueCiderPage,
+      getDutyDueCiderPage("£8,436.43"),
       postDutyDueCiderPage,
       getTaskListPage,
       getWhatDoYouNeedToDeclareWinePage,
@@ -69,7 +69,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getSingleSprRateWinePage,
       postSingleSprRateWinePage,
       getCheckYourAnswersReturnsWinePage,
-      getDutyDueWinePage,
+      getDutyDueWinePage("£15,041.34"),
       postDutyDueWinePage,
       getTaskListPage,
       getWhatDoYouNeedToDeclareSpiritsPage,
@@ -81,7 +81,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getSingleSprRateSpiritsPage,
       postSingleSprRateSpiritsPage,
       getCheckYourAnswersReturnsSpiritsPage,
-      getDutyDueSpiritsPage,
+      getDutyDueSpiritsPage("£15,041.34"),
       postDutyDueSpiritsPage,
       getTaskListPage,
       getWhatDoYouNeedToDeclareOtherFermentedProductPage,
@@ -93,7 +93,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getSingleSprRateOtherFermentedProductPage,
       postSingleSprRateOtherFermentedProductPage,
       getCheckYourAnswersReturnsOtherFermentedProductPage,
-      getDutyDueOtherFermentedProductPage,
+      getDutyDueOtherFermentedProductPage("£15,041.34"),
       postDutyDueOtherFermentedProductPage,
       getTaskListPage
     )
@@ -102,6 +102,100 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     "Alcohol Duty Returns Journey When Multiple SPR is set to No"
   ) withActions
     (AlcoholDutyReturnsJourneyWithMultipleSPRisSetToNo: _*)
+
+  val AlcoholDutyReturnsJourneyWithMultipleSPRisSetToYes: List[ActionBuilder] =
+    List[ActionBuilder](
+      getClearData,
+      getAuthLoginPage,
+      postAuthLoginPage,
+      getBeforeYouStartPage,
+      postBeforeYouStartPage,
+      getTaskListPage,
+      getDeclareAlcoholDutyQuestion,
+      postDeclareAlcoholDutyQuestion,
+      getAlcoholTypesToDeclare,
+      postAlcoholTypesToDeclare,
+      getWhatDoYouNeedToDeclareBeerPage,
+      postWhatDoYouNeedToDeclareBeerPage,
+      getHowMuchYouNeedToDeclareBeerPage,
+      postHowMuchYouNeedToDeclareBeerPage,
+      postDoYouHaveMultipleSprDutyRateBeerPageWithYes,
+      getMultipleSprRateBeerPage,
+      postMultipleSprRateBeerPage,
+      getCheckYourAnswersSprBeerPage,
+      postCheckYourAnswersSprBeerPage,
+      getMultipleSprListQuestionBeerPage,
+      postMultipleSprListQuestionBeerPage,
+      getCheckYourAnswersReturnsBeerPage,
+      getDutyDueBeerPage("£10,717.14"),
+      postDutyDueBeerPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareCiderPage,
+      postWhatDoYouNeedToDeclareCiderPage,
+      getHowMuchYouNeedToDeclareCiderPage,
+      postHowMuchYouNeedToDeclareCiderPage,
+      postDoYouHaveMultipleSprDutyRateCiderPageWithYes,
+      getMultipleSprRateCiderPage,
+      postMultipleSprRateCiderPage,
+      getCheckYourAnswersSprCiderPage,
+      postCheckYourAnswersSprCiderPage,
+      getMultipleSprListQuestionCiderPage,
+      postMultipleSprListQuestionCiderPage,
+      getCheckYourAnswersReturnsCiderPage,
+      getDutyDueCiderPage("£4,403.82"),
+      postDutyDueCiderPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareWinePage,
+      postWhatDoYouNeedToDeclareWinePage,
+      getHowMuchYouNeedToDeclareWinePage,
+      postHowMuchYouNeedToDeclareWinePage,
+      postDoYouHaveMultipleSprDutyRateWinePageWithYes,
+      getMultipleSprRateWinePage,
+      postMultipleSprRateWinePage,
+      getCheckYourAnswersSprWinePage,
+      postCheckYourAnswersSprWinePage,
+      getMultipleSprListQuestionWinePage,
+      postMultipleSprListQuestionWinePage,
+      getCheckYourAnswersReturnsWinePage,
+      getDutyDueWinePage("£11,008.73"),
+      postDutyDueWinePage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareSpiritsPage,
+      postWhatDoYouNeedToDeclareSpiritsPage,
+      getHowMuchYouNeedToDeclareSpiritsPage,
+      postHowMuchYouNeedToDeclareSpiritsPage,
+      postDoYouHaveMultipleSprDutyRateSpiritsPageWithYes,
+      getMultipleSprRateSpiritsPage,
+      postMultipleSprRateSpiritsPage,
+      getCheckYourAnswersSprSpiritsPage,
+      postCheckYourAnswersSprSpiritsPage,
+      getMultipleSprListQuestionSpiritsPage,
+      postMultipleSprListQuestionSpiritsPage,
+      getCheckYourAnswersReturnsSpiritsPage,
+      getDutyDueSpiritsPage("£11,008.73"),
+      postDutyDueSpiritsPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareOtherFermentedProductPage,
+      postWhatDoYouNeedToDeclareOtherFermentedProductPage,
+      getHowMuchYouNeedToDeclareOtherFermentedProductPage,
+      postHowMuchYouNeedToDeclareOtherFermentedProductPage,
+      postDoYouHaveMultipleSprDutyRateOtherFermentedProductPageWithYes,
+      getMultipleSprRateOtherFermentedProductPage,
+      postMultipleSprRateOtherFermentedProductPage,
+      getCheckYourAnswersSprOtherFermentedProductPage,
+      postCheckYourAnswersSprOtherFermentedProductPage,
+      getMultipleSprListQuestionOtherFermentedProductPage,
+      postMultipleSprListQuestionOtherFermentedProductPage,
+      getCheckYourAnswersReturnsOtherFermentedProductPage,
+      getDutyDueOtherFermentedProductPage("£11,008.73"),
+      postDutyDueOtherFermentedProductPage,
+      getTaskListPage
+    )
+  setup(
+    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-yes",
+    "Alcohol Duty Returns Journey When Multiple SPR is set to YES"
+  ) withActions
+    (AlcoholDutyReturnsJourneyWithMultipleSPRisSetToYes: _*)
 
   val DeclareDutySuspendedDeliveriesJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
@@ -127,7 +221,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getCheckYourAnswersDutySuspendedDeliveries,
       getTaskListPage
     )
-  setup("declare-duty-suspended-deliveries-journey-with-option-yes", "Declare Duty Suspended Deliveries Journey With Option Yes") withActions
+  setup(
+    "declare-duty-suspended-deliveries-journey-with-option-yes",
+    "Declare Duty Suspended Deliveries Journey With Option Yes"
+  ) withActions
     (DeclareDutySuspendedDeliveriesJourneyWithOptionYes: _*)
 
   val DeclareDutySuspendedDeliveriesJourneyWithOptionNo: List[ActionBuilder] =
@@ -142,7 +239,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDeclareDutySuspendedDeliveriesQuestion(false),
       getTaskListPage
     )
-  setup("declare-duty-suspended-deliveries-journey-with-option-no", "Declare Duty Suspended Deliveries Journey With Option No") withActions
+  setup(
+    "declare-duty-suspended-deliveries-journey-with-option-no",
+    "Declare Duty Suspended Deliveries Journey With Option No"
+  ) withActions
     (DeclareDutySuspendedDeliveriesJourneyWithOptionNo: _*)
 
   val DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: List[ActionBuilder] =
@@ -176,7 +276,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getQuarterlySpiritsCheckYourAnswersPage,
       getTaskListPage
     )
-  setup("declare-quarterly-spirits-questions-journey-with-option-yes", "Declare Quarterly Spirits Questions Journey With Option Yes") withActions
+  setup(
+    "declare-quarterly-spirits-questions-journey-with-option-yes",
+    "Declare Quarterly Spirits Questions Journey With Option Yes"
+  ) withActions
     (DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: _*)
 
   val DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: List[ActionBuilder] =
@@ -191,7 +294,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postQuarterlySpiritsReturnsGuidancePage(false),
       getTaskListPage
     )
-  setup("declare-quarterly-spirits-questions-journey-with-option-no", "Declare Quarterly Spirits Questions Journey With Option No") withActions
+  setup(
+    "declare-quarterly-spirits-questions-journey-with-option-no",
+    "Declare Quarterly Spirits Questions Journey With Option No"
+  ) withActions
     (DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: _*)
 
   runSimulation()
