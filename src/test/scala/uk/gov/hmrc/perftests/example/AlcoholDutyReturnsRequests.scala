@@ -28,11 +28,11 @@ import java.time.LocalDate
 object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
-  val route: String = "manage-alcohol-duty"
-  val CsrfPattern = """<input type="hidden" name="csrfToken" value="([^"]+)""""
+  val route: String   = "manage-alcohol-duty"
+  val CsrfPattern     = """<input type="hidden" name="csrfToken" value="([^"]+)""""
   val authUrl: String = baseUrlFor("auth-login-stub")
-  val Year: Int = LocalDate.now().getYear
-  val Month: Int = LocalDate.now().getMonthValue
+  val Year: Int       = LocalDate.now().getYear
+  val Month: Int      = LocalDate.now().getMonthValue
 
   def periodKey(): String =
     s"""${generateYear(Year: Int).toString.takeRight(2)}A${(generateMonth(Month: Int) + 64).toChar}"""
@@ -92,13 +92,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Declaring your alcohol duty"))
 
-  def postDeclareAlcoholDutyQuestion: HttpRequestBuilder =
+  def postDeclareAlcoholDutyQuestion(declareAlcoholDutyQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Declaring Your Alcohol Duty Page")
       .post(s"$baseUrl/$route/do-you-need-to-declare-duty")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("declareAlcoholDutyQuestion-yesNoValue", "true")
+      .formParam("declareAlcoholDutyQuestion-yesNoValue", declareAlcoholDutyQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/which-types-do-you-need-to-declare": String))
+      .check(header("Location").is(s"/$route/${if (declareAlcoholDutyQuestion) "which-types-do-you-need-to-declare"
+        else "task-list/your-alcohol-duty-return"}": String))
 
   def getAlcoholTypesToDeclare: HttpRequestBuilder =
     http("Navigate to Alcohol Type to Declare Page")
@@ -183,13 +184,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("If you have more than one Small Producer Relief duty rate"))
 
-  def postDoYouHaveMultipleSprDutyRateBeerPage: HttpRequestBuilder =
+  def postDoYouHaveMultipleSprDutyRateBeerPage(multipleSprDutyRateQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Do You Have Multiple Small Producer Relief Duty Rate Beer Page")
       .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Beer")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "false")
+      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", multipleSprDutyRateQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-single-spr-rate/Beer": String))
+      .check(header("Location").is(s"/$route/${if (multipleSprDutyRateQuestion) "multiple-spr-rates/Beer"
+        else "tell-us-about-single-spr-rate/Beer"}": String))
 
   def getSingleSprRateBeerPage: HttpRequestBuilder =
     http("Navigate to Single Small Producer Relief Rate Beer Page")
@@ -242,14 +244,6 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 
   /*Beer - SPR Yes pages*/
-  def postDoYouHaveMultipleSprDutyRateBeerPageWithYes: HttpRequestBuilder =
-    http("Post Do You Have Multiple Small Producer Relief Duty Rate Beer Page")
-      .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Beer")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "true")
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/multiple-spr-rates/Beer": String))
-
   def getMultipleSprRateBeerPage: HttpRequestBuilder =
     http("Navigate to Multiple Small Producer Relief Rate Beer Page")
       .get(s"$baseUrl/$route/multiple-spr-rates/Beer": String)
@@ -289,14 +283,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Small Producer Reliefs to declare"))
 
-  def postMultipleSprListQuestionBeerPage: HttpRequestBuilder =
+  def postMultipleSprListQuestionBeerPage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Beer Page")
       .post(s"$baseUrl/$route/multiple-spr-list/Beer")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("multipleSPRList-yesNoValue", "false")
+      .formParam("multipleSPRList-yesNoValue", multipleSprListQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/return-check-your-answers/Beer": String))
-
+      .check(header("Location").is(s"/$route/${if (multipleSprListQuestion) "change-multiple-spr-rates/Beer"
+        else "return-check-your-answers/Beer"}": String))
 
   /*Cider pages*/
   def getWhatDoYouNeedToDeclareCiderPage: HttpRequestBuilder =
@@ -354,13 +348,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("If you have more than one Small Producer Relief duty rate"))
 
-  def postDoYouHaveMultipleSprDutyRateCiderPage: HttpRequestBuilder =
+  def postDoYouHaveMultipleSprDutyRateCiderPage(multipleSprDutyRateQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Do You Have Multiple Small Producer Relief Duty Rate Cider Page")
       .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Cider")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "false")
+      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", multipleSprDutyRateQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-single-spr-rate/Cider": String))
+      .check(header("Location").is(s"/$route/${if (multipleSprDutyRateQuestion) "multiple-spr-rates/Cider"
+        else "tell-us-about-single-spr-rate/Cider"}": String))
 
   def getSingleSprRateCiderPage: HttpRequestBuilder =
     http("Navigate to Single Small Producer Relief Rate Cider Page")
@@ -413,14 +408,6 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 
   /*Cider - SPR Yes pages*/
-  def postDoYouHaveMultipleSprDutyRateCiderPageWithYes: HttpRequestBuilder =
-    http("Post Do You Have Multiple Small Producer Relief Duty Rate Cider Page")
-      .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Cider")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "true")
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/multiple-spr-rates/Cider": String))
-
   def getMultipleSprRateCiderPage: HttpRequestBuilder =
     http("Navigate to Multiple Small Producer Relief Rate Cider Page")
       .get(s"$baseUrl/$route/multiple-spr-rates/Cider": String)
@@ -460,14 +447,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Small Producer Reliefs to declare"))
 
-  def postMultipleSprListQuestionCiderPage: HttpRequestBuilder =
+  def postMultipleSprListQuestionCiderPage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Cider Page")
       .post(s"$baseUrl/$route/multiple-spr-list/Cider")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("multipleSPRList-yesNoValue", "false")
+      .formParam("multipleSPRList-yesNoValue", multipleSprListQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/return-check-your-answers/Cider": String))
-
+      .check(header("Location").is(s"/$route/${if (multipleSprListQuestion) "change-multiple-spr-rates/Cider"
+        else "return-check-your-answers/Cider"}": String))
 
   /*Wine pages*/
   def getWhatDoYouNeedToDeclareWinePage: HttpRequestBuilder =
@@ -533,13 +520,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("If you have more than one Small Producer Relief duty rate"))
 
-  def postDoYouHaveMultipleSprDutyRateWinePage: HttpRequestBuilder =
+  def postDoYouHaveMultipleSprDutyRateWinePage(multipleSprDutyRateQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Do You Have Multiple Small Producer Relief Duty Rate Wine Page")
       .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Wine")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "false")
+      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", multipleSprDutyRateQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-single-spr-rate/Wine": String))
+      .check(header("Location").is(s"/$route/${if (multipleSprDutyRateQuestion) "multiple-spr-rates/Wine"
+        else "tell-us-about-single-spr-rate/Wine"}": String))
 
   def getSingleSprRateWinePage: HttpRequestBuilder =
     http("Navigate to Single Small Producer Relief Rate Wine Page")
@@ -592,14 +580,6 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 
   /*Wine - SPR Yes pages*/
-  def postDoYouHaveMultipleSprDutyRateWinePageWithYes: HttpRequestBuilder =
-    http("Post Do You Have Multiple Small Producer Relief Duty Rate Wine Page")
-      .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Wine")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "true")
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/multiple-spr-rates/Wine": String))
-
   def getMultipleSprRateWinePage: HttpRequestBuilder =
     http("Navigate to Multiple Small Producer Relief Rate Wine Page")
       .get(s"$baseUrl/$route/multiple-spr-rates/Wine": String)
@@ -639,13 +619,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Small Producer Reliefs to declare"))
 
-  def postMultipleSprListQuestionWinePage: HttpRequestBuilder =
+  def postMultipleSprListQuestionWinePage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Wine Page")
       .post(s"$baseUrl/$route/multiple-spr-list/Wine")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("multipleSPRList-yesNoValue", "false")
+      .formParam("multipleSPRList-yesNoValue", multipleSprListQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/return-check-your-answers/Wine": String))
+      .check(header("Location").is(s"/$route/${if (multipleSprListQuestion) "change-multiple-spr-rates/Wine"
+        else "return-check-your-answers/Wine"}": String))
 
   /*Spirits pages*/
   def getWhatDoYouNeedToDeclareSpiritsPage: HttpRequestBuilder =
@@ -711,13 +692,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("If you have more than one Small Producer Relief duty rate"))
 
-  def postDoYouHaveMultipleSprDutyRateSpiritsPage: HttpRequestBuilder =
+  def postDoYouHaveMultipleSprDutyRateSpiritsPage(multipleSprDutyRateQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Do You Have Multiple Small Producer Relief Duty Rate Spirits Page")
       .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Spirits")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "false")
+      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", multipleSprDutyRateQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-single-spr-rate/Spirits": String))
+      .check(header("Location").is(s"/$route/${if (multipleSprDutyRateQuestion) "multiple-spr-rates/Spirits"
+        else "tell-us-about-single-spr-rate/Spirits"}": String))
 
   def getSingleSprRateSpiritsPage: HttpRequestBuilder =
     http("Navigate to Single Small Producer Relief Rate Spirits Page")
@@ -770,14 +752,6 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 
   /*Spirits - SPR Yes pages*/
-  def postDoYouHaveMultipleSprDutyRateSpiritsPageWithYes: HttpRequestBuilder =
-    http("Post Do You Have Multiple Small Producer Relief Duty Rate Spirits Page")
-      .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/Spirits")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "true")
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/multiple-spr-rates/Spirits": String))
-
   def getMultipleSprRateSpiritsPage: HttpRequestBuilder =
     http("Navigate to Multiple Small Producer Relief Rate Spirits Page")
       .get(s"$baseUrl/$route/multiple-spr-rates/Spirits": String)
@@ -817,13 +791,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Small Producer Reliefs to declare"))
 
-  def postMultipleSprListQuestionSpiritsPage: HttpRequestBuilder =
+  def postMultipleSprListQuestionSpiritsPage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Spirits Page")
       .post(s"$baseUrl/$route/multiple-spr-list/Spirits")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("multipleSPRList-yesNoValue", "false")
+      .formParam("multipleSPRList-yesNoValue", multipleSprListQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/return-check-your-answers/Spirits": String))
+      .check(header("Location").is(s"/$route/${if (multipleSprListQuestion) "change-multiple-spr-rates/Spirits"
+        else "return-check-your-answers/Spirits"}": String))
 
   /*Other Fermented Product pages*/
   def getWhatDoYouNeedToDeclareOtherFermentedProductPage: HttpRequestBuilder =
@@ -880,7 +855,10 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("volumes[5].pureAlcohol", 66.89)
       .formParam("volumes[5].taxType", 359)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/do-you-have-multiple-small-producer-relief-duty-rates/OtherFermentedProduct": String))
+      .check(
+        header("Location")
+          .is(s"/$route/do-you-have-multiple-small-producer-relief-duty-rates/OtherFermentedProduct": String)
+      )
 
   def getDoYouHaveMultipleSprDutyRateOtherFermentedProductPage: HttpRequestBuilder =
     http("Navigate to Do You Have Multiple Small Producer Relief Duty Rate Other Fermented Product Page")
@@ -889,13 +867,18 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("If you have more than one Small Producer Relief duty rate"))
 
-  def postDoYouHaveMultipleSprDutyRateOtherFermentedProductPage: HttpRequestBuilder =
+  def postDoYouHaveMultipleSprDutyRateOtherFermentedProductPage(
+    multipleSprDutyRateQuestion: Boolean = true
+  ): HttpRequestBuilder =
     http("Post Do You Have Multiple Small Producer Relief Duty Rate Other Fermented Product Page")
       .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/OtherFermentedProduct")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "false")
+      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", multipleSprDutyRateQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-single-spr-rate/OtherFermentedProduct": String))
+      .check(
+        header("Location").is(s"/$route/${if (multipleSprDutyRateQuestion) "multiple-spr-rates/OtherFermentedProduct"
+          else "tell-us-about-single-spr-rate/OtherFermentedProduct"}": String)
+      )
 
   def getSingleSprRateOtherFermentedProductPage: HttpRequestBuilder =
     http("Navigate to Single Small Producer Relief Rate Other Fermented Product Page")
@@ -938,7 +921,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/duty-due/OtherFermentedProduct": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("You will owe "+dutyDueAmount))
+      .check(regex("You will owe " + dutyDueAmount))
 
   def postDutyDueOtherFermentedProductPage: HttpRequestBuilder =
     http("Post Duty Due Other Fermented Product Page")
@@ -948,20 +931,16 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(header("Location").is(s"/$route/task-list/your-alcohol-duty-return": String))
 
   /*Other Fermented Products - SPR Yes pages*/
-  def postDoYouHaveMultipleSprDutyRateOtherFermentedProductPageWithYes: HttpRequestBuilder =
-    http("Post Do You Have Multiple Small Producer Relief Duty Rate Other Fermented Product Page")
-      .post(s"$baseUrl/$route/do-you-have-multiple-small-producer-relief-duty-rates/OtherFermentedProduct")
-      .formParam("csrfToken", "${csrfToken}")
-      .formParam("doYouHaveMultipleSPRDutyRates-yesNoValue", "true")
-      .check(status.is(303))
-      .check(header("Location").is(s"/$route/multiple-spr-rates/OtherFermentedProduct": String))
-
   def getMultipleSprRateOtherFermentedProductPage: HttpRequestBuilder =
     http("Navigate to Multiple Small Producer Relief Rate Other Fermented Product Page")
       .get(s"$baseUrl/$route/multiple-spr-rates/OtherFermentedProduct": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Tell us about the other fermented products you need to declare that are eligible for Small Producer Relief"))
+      .check(
+        regex(
+          "Tell us about the other fermented products you need to declare that are eligible for Small Producer Relief"
+        )
+      )
 
   def postMultipleSprRateOtherFermentedProductPage: HttpRequestBuilder =
     http("Post Multiple Small Producer Relief Rate Other Fermented Product Page")
@@ -995,11 +974,16 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Small Producer Reliefs to declare"))
 
-  def postMultipleSprListQuestionOtherFermentedProductPage: HttpRequestBuilder =
+  def postMultipleSprListQuestionOtherFermentedProductPage(
+    multipleSprListQuestion: Boolean = true
+  ): HttpRequestBuilder =
     http("Post Multiple SPR List Question Other Fermented Product Page")
       .post(s"$baseUrl/$route/multiple-spr-list/OtherFermentedProduct")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("multipleSPRList-yesNoValue", "false")
+      .formParam("multipleSPRList-yesNoValue", multipleSprListQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/return-check-your-answers/OtherFermentedProduct": String))
+      .check(
+        header("Location").is(s"/$route/${if (multipleSprListQuestion) "change-multiple-spr-rates/OtherFermentedProduct"
+          else "return-check-your-answers/OtherFermentedProduct"}": String)
+      )
 }
