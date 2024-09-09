@@ -1,73 +1,38 @@
-**This is a template README.md.  Be sure to update this with project specific content that describes your performance test project.**
+Alcohol Duty Performance Tests
+Link: https://github.com/hmrc/alcohol-duty-performance-tests
 
-# alcohol-duty-performance-tests
+Performance test suite for the `Alcohol Duty Returns`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
 
-Performance test suite for the `<digital service name>`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
+### 1. Services to run (for local testing)
+Start the docker desktop application (and make sure the mongodb is running on the docker)
+Start `Alhocol Duty` services as follows:
+sm2 --start ALCOHOL_DUTY_ALL
+To enable test only endpoint for local testing, stop ALCOHOL_DUTY_FRONTEND & ALCOHOL_DUTY_RETURNS from SM2 services and run these services locally with an argument as below:
+sbt "run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes"
 
-## Pre-requisites
+### 2. To run smoke tests
+Run below command in terminal: 
+sbt -Dperftest.runSmokeTest=true -DrunLocal=true gatling:test
 
-### Services
+### 3. To run full tests
+Run below command in terminal:
+sbt -DrunLocal=true gatling:test
 
-Start Mongo Docker container as follows:
+### 3. To run full tests in staging
+Go to jenkins job at https://performance.tools.staging.tax.service.gov.uk/job/alcohol-duty-performance-tests/ 
+Click on 'Build with parameters'
+Enter branch name (leave blank if the tests needs to run from the main branch)
+Set below parameters:
+Load: 100
+ramp_up: 1
+constant_rate: 8
+Then click 'Build'
 
-```bash
-docker run --rm -d -p 27017:27017 --name mongo mongo:4.4
-```
-
-Start `PLATFORM_EXAMPLE_UI_TESTS` services as follows:
-
-```bash
-sm2 --start PLATFORM_EXAMPLE_UI_TESTS
-```
-
-### Logging
-
+### 5. Logging
 The default log level for all HTTP requests is set to `WARN`. Configure [logback.xml](src/test/resources/logback.xml) to update this if required.
 
-### WARNING :warning:
-
+### 6. WARNING
 Do **NOT** run a full performance test against staging from your local machine. Please [implement a new performance test job](https://confluence.tools.tax.service.gov.uk/display/DTRG/Practical+guide+to+performance+testing+a+digital+service#Practicalguidetoperformancetestingadigitalservice-SettingupabuildonJenkinstorunagainsttheStagingenvironment) and execute your job from the dashboard in [Performance Jenkins](https://performance.tools.staging.tax.service.gov.uk).
 
-## Tests
-
-Run smoke test (locally) as follows:
-
-```bash
-sbt -Dperftest.runSmokeTest=true -DrunLocal=true gatling:test
-```
-
-Run full performance test (locally) as follows:
-
-```bash
-sbt -DrunLocal=true gatling:test
-```
-
-Run smoke test (staging) as follows:
-
-```bash
-sbt -Dperftest.runSmokeTest=true -DrunLocal=false gatling:test
-```
-
-## Scalafmt
-
-Check all project files are formatted as expected as follows:
-
-```bash
-sbt scalafmtCheckAll scalafmtCheck
-```
-
-Format `*.sbt` and `project/*.scala` files as follows:
-
-```bash
-sbt scalafmtSbt
-```
-
-Format all project files as follows:
-
-```bash
-sbt scalafmtAll
-```
-
-## License
-
+### 7. License
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").

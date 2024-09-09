@@ -59,17 +59,14 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Do you need to declare alcohol you delivered or received duty suspended?"))
 
-  def postDeclareDutySuspendedDeliveriesQuestion(declareDSDQuestion: Boolean = true): HttpRequestBuilder = {
+  def postDeclareDutySuspendedDeliveriesQuestion(declareDSDQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Declare Duty Suspended Deliveries Question")
       .post(s"$baseUrl/$route/do-you-need-to-declare-delivered-received-duty-suspended")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-duty-suspended-deliveries-input", declareDSDQuestion)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/${
-          if (declareDSDQuestion) "tell-us-about-your-duty-suspended-deliveries"
-          else "task-list/your-alcohol-duty-return"
-        }": String))
-  }
+      .check(header("Location").is(s"/$route/${if (declareDSDQuestion) "tell-us-about-your-duty-suspended-deliveries"
+        else "task-list/your-alcohol-duty-return"}": String))
 
   def getDutySuspendedDeliveriesGuidance: HttpRequestBuilder =
     http("Get Duty Suspended Deliveries Guidance")

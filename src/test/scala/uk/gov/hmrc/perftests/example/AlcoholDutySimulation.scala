@@ -18,76 +18,190 @@ package uk.gov.hmrc.perftests.example
 
 import io.gatling.core.action.builder.ActionBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests.{getPureAlcoholPage, _}
+import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests.{getCheckYourAnswersDutySuspendedDeliveries, _}
 import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{postQuarterlySpiritsReturnsGuidancePage, _}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
-  val AlcoholDutyReturnsJourneyWithSPRandDRYes: List[ActionBuilder] =
+  val AlcoholDutyReturnsJourneyWithMultipleSPRisSetToNo: List[ActionBuilder] =
     List[ActionBuilder](
+      getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
+      getBeforeYouStartPage,
+      postBeforeYouStartPage,
+      getTaskListPage,
       getDeclareAlcoholDutyQuestion,
-      postDeclareAlcoholDutyQuestion,
-      getProductEntryGuidancePage,
-      navigateToProductNamePage,
-      postProductName,
-      getAlcoholByVolumeQuestion,
-      postAlcoholByVolume,
-      getDraughtReliefQuestion,
-      postDraughtReliefQuestion(true),
-      getSmallProducerReliefQuestion,
-      postSmallProducerReliefQuestion(true),
-      getTaxTypeCode,
-      postTaxTypeCode("Wine, tax type code 378"),
-      getDeclareSmallProducerReliefDutyRate,
-      postDeclareSmallProducerReliefDutyRate,
-      getProductVolumePage,
-      postProductVolumePage,
-      getPureAlcoholPage,
-      getProductDutyRatePage("£16.61")
+      postDeclareAlcoholDutyQuestion(),
+      getAlcoholTypesToDeclare,
+      postAlcoholTypesToDeclare,
+      getWhatDoYouNeedToDeclareBeerPage,
+      postWhatDoYouNeedToDeclareBeerPage,
+      getHowMuchYouNeedToDeclareBeerPage,
+      postHowMuchYouNeedToDeclareBeerPage,
+      getDoYouHaveMultipleSprDutyRateBeerPage,
+      postDoYouHaveMultipleSprDutyRateBeerPage(false),
+      getSingleSprRateBeerPage,
+      postSingleSprRateBeerPage,
+      getCheckYourAnswersReturnsBeerPage,
+      getDutyDueBeerPage("£14,749.75"),
+      postDutyDueBeerPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareCiderPage,
+      postWhatDoYouNeedToDeclareCiderPage,
+      getHowMuchYouNeedToDeclareCiderPage,
+      postHowMuchYouNeedToDeclareCiderPage,
+      getDoYouHaveMultipleSprDutyRateCiderPage,
+      postDoYouHaveMultipleSprDutyRateCiderPage(false),
+      getSingleSprRateCiderPage,
+      postSingleSprRateCiderPage,
+      getCheckYourAnswersReturnsCiderPage,
+      getDutyDueCiderPage("£8,436.43"),
+      postDutyDueCiderPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareWinePage,
+      postWhatDoYouNeedToDeclareWinePage,
+      getHowMuchYouNeedToDeclareWinePage,
+      postHowMuchYouNeedToDeclareWinePage,
+      getDoYouHaveMultipleSprDutyRateWinePage,
+      postDoYouHaveMultipleSprDutyRateWinePage(false),
+      getSingleSprRateWinePage,
+      postSingleSprRateWinePage,
+      getCheckYourAnswersReturnsWinePage,
+      getDutyDueWinePage("£15,041.34"),
+      postDutyDueWinePage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareSpiritsPage,
+      postWhatDoYouNeedToDeclareSpiritsPage,
+      getHowMuchYouNeedToDeclareSpiritsPage,
+      postHowMuchYouNeedToDeclareSpiritsPage,
+      getDoYouHaveMultipleSprDutyRateSpiritsPage,
+      postDoYouHaveMultipleSprDutyRateSpiritsPage(false),
+      getSingleSprRateSpiritsPage,
+      postSingleSprRateSpiritsPage,
+      getCheckYourAnswersReturnsSpiritsPage,
+      getDutyDueSpiritsPage("£15,041.34"),
+      postDutyDueSpiritsPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareOtherFermentedProductPage,
+      postWhatDoYouNeedToDeclareOtherFermentedProductPage,
+      getHowMuchYouNeedToDeclareOtherFermentedProductPage,
+      postHowMuchYouNeedToDeclareOtherFermentedProductPage,
+      getDoYouHaveMultipleSprDutyRateOtherFermentedProductPage,
+      postDoYouHaveMultipleSprDutyRateOtherFermentedProductPage(false),
+      getSingleSprRateOtherFermentedProductPage,
+      postSingleSprRateOtherFermentedProductPage,
+      getCheckYourAnswersReturnsOtherFermentedProductPage,
+      getDutyDueOtherFermentedProductPage("£15,041.34"),
+      postDutyDueOtherFermentedProductPage,
+      getTaskListPage
     )
-
   setup(
-    "alcohol-duty-returns-with-SPR-and-DR-Yes-journey",
-    "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected Yes"
+    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
+    "Alcohol Duty Returns Journey When Multiple SPR is set to No"
   ) withActions
-    (AlcoholDutyReturnsJourneyWithSPRandDRYes: _*)
+    (AlcoholDutyReturnsJourneyWithMultipleSPRisSetToNo: _*)
 
-  val AlcoholDutyReturnsJourneyWithSPRandDRNo: List[ActionBuilder] =
+  val AlcoholDutyReturnsJourneyWithMultipleSPRisSetToYes: List[ActionBuilder] =
     List[ActionBuilder](
+      getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
+      getBeforeYouStartPage,
+      postBeforeYouStartPage,
+      getTaskListPage,
       getDeclareAlcoholDutyQuestion,
-      postDeclareAlcoholDutyQuestion,
-      getProductEntryGuidancePage,
-      navigateToProductNamePage,
-      postProductName,
-      getAlcoholByVolumeQuestion,
-      postAlcoholByVolume,
-      getDraughtReliefQuestion,
-      postDraughtReliefQuestion(false),
-      getSmallProducerReliefQuestion,
-      postSmallProducerReliefQuestion(false),
-      getTaxTypeCode,
-      postTaxTypeCode("Beer, tax type code 321", false),
-      getProductVolumePage,
-      postProductVolumePage,
-      getPureAlcoholPage,
-      getProductDutyRatePage("£34.52")
+      postDeclareAlcoholDutyQuestion(),
+      getAlcoholTypesToDeclare,
+      postAlcoholTypesToDeclare,
+      getWhatDoYouNeedToDeclareBeerPage,
+      postWhatDoYouNeedToDeclareBeerPage,
+      getHowMuchYouNeedToDeclareBeerPage,
+      postHowMuchYouNeedToDeclareBeerPage,
+      postDoYouHaveMultipleSprDutyRateBeerPage(),
+      getMultipleSprRateBeerPage,
+      postMultipleSprRateBeerPage,
+      getCheckYourAnswersSprBeerPage,
+      postCheckYourAnswersSprBeerPage,
+      getMultipleSprListQuestionBeerPage,
+      postMultipleSprListQuestionBeerPage(false),
+      getCheckYourAnswersReturnsBeerPage,
+      getDutyDueBeerPage("£10,717.14"),
+      postDutyDueBeerPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareCiderPage,
+      postWhatDoYouNeedToDeclareCiderPage,
+      getHowMuchYouNeedToDeclareCiderPage,
+      postHowMuchYouNeedToDeclareCiderPage,
+      postDoYouHaveMultipleSprDutyRateCiderPage(),
+      getMultipleSprRateCiderPage,
+      postMultipleSprRateCiderPage,
+      getCheckYourAnswersSprCiderPage,
+      postCheckYourAnswersSprCiderPage,
+      getMultipleSprListQuestionCiderPage,
+      postMultipleSprListQuestionCiderPage(false),
+      getCheckYourAnswersReturnsCiderPage,
+      getDutyDueCiderPage("£4,403.82"),
+      postDutyDueCiderPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareWinePage,
+      postWhatDoYouNeedToDeclareWinePage,
+      getHowMuchYouNeedToDeclareWinePage,
+      postHowMuchYouNeedToDeclareWinePage,
+      postDoYouHaveMultipleSprDutyRateWinePage(),
+      getMultipleSprRateWinePage,
+      postMultipleSprRateWinePage,
+      getCheckYourAnswersSprWinePage,
+      postCheckYourAnswersSprWinePage,
+      getMultipleSprListQuestionWinePage,
+      postMultipleSprListQuestionWinePage(false),
+      getCheckYourAnswersReturnsWinePage,
+      getDutyDueWinePage("£11,008.73"),
+      postDutyDueWinePage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareSpiritsPage,
+      postWhatDoYouNeedToDeclareSpiritsPage,
+      getHowMuchYouNeedToDeclareSpiritsPage,
+      postHowMuchYouNeedToDeclareSpiritsPage,
+      postDoYouHaveMultipleSprDutyRateSpiritsPage(),
+      getMultipleSprRateSpiritsPage,
+      postMultipleSprRateSpiritsPage,
+      getCheckYourAnswersSprSpiritsPage,
+      postCheckYourAnswersSprSpiritsPage,
+      getMultipleSprListQuestionSpiritsPage,
+      postMultipleSprListQuestionSpiritsPage(false),
+      getCheckYourAnswersReturnsSpiritsPage,
+      getDutyDueSpiritsPage("£11,008.73"),
+      postDutyDueSpiritsPage,
+      getTaskListPage,
+      getWhatDoYouNeedToDeclareOtherFermentedProductPage,
+      postWhatDoYouNeedToDeclareOtherFermentedProductPage,
+      getHowMuchYouNeedToDeclareOtherFermentedProductPage,
+      postHowMuchYouNeedToDeclareOtherFermentedProductPage,
+      postDoYouHaveMultipleSprDutyRateOtherFermentedProductPage(),
+      getMultipleSprRateOtherFermentedProductPage,
+      postMultipleSprRateOtherFermentedProductPage,
+      getCheckYourAnswersSprOtherFermentedProductPage,
+      postCheckYourAnswersSprOtherFermentedProductPage,
+      getMultipleSprListQuestionOtherFermentedProductPage,
+      postMultipleSprListQuestionOtherFermentedProductPage(false),
+      getCheckYourAnswersReturnsOtherFermentedProductPage,
+      getDutyDueOtherFermentedProductPage("£11,008.73"),
+      postDutyDueOtherFermentedProductPage,
+      getTaskListPage
     )
   setup(
-    "alcohol-duty-returns-with-SPR-and-DR-No-journey",
-    "Alcohol Duty Returns Journey When Draught Relief and Small Producer Relief Selected No"
+    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-yes",
+    "Alcohol Duty Returns Journey When Multiple SPR is set to YES"
   ) withActions
-    (AlcoholDutyReturnsJourneyWithSPRandDRNo: _*)
+    (AlcoholDutyReturnsJourneyWithMultipleSPRisSetToYes: _*)
 
   val DeclareDutySuspendedDeliveriesJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
@@ -107,14 +221,17 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getCheckYourAnswersDutySuspendedDeliveries,
       getTaskListPage
     )
-  setup("declare-duty-suspended-deliveries-journey-with-option-yes", "Declare Duty Suspended Deliveries Journey With Option Yes") withActions
+  setup(
+    "declare-duty-suspended-deliveries-journey-with-option-yes",
+    "Declare Duty Suspended Deliveries Journey With Option Yes"
+  ) withActions
     (DeclareDutySuspendedDeliveriesJourneyWithOptionYes: _*)
 
   val DeclareDutySuspendedDeliveriesJourneyWithOptionNo: List[ActionBuilder] =
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
@@ -122,14 +239,17 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDeclareDutySuspendedDeliveriesQuestion(false),
       getTaskListPage
     )
-  setup("declare-duty-suspended-deliveries-journey-with-option-no", "Declare Duty Suspended Deliveries Journey With Option No") withActions
+  setup(
+    "declare-duty-suspended-deliveries-journey-with-option-no",
+    "Declare Duty Suspended Deliveries Journey With Option No"
+  ) withActions
     (DeclareDutySuspendedDeliveriesJourneyWithOptionNo: _*)
 
   val DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
@@ -156,14 +276,17 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getQuarterlySpiritsCheckYourAnswersPage,
       getTaskListPage
     )
-  setup("declare-quarterly-spirits-questions-journey-with-option-yes", "Declare Quarterly Spirits Questions Journey With Option Yes") withActions
+  setup(
+    "declare-quarterly-spirits-questions-journey-with-option-yes",
+    "Declare Quarterly Spirits Questions Journey With Option Yes"
+  ) withActions
     (DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: _*)
 
   val DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: List[ActionBuilder] =
     List[ActionBuilder](
       getClearData,
       getAuthLoginPage,
-      loginWithAuthLoginStub,
+      postAuthLoginPage,
       getBeforeYouStartPage,
       postBeforeYouStartPage,
       getTaskListPage,
@@ -171,7 +294,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postQuarterlySpiritsReturnsGuidancePage(false),
       getTaskListPage
     )
-  setup("declare-quarterly-spirits-questions-journey-with-option-no", "Declare Quarterly Spirits Questions Journey With Option No") withActions
+  setup(
+    "declare-quarterly-spirits-questions-journey-with-option-no",
+    "Declare Quarterly Spirits Questions Journey With Option No"
+  ) withActions
     (DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: _*)
 
   runSimulation()
