@@ -199,7 +199,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
 
   val DeclareDutySuspendedDeliveriesJourneyWithOptionYes: List[ActionBuilder] =
     List[ActionBuilder](
-      getClearData,
+//      getClearData,
       getAuthLoginPage,
       postAuthLoginPage,
       getBeforeYouStartPage,

@@ -16,15 +16,25 @@
 
 package uk.gov.hmrc.perftests.example
 
+import io.gatling.commons.validation.Validation
 import io.gatling.core.Predef._
+import io.gatling.core.check.Check.PreparedCache
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import io.gatling.core.check.CheckBuilder
+import io.gatling.core.check.{Check, CheckBuilder, CheckResult}
 import io.gatling.core.check.regex.RegexCheckType
 
 import java.time.LocalDate
+import scala.util.Random
 
+class CustomHttpCheck extends Check[Response] {
+  override def check(response: Response, session: Session, preparedCache: PreparedCache): Validation[CheckResult] = {
+    println(s"response.status:${response.status}")
+    println(s"response.body:${response.body.string}")
+    CheckResult.NoopCheckResultSuccess
+  }
+}
 object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
@@ -53,6 +63,20 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     else
       12
 
+    private val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    private val random = new Random()
+    private val usedReferences = scala.collection.mutable.Set[String]()
+
+    def generateUniqueReference(length: Int): String = {
+      var reference: String = ""
+      do {
+        reference = (1 to length).map(_ => characters(random.nextInt(characters.length))).mkString
+      } while (usedReferences.contains(reference))
+      usedReferences.add(reference)
+      println("*****************************Reference =" + reference)
+      reference
+    }
+
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
 
   def getClearData: HttpRequestBuilder =
@@ -80,7 +104,8 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("enrolment[0].state", "Activated")
       .formParam("enrolment[0].name", "HMRC-AD-ORG")
       .formParam("enrolment[0].taxIdentifier[0].name", "APPAID")
-      .formParam("enrolment[0].taxIdentifier[0].value", "XMADN0000100208")
+//      .formParam("enrolment[0].taxIdentifier[0].value", "XMADN0000100208")
+      .formParam("enrolment[0].taxIdentifier[0].value", generateUniqueReference(5) + "0000100208")
       .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey())
       .check(status.is(303))
       .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey(): String))
