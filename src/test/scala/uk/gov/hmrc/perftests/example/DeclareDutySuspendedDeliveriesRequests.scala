@@ -35,8 +35,7 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
 
   def getBeforeYouStartPage: HttpRequestBuilder =
     http("Get Before You Start Page")
-      .get(s"$baseUrl/$route/before-you-start-your-return/" + periodKey(): String)
-      .check(HttpCheck(new CustomHttpCheck(), HttpCheckScope.Body))
+      .get(s"$baseUrl/$route/before-you-start-your-return/" + periodKey: String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Before you start"))

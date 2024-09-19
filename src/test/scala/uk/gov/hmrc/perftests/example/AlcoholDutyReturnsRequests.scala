@@ -44,7 +44,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
   val Year: Int       = LocalDate.now().getYear
   val Month: Int      = LocalDate.now().getMonthValue
 
-  def periodKey(): String =
+  val periodKey: String =
     s"""${generateYear(Year: Int).toString.takeRight(2)}A${(generateMonth(Month: Int) + 64).toChar}"""
 
   def generateYear(Year: Int): Int =
@@ -63,19 +63,18 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     else
       12
 
-    private val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    private val random = new Random()
-    private val usedReferences = scala.collection.mutable.Set[String]()
+  private val characters     = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  private val random         = new Random()
+  private val usedReferences = scala.collection.mutable.Set[String]()
 
-    def generateUniqueReference(length: Int): String = {
-      var reference: String = ""
-      do {
-        reference = (1 to length).map(_ => characters(random.nextInt(characters.length))).mkString
-      } while (usedReferences.contains(reference))
-      usedReferences.add(reference)
-      println("*****************************Reference =" + reference)
-      reference
-    }
+  def generateUniqueReference(length: Int): String = {
+    var reference: String = ""
+    do reference = (1 to length).map(_ => characters(random.nextInt(characters.length))).mkString while (usedReferences
+      .contains(reference))
+    usedReferences.add(reference)
+//    println("*****************************Reference =" + reference)
+    reference
+  }
 
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
 
@@ -83,6 +82,12 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     http("Clear Data")
       .get(s"$baseUrl/$route/test-only/clear-all": String)
       .check(status.is(200))
+
+  def getClearReturnData: HttpRequestBuilder =
+    http("Clear Data")
+      .get(baseUrl + "/" + route + "/test-only/clear-return/${appaId}/" + periodKey)
+      .check(status.is(200))
+      .check(regex("All return data is cleared").exists)
 
   def getAuthLoginPage: HttpRequestBuilder =
     http("Navigate to auth login stub page")
@@ -105,10 +110,10 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("enrolment[0].name", "HMRC-AD-ORG")
       .formParam("enrolment[0].taxIdentifier[0].name", "APPAID")
 //      .formParam("enrolment[0].taxIdentifier[0].value", "XMADN0000100208")
-      .formParam("enrolment[0].taxIdentifier[0].value", generateUniqueReference(5) + "0000100208")
-      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey())
+      .formParam("enrolment[0].taxIdentifier[0].value", "${appaId}")
+      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey)
       .check(status.is(303))
-      .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey(): String))
+      .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey: String))
 
   def getDeclareAlcoholDutyQuestion: HttpRequestBuilder =
     http("Navigate to Declaring Your Alcohol Duty Page")
