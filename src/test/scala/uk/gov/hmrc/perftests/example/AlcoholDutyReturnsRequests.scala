@@ -27,14 +27,6 @@ import io.gatling.core.check.regex.RegexCheckType
 
 import java.time.LocalDate
 import scala.util.Random
-
-class CustomHttpCheck extends Check[Response] {
-  override def check(response: Response, session: Session, preparedCache: PreparedCache): Validation[CheckResult] = {
-    println(s"response.status:${response.status}")
-    println(s"response.body:${response.body.string}")
-    CheckResult.NoopCheckResultSuccess
-  }
-}
 object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
@@ -72,7 +64,6 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     do reference = (1 to length).map(_ => characters(random.nextInt(characters.length))).mkString while (usedReferences
       .contains(reference))
     usedReferences.add(reference)
-//    println("*****************************Reference =" + reference)
     reference
   }
 
