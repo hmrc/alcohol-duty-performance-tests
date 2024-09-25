@@ -20,7 +20,6 @@ import io.gatling.core.Predef._
 import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
 import io.gatling.http.Predef._
-import io.gatling.http.check.{HttpCheck, HttpCheckScope}
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests.periodKey

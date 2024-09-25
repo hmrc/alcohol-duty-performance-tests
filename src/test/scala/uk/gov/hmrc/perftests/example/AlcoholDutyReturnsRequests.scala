@@ -109,7 +109,6 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("enrolment[0].state", "Activated")
       .formParam("enrolment[0].name", "HMRC-AD-ORG")
       .formParam("enrolment[0].taxIdentifier[0].name", "APPAID")
-//      .formParam("enrolment[0].taxIdentifier[0].value", "XMADN0000100208")
       .formParam("enrolment[0].taxIdentifier[0].value", "${appaId}")
       .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey)
       .check(status.is(303))

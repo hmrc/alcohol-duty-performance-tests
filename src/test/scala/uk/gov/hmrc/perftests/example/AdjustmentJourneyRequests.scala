@@ -37,14 +37,14 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(status.is(200))
       .check(regex("Do you need to make an adjustment to a previously submitted return?"))
 
-  def postDeclareAdjustmentQuestionPage(declareAdjusmentQuestion: Boolean = true): HttpRequestBuilder = {
+  def postDeclareAdjustmentQuestionPage(declareAdjustmentQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post Declare Adjustment Question")
       .post(s"$baseUrl/$route/adjust-a-previous-return")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("declareQuarterlySpirits-yesNoValue", declareAdjusmentQuestion)
+      .formParam("declare-adjustment-question-value", declareAdjustmentQuestion)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/${
-        if (declareAdjusmentQuestion) "type-of-adjustment"
+        if (declareAdjustmentQuestion) "type-of-adjustment"
         else "task-list/your-alcohol-duty-return"
       }": String))
   }
@@ -56,21 +56,20 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(status.is(200))
       .check(regex("What type of adjustment do you need to make?"))
 
-  def postAdjustmentType: HttpRequestBuilder =
+  def postAdjustmentType(adjustmentType: String): HttpRequestBuilder =
     http("Post Adjustment Type")
-      .post(s"$baseUrl/$route/what-is-the-total-volume-of-spirits-you-made-this-quarter")
+      .post(s"$baseUrl/$route/type-of-adjustment")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("value", "under-declaration")
+      .formParam("adjustment-type-value", adjustmentType)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/adjustment-return-date": String))
 
-
-  def getAdjustmentReturnDatePage: HttpRequestBuilder =
+  def getAdjustmentReturnDatePage(pageHeader: String): HttpRequestBuilder =
     http("Get Adjustment Return Date Page")
       .get(s"$baseUrl/$route/adjustment-return-date": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("When should you have paid duty?"))
+      .check(regex(pageHeader))
 
   def postAdjustmentReturnDate: HttpRequestBuilder =
     http("Post Adjustment Return Date")
@@ -88,13 +87,16 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("What is the tax type code for the alcohol you are adjusting?"))
 
-  def postAdjustmentTaxTypeCode: HttpRequestBuilder =
+  def postAdjustmentTaxTypeCode(taxTypeCode: Int, withSpr: Boolean = true): HttpRequestBuilder =
     http("Post Adjustment Tax Type Code")
       .post(s"$baseUrl/$route/adjustment-tax-type-code")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("adjustment-tax-type-input", 371)
+      .formParam("adjustment-tax-type-input", taxTypeCode)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/adjustment-volume-with-spr": String))
+      .check(header("Location").is(s"/$route/${
+        if (withSpr) "adjustment-volume-with-spr"
+        else "adjustment-volume"
+      }": String))
 
   def getAdjustmentVolumeWithSprPage: HttpRequestBuilder =
     http("Get Adjustment Volume With Spr Page")
@@ -103,7 +105,7 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("How much do you need to adjust?"))
 
-  def postAdjustmentVolumeWithSpr: HttpRequestBuilder =
+  def postAdjustmentVolumeWithSpr(isRepackaged: Boolean = false): HttpRequestBuilder =
     http("Post Adjustment Volume With Spr")
       .post(s"$baseUrl/$route/adjustment-volume-with-spr")
       .formParam("csrfToken", "${csrfToken}")
@@ -111,14 +113,62 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .formParam("volumes.pureAlcoholVolume", 250.55)
       .formParam("volumes.sprDutyRate", 9.8)
       .check(status.is(303))
+      .check(header("Location").is(s"/$route/${
+        if (isRepackaged) "new-tax-type-code"
+        else "adjustment-duty-value"
+      }": String))
+
+  def getAdjustmentVolumeWithoutSprPage: HttpRequestBuilder =
+    http("Get Adjustment Volume Without Spr Page")
+      .get(s"$baseUrl/$route/adjustment-volume": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("How much do you need to adjust?"))
+
+  def postAdjustmentVolumeWithoutSpr: HttpRequestBuilder =
+    http("Post Adjustment Volume Without Spr")
+      .post(s"$baseUrl/$route/adjustment-volume")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("volumes.totalLitresVolume", 3000.75)
+      .formParam("volumes.pureAlcoholVolume", 250.55)
+      .check(status.is(303))
       .check(header("Location").is(s"/$route/adjustment-duty-value": String))
 
-  def getAdjustmentDutyValuePage: HttpRequestBuilder =
+  def getNewTaxTypeCodePage: HttpRequestBuilder =
+    http("Get New Tax Type Code Page")
+      .get(s"$baseUrl/$route/new-tax-type-code": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("What is the tax type code for the newly repackaged products?"))
+
+  def postNewTaxTypeCode: HttpRequestBuilder =
+    http("Post New Tax Type Code")
+      .post(s"$baseUrl/$route/new-tax-type-code")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("new-tax-type-code", 363)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/new-spr-duty-rate": String))
+
+  def getNewSprDutyRatePage: HttpRequestBuilder =
+    http("Get New Spr Duty Rate Page")
+      .get(s"$baseUrl/$route/new-spr-duty-rate": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("What is your Small Producer Relief Duty rate for the newly repackaged products?"))
+
+  def postNewSprDutyRate: HttpRequestBuilder =
+    http("Post New Spr Duty Rate")
+      .post(s"$baseUrl/$route/new-spr-duty-rate")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("adjustment-small-producer-relief-duty-rate-input", 11.5)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/adjustment-duty-value": String))
+
+  def getAdjustmentDutyValuePage(dutyDueAmount: String): HttpRequestBuilder =
     http("Get Adjustment Duty Value Page")
       .get(s"$baseUrl/$route/adjustment-duty-value": String)
       .check(status.is(200))
-      .check(saveCsrfToken())
-      .check(regex("The duty value for this adjustment is £2,455.39"))
+      .check(regex("The duty value for this adjustment is " + dutyDueAmount))
 
   def getAdjustmentsCheckYourAnswersPage: HttpRequestBuilder =
     http("Get Adjustments Check Your Answers Page")
@@ -127,26 +177,26 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(regex("Check your answers"))
 
   def postAdjustmentsCheckYourAnswers: HttpRequestBuilder =
-    http("Post Adjustment Volume With Spr")
+    http("Post Adjustments Check Your Answers")
       .post(s"$baseUrl/$route/adjustment-check-your-answers")
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/adjustments-to-previous-returns": String))
+      .check(header("Location").is(s"/$route/adjustments-to-previous-returns/1": String))
 
   def getAdjustmentListPage: HttpRequestBuilder =
     http("Get Adjustment List Page")
-      .get(s"$baseUrl/$route/adjustments-to-previous-returns": String)
+      .get(s"$baseUrl/$route/adjustments-to-previous-returns/1": String)
       .check(status.is(200))
       .check(regex("Adjustments to previous returns"))
 
-  def postAdjustmentList(anyOtherAdjusmentQuestion: Boolean = true): HttpRequestBuilder = {
+  def postAdjustmentList(anyOtherAdjustmentQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post Adjustment List")
-      .post(s"$baseUrl/$route/adjustments-to-previous-returns")
+      .post(s"$baseUrl/$route/adjustments-to-previous-returns/1")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("adjustment-list-yes-no-value", anyOtherAdjusmentQuestion)
+      .formParam("adjustment-list-yes-no-value", anyOtherAdjustmentQuestion)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/${
-        if (anyOtherAdjusmentQuestion) "type-of-adjustment"
+        if (anyOtherAdjustmentQuestion) "type-of-adjustment"
         else "task-list/your-alcohol-duty-return"
       }": String))
   }
