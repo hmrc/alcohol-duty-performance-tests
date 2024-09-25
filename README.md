@@ -19,7 +19,7 @@ Run below command in terminal:
 sbt -DrunLocal=true gatling:test
 
 ### 3. To run full tests in staging
-Go to jenkins job at https://performance.tools.staging.tax.service.gov.uk/job/alcohol-duty-performance-tests/ 
+Go to Jenkins Performance Tests Job on Staging
 Click on 'Build with parameters'
 Enter branch name (leave blank if the tests needs to run from the main branch)
 Set below parameters:
