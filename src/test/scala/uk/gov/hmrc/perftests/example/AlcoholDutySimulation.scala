@@ -16,17 +16,24 @@
 
 package uk.gov.hmrc.perftests.example
 
-import io.gatling.core.action.builder.ActionBuilder
+import io.gatling.core.Predef._
+import io.gatling.core.structure.ChainBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
+import uk.gov.hmrc.perftests.example.AdjustmentJourneyRequests.{getAdjustmentDutyValuePage, getAdjustmentListPage, getAdjustmentReturnDatePage, getAdjustmentTaxTypeCodePage, getAdjustmentTypePage, getAdjustmentVolumeWithSprPage, getAdjustmentVolumeWithoutSprPage, getAdjustmentsCheckYourAnswersPage, getDeclareAdjustmentQuestionPage, getNewSprDutyRatePage, getNewTaxTypeCodePage, postAdjustmentList, postAdjustmentReturnDate, postAdjustmentTaxTypeCode, postAdjustmentType, postAdjustmentVolumeWithSpr, postAdjustmentVolumeWithoutSpr, postAdjustmentsCheckYourAnswers, postDeclareAdjustmentQuestionPage, postNewSprDutyRate, postNewTaxTypeCode}
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests.{getCheckYourAnswersDutySuspendedDeliveries, _}
 import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{postQuarterlySpiritsReturnsGuidancePage, _}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
-  val AlcoholDutyReturnsJourneyWithMultipleSPRisSetToNo: List[ActionBuilder] =
-    List[ActionBuilder](
-      getClearData,
+  val randomAppaIds: Iterator[Map[String, String]] =
+    Iterator.continually(Map("appaId" -> s"${generateUniqueReference(5)}0000100208"))
+  def appaIdFeeder: ChainBuilder = feed(randomAppaIds)
+
+  setup(
+    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
+    "Alcohol Duty Returns Journey When Multiple SPR is set to No"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
       getAuthLoginPage,
       postAuthLoginPage,
       getBeforeYouStartPage,
@@ -97,15 +104,11 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDutyDueOtherFermentedProductPage,
       getTaskListPage
     )
-  setup(
-    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
-    "Alcohol Duty Returns Journey When Multiple SPR is set to No"
-  ) withActions
-    (AlcoholDutyReturnsJourneyWithMultipleSPRisSetToNo: _*)
 
-  val AlcoholDutyReturnsJourneyWithMultipleSPRisSetToYes: List[ActionBuilder] =
-    List[ActionBuilder](
-      getClearData,
+  setup(
+    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-yes",
+    "Alcohol Duty Returns Journey When Multiple SPR is set to YES"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
       getAuthLoginPage,
       postAuthLoginPage,
       getBeforeYouStartPage,
@@ -191,45 +194,37 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDutyDueOtherFermentedProductPage,
       getTaskListPage
     )
-  setup(
-    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-yes",
-    "Alcohol Duty Returns Journey When Multiple SPR is set to YES"
-  ) withActions
-    (AlcoholDutyReturnsJourneyWithMultipleSPRisSetToYes: _*)
 
-  val DeclareDutySuspendedDeliveriesJourneyWithOptionYes: List[ActionBuilder] =
-    List[ActionBuilder](
-      getClearData,
-      getAuthLoginPage,
-      postAuthLoginPage,
-      getBeforeYouStartPage,
-      postBeforeYouStartPage,
-      getTaskListPage,
-      getDeclareDutySuspendedDeliveriesQuestion,
-      postDeclareDutySuspendedDeliveriesQuestion(),
-      getDutySuspendedDeliveriesGuidance,
-      getDutySuspendedBeer,
-      postDutySuspendedBeer,
-      getDutySuspendedCider,
-      postDutySuspendedCider,
-      getDutySuspendedWine,
-      postDutySuspendedWine,
-      getDutySuspendedSpirits,
-      postDutySuspendedSpirits,
-      getDutySuspendedOtherFermentedProducts,
-      postDutySuspendedOtherFermentedProducts,
-      getCheckYourAnswersDutySuspendedDeliveries,
-      getTaskListPage
-    )
   setup(
     "declare-duty-suspended-deliveries-journey-with-option-yes",
     "Declare Duty Suspended Deliveries Journey With Option Yes"
-  ) withActions
-    (DeclareDutySuspendedDeliveriesJourneyWithOptionYes: _*)
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
+    getAuthLoginPage,
+    postAuthLoginPage,
+    getBeforeYouStartPage,
+    postBeforeYouStartPage,
+    getTaskListPage,
+    getDeclareDutySuspendedDeliveriesQuestion,
+    postDeclareDutySuspendedDeliveriesQuestion(),
+    getDutySuspendedDeliveriesGuidance,
+    getDutySuspendedBeer,
+    postDutySuspendedBeer,
+    getDutySuspendedCider,
+    postDutySuspendedCider,
+    getDutySuspendedWine,
+    postDutySuspendedWine,
+    getDutySuspendedSpirits,
+    postDutySuspendedSpirits,
+    getDutySuspendedOtherFermentedProducts,
+    postDutySuspendedOtherFermentedProducts,
+    getCheckYourAnswersDutySuspendedDeliveries,
+    getTaskListPage
+  )
 
-  val DeclareDutySuspendedDeliveriesJourneyWithOptionNo: List[ActionBuilder] =
-    List[ActionBuilder](
-      getClearData,
+  setup(
+    "declare-duty-suspended-deliveries-journey-with-option-no",
+    "Declare Duty Suspended Deliveries Journey With Option No"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
       getAuthLoginPage,
       postAuthLoginPage,
       getBeforeYouStartPage,
@@ -239,15 +234,11 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postDeclareDutySuspendedDeliveriesQuestion(false),
       getTaskListPage
     )
-  setup(
-    "declare-duty-suspended-deliveries-journey-with-option-no",
-    "Declare Duty Suspended Deliveries Journey With Option No"
-  ) withActions
-    (DeclareDutySuspendedDeliveriesJourneyWithOptionNo: _*)
 
-  val DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: List[ActionBuilder] =
-    List[ActionBuilder](
-      getClearData,
+  setup(
+    "declare-quarterly-spirits-questions-journey-with-option-yes",
+    "Declare Quarterly Spirits Questions Journey With Option Yes"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
       getAuthLoginPage,
       postAuthLoginPage,
       getBeforeYouStartPage,
@@ -276,15 +267,11 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       getQuarterlySpiritsCheckYourAnswersPage,
       getTaskListPage
     )
-  setup(
-    "declare-quarterly-spirits-questions-journey-with-option-yes",
-    "Declare Quarterly Spirits Questions Journey With Option Yes"
-  ) withActions
-    (DeclareQuarterlySpiritsQuestionsJourneyWithOptionYes: _*)
 
-  val DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: List[ActionBuilder] =
-    List[ActionBuilder](
-      getClearData,
+  setup(
+    "declare-quarterly-spirits-questions-journey-with-option-no",
+    "Declare Quarterly Spirits Questions Journey With Option No"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
       getAuthLoginPage,
       postAuthLoginPage,
       getBeforeYouStartPage,
@@ -294,11 +281,108 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
       postQuarterlySpiritsReturnsGuidancePage(false),
       getTaskListPage
     )
+
   setup(
-    "declare-quarterly-spirits-questions-journey-with-option-no",
-    "Declare Quarterly Spirits Questions Journey With Option No"
-  ) withActions
-    (DeclareQuarterlySpiritsQuestionsJourneyWithOptionNo: _*)
+    "declare-adjustments-journey-with-option-yes",
+    "Declare Adjustments Journey With Option Yes"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests(
+    getAuthLoginPage,
+    postAuthLoginPage,
+    getBeforeYouStartPage,
+    postBeforeYouStartPage,
+    getTaskListPage,
+    getDeclareAdjustmentQuestionPage,
+    postDeclareAdjustmentQuestionPage(),
+//    Under-Declaration Journey starts here
+    getAdjustmentTypePage,
+    postAdjustmentType("under-declaration"),
+    getAdjustmentReturnDatePage("When should you have paid duty?"),
+    postAdjustmentReturnDate,
+    getAdjustmentTaxTypeCodePage,
+    postAdjustmentTaxTypeCode(371),
+    getAdjustmentVolumeWithSprPage,
+    postAdjustmentVolumeWithSpr(),
+    getAdjustmentDutyValuePage("£2,455.39"),
+    getAdjustmentsCheckYourAnswersPage,
+    postAdjustmentsCheckYourAnswers,
+    getAdjustmentListPage,
+    postAdjustmentList(),
+//    Over-Declaration Journey starts here
+    getAdjustmentTypePage,
+    postAdjustmentType("over-declaration"),
+    getAdjustmentReturnDatePage("When did you pay duty on this?"),
+    postAdjustmentReturnDate,
+    getAdjustmentTaxTypeCodePage,
+    postAdjustmentTaxTypeCode(371),
+    getAdjustmentVolumeWithSprPage,
+    postAdjustmentVolumeWithSpr(),
+    getAdjustmentDutyValuePage("−£2,455.39"),
+    getAdjustmentsCheckYourAnswersPage,
+    postAdjustmentsCheckYourAnswers,
+    getAdjustmentListPage,
+    postAdjustmentList(),
+//    Spoilt Journey starts here
+    getAdjustmentTypePage,
+    postAdjustmentType("spoilt"),
+    getAdjustmentReturnDatePage("To the nearest month, when did you pay duty on this?"),
+    postAdjustmentReturnDate,
+    getAdjustmentTaxTypeCodePage,
+    postAdjustmentTaxTypeCode(312,false),
+    getAdjustmentVolumeWithoutSprPage,
+    postAdjustmentVolumeWithoutSpr,
+    getAdjustmentDutyValuePage("−£2,322.59"),
+    getAdjustmentsCheckYourAnswersPage,
+    postAdjustmentsCheckYourAnswers,
+    getAdjustmentListPage,
+    postAdjustmentList(),
+//    Drawback Journey starts here
+    getAdjustmentTypePage,
+    postAdjustmentType("drawback"),
+    getAdjustmentReturnDatePage("When did you pay duty on this?"),
+    postAdjustmentReturnDate,
+    getAdjustmentTaxTypeCodePage,
+    postAdjustmentTaxTypeCode(314,false),
+    getAdjustmentVolumeWithoutSprPage,
+    postAdjustmentVolumeWithoutSpr,
+    getAdjustmentDutyValuePage("−£2,322.59"),
+    getAdjustmentsCheckYourAnswersPage,
+    postAdjustmentsCheckYourAnswers,
+    getAdjustmentListPage,
+    postAdjustmentList(),
+//    Repackaged Journey starts here
+    getAdjustmentTypePage,
+    postAdjustmentType("repackaged-draught-products"),
+    getAdjustmentReturnDatePage("When did you pay duty on this?"),
+    postAdjustmentReturnDate,
+    getAdjustmentTaxTypeCodePage,
+    postAdjustmentTaxTypeCode(373),
+    getAdjustmentVolumeWithSprPage,
+    postAdjustmentVolumeWithSpr(true),
+    getNewTaxTypeCodePage,
+    postNewTaxTypeCode,
+    getNewSprDutyRatePage,
+    postNewSprDutyRate,
+    getAdjustmentDutyValuePage("£425.93"),
+    getAdjustmentsCheckYourAnswersPage,
+    postAdjustmentsCheckYourAnswers,
+    getAdjustmentListPage,
+    postAdjustmentList(false),
+    getTaskListPage
+  )
+
+  setup(
+    "declare-adjustments-journey-with-option-no",
+    "Declare Adjustments Journey With Option No"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests(
+    getAuthLoginPage,
+    postAuthLoginPage,
+    getBeforeYouStartPage,
+    postBeforeYouStartPage,
+    getTaskListPage,
+    getDeclareAdjustmentQuestionPage,
+    postDeclareAdjustmentQuestionPage(false),
+    getTaskListPage
+  )
 
   runSimulation()
 }
