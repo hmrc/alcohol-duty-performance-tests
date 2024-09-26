@@ -1006,4 +1006,24 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
         header("Location").is(s"/$route/${if (multipleSprListQuestion) "change-multiple-spr-rates/OtherFermentedProduct"
           else "return-check-your-answers/OtherFermentedProduct"}": String)
       )
+
+  def getReturnSummary(dutyDueAmount: String): HttpRequestBuilder =
+    http("Navigate to Return Summary Page")
+      .get(s"$baseUrl/$route/return-summary": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("The duty due for this return is "+dutyDueAmount))
+
+  def postReturnSummary: HttpRequestBuilder =
+    http("Post Return Summary Page")
+      .post(s"$baseUrl/$route/return-summary")
+      .formParam("csrfToken", "${csrfToken}")
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/return-submitted": String))
+
+  def getReturnSubmitted: HttpRequestBuilder =
+    http("Navigate to Return Submitted Page")
+      .get(s"$baseUrl/$route/return-submitted": String)
+      .check(status.is(200))
+      .check(regex("Return submitted"))
 }
