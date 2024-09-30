@@ -32,7 +32,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
 
   setup(
     "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
-    "Alcohol Duty Returns Journey When Multiple SPR is set to No"
+    "Alcohol Duty Returns Journey - with and without SPR"
   ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
     getAuthLoginPage,
     postAuthLoginPage,
@@ -227,13 +227,8 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
 //RETURN SUMMARY PAGES
     getReturnSummary("£64,090.95"),
     postReturnSummary,
-    getReturnSubmitted
-  )
-
-  setup(
-    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-yes",
-    "Alcohol Duty Returns Journey When Multiple SPR is set to YES"
-  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
+    getReturnSubmitted,
+                                        /*SPR NO JOURNEY STARTS HERE*/
     getAuthLoginPage,
     postAuthLoginPage,
     getBeforeYouStartPage,

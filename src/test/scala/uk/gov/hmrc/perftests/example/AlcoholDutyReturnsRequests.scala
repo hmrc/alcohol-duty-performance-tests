@@ -16,13 +16,11 @@
 
 package uk.gov.hmrc.perftests.example
 
-import io.gatling.commons.validation.Validation
 import io.gatling.core.Predef._
-import io.gatling.core.check.Check.PreparedCache
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import io.gatling.core.check.{Check, CheckBuilder, CheckResult}
+import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
 
 import java.time.LocalDate
