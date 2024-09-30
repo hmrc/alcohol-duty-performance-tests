@@ -32,7 +32,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
 
   setup(
     "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
-    "Alcohol Duty Returns Journey - with and without SPR"
+    "Alcohol Duty Returns Journey When Multiple SPR is set to No"
   ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
     getAuthLoginPage,
     postAuthLoginPage,
@@ -43,7 +43,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDeclareAlcoholDutyQuestion(),
     getAlcoholTypesToDeclare,
     postAlcoholTypesToDeclare,
-//RETURNS JOURNEY - BEER
+    //RETURNS JOURNEY - BEER
     getWhatDoYouNeedToDeclareBeerPage,
     postWhatDoYouNeedToDeclareBeerPage,
     getHowMuchYouNeedToDeclareBeerPage,
@@ -56,7 +56,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueBeerPage("£14,749.75"),
     postDutyDueBeerPage,
     getTaskListPage,
-//RETURNS JOURNEY - CIDER
+    //RETURNS JOURNEY - CIDER
     getWhatDoYouNeedToDeclareCiderPage,
     postWhatDoYouNeedToDeclareCiderPage,
     getHowMuchYouNeedToDeclareCiderPage,
@@ -69,7 +69,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueCiderPage("£8,436.43"),
     postDutyDueCiderPage,
     getTaskListPage,
-//RETURNS JOURNEY - WINE
+    //RETURNS JOURNEY - WINE
     getWhatDoYouNeedToDeclareWinePage,
     postWhatDoYouNeedToDeclareWinePage,
     getHowMuchYouNeedToDeclareWinePage,
@@ -82,7 +82,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueWinePage("£15,041.34"),
     postDutyDueWinePage,
     getTaskListPage,
-//RETURNS JOURNEY - SPIRITS
+    //RETURNS JOURNEY - SPIRITS
     getWhatDoYouNeedToDeclareSpiritsPage,
     postWhatDoYouNeedToDeclareSpiritsPage,
     getHowMuchYouNeedToDeclareSpiritsPage,
@@ -95,7 +95,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueSpiritsPage("£15,041.34"),
     postDutyDueSpiritsPage,
     getTaskListPage,
-//RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
+    //RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
     getWhatDoYouNeedToDeclareOtherFermentedProductPage,
     postWhatDoYouNeedToDeclareOtherFermentedProductPage,
     getHowMuchYouNeedToDeclareOtherFermentedProductPage,
@@ -108,7 +108,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueOtherFermentedProductPage("£15,041.34"),
     postDutyDueOtherFermentedProductPage,
     getTaskListPage,
-//ADJUSTMENT JOURNEY - UNDER DECLARATION
+    //ADJUSTMENT JOURNEY - UNDER DECLARATION
     getDeclareAdjustmentQuestionPage,
     postDeclareAdjustmentQuestionPage(),
     getAdjustmentTypePage,
@@ -124,7 +124,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
     postAdjustmentList(),
-//ADJUSTMENT JOURNEY - OVER DECLARATION
+    //ADJUSTMENT JOURNEY - OVER DECLARATION
     getAdjustmentTypePage,
     postAdjustmentType("over-declaration"),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
@@ -138,7 +138,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
     postAdjustmentList(),
-//ADJUSTMENT JOURNEY - SPOILT
+    //ADJUSTMENT JOURNEY - SPOILT
     getAdjustmentTypePage,
     postAdjustmentType("spoilt"),
     getAdjustmentReturnDatePage("To the nearest month, when did you pay duty on this?"),
@@ -152,7 +152,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
     postAdjustmentList(),
-//ADJUSTMENT JOURNEY - DRAWBACK
+    //ADJUSTMENT JOURNEY - DRAWBACK
     getAdjustmentTypePage,
     postAdjustmentType("drawback"),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
@@ -166,7 +166,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
     postAdjustmentList(),
-//ADJUSTMENT JOURNEY - REPACKAGED
+    //ADJUSTMENT JOURNEY - REPACKAGED
     getAdjustmentTypePage,
     postAdjustmentType("repackaged-draught-products"),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
@@ -185,7 +185,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getAdjustmentListPage,
     postAdjustmentList(false),
     getTaskListPage,
-//DSD JOURNEY
+    //DSD JOURNEY
     getDeclareDutySuspendedDeliveriesQuestion,
     postDeclareDutySuspendedDeliveriesQuestion(),
     getDutySuspendedDeliveriesGuidance,
@@ -201,7 +201,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDutySuspendedOtherFermentedProducts,
     getCheckYourAnswersDutySuspendedDeliveries,
     getTaskListPage,
-//SPIRITS AND INGREDIENTS JOURNEY
+    //SPIRITS AND INGREDIENTS JOURNEY
     getQuarterlySpiritsReturnsGuidancePage,
     postQuarterlySpiritsReturnsGuidancePage(),
     getDeclareSpiritsTotalPage,
@@ -224,11 +224,16 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDeclareOtherIngredients,
     getQuarterlySpiritsCheckYourAnswersPage,
     getTaskListPage,
-//RETURN SUMMARY PAGES
+    //RETURN SUMMARY PAGES
     getReturnSummary("£64,090.95"),
     postReturnSummary,
-    getReturnSubmitted,
-                                        /*SPR NO JOURNEY STARTS HERE*/
+    getReturnSubmitted
+  )
+
+  setup(
+    "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-yes",
+    "Alcohol Duty Returns Journey When Multiple SPR is set to YES"
+  ) withActions (appaIdFeeder.actionBuilders: _*) withRequests (
     getAuthLoginPage,
     postAuthLoginPage,
     getBeforeYouStartPage,
@@ -238,7 +243,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDeclareAlcoholDutyQuestion(),
     getAlcoholTypesToDeclare,
     postAlcoholTypesToDeclare,
-//RETURNS JOURNEY - BEER
+    //RETURNS JOURNEY - BEER
     getWhatDoYouNeedToDeclareBeerPage,
     postWhatDoYouNeedToDeclareBeerPage,
     getHowMuchYouNeedToDeclareBeerPage,
@@ -254,7 +259,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueBeerPage("£10,717.14"),
     postDutyDueBeerPage,
     getTaskListPage,
-//RETURNS JOURNEY - CIDER
+    //RETURNS JOURNEY - CIDER
     getWhatDoYouNeedToDeclareCiderPage,
     postWhatDoYouNeedToDeclareCiderPage,
     getHowMuchYouNeedToDeclareCiderPage,
@@ -270,7 +275,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueCiderPage("£4,403.82"),
     postDutyDueCiderPage,
     getTaskListPage,
-//RETURNS JOURNEY - WINE
+    //RETURNS JOURNEY - WINE
     getWhatDoYouNeedToDeclareWinePage,
     postWhatDoYouNeedToDeclareWinePage,
     getHowMuchYouNeedToDeclareWinePage,
@@ -286,7 +291,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueWinePage("£11,008.73"),
     postDutyDueWinePage,
     getTaskListPage,
-//RETURNS JOURNEY - SPIRITS
+    //RETURNS JOURNEY - SPIRITS
     getWhatDoYouNeedToDeclareSpiritsPage,
     postWhatDoYouNeedToDeclareSpiritsPage,
     getHowMuchYouNeedToDeclareSpiritsPage,
@@ -302,7 +307,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueSpiritsPage("£11,008.73"),
     postDutyDueSpiritsPage,
     getTaskListPage,
-//RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
+    //RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
     getWhatDoYouNeedToDeclareOtherFermentedProductPage,
     postWhatDoYouNeedToDeclareOtherFermentedProductPage,
     getHowMuchYouNeedToDeclareOtherFermentedProductPage,
@@ -318,19 +323,19 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueOtherFermentedProductPage("£11,008.73"),
     postDutyDueOtherFermentedProductPage,
     getTaskListPage,
-//ADJUSTMENT JOURNEY - WITH OPTION 'NO'
+    //ADJUSTMENT JOURNEY - WITH OPTION 'NO'
     getDeclareAdjustmentQuestionPage,
     postDeclareAdjustmentQuestionPage(false),
     getTaskListPage,
-//DSD JOURNEY - WITH OPTION 'NO'
+    //DSD JOURNEY - WITH OPTION 'NO'
     getDeclareDutySuspendedDeliveriesQuestion,
     postDeclareDutySuspendedDeliveriesQuestion(false),
     getTaskListPage,
-//SPIRITS AND INGREDIENTS JOURNEY - WITH OPTION 'NO'
+    //SPIRITS AND INGREDIENTS JOURNEY - WITH OPTION 'NO'
     getQuarterlySpiritsReturnsGuidancePage,
     postQuarterlySpiritsReturnsGuidancePage(false),
     getTaskListPage,
-//RETURN SUMMARY PAGES
+    //RETURN SUMMARY PAGES
     getReturnSummary("£48,147.15 "),
     postReturnSummary,
     getReturnSubmitted
