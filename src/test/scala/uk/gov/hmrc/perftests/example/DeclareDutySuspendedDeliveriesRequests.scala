@@ -50,14 +50,14 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
     http("Get Task List Page")
       .get(s"$baseUrl/$route/task-list/your-alcohol-duty-return": String)
       .check(status.is(200))
-      .check(regex("Alcohol Duty return"))
+      .check(regex("Complete your Alcohol Duty Return"))
 
   def getDeclareDutySuspendedDeliveriesQuestion: HttpRequestBuilder =
     http("Get Declare Duty Suspended Deliveries Question Page")
       .get(s"$baseUrl/$route/do-you-need-to-declare-delivered-received-duty-suspended": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Do you need to declare alcohol you delivered or received duty suspended?"))
+      .check(regex("Do you need to tell us about any duty suspended alcohol?"))
 
   def postDeclareDutySuspendedDeliveriesQuestion(declareDSDQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Declare Duty Suspended Deliveries Question")
@@ -72,7 +72,7 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
     http("Get Duty Suspended Deliveries Guidance")
       .get(s"$baseUrl/$route/tell-us-about-your-duty-suspended-deliveries": String)
       .check(status.is(200))
-      .check(regex("Tell us about your duty suspended alcohol"))
+      .check(regex("Calculate your duty suspended alcohol"))
 
   def getDutySuspendedBeer: HttpRequestBuilder =
     http("Get Duty Suspended Beer")

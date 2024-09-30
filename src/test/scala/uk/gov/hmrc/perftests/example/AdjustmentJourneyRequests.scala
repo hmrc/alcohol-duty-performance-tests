@@ -35,7 +35,7 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
     http("Get Declare Adjustment Question Page")
       .get(s"$baseUrl/$route/adjust-a-previous-return": String)
       .check(status.is(200))
-      .check(regex("Do you need to make an adjustment to a previously submitted return?"))
+      .check(regex("Do you need to declare an adjustment from a previously submitted return?"))
 
   def postDeclareAdjustmentQuestionPage(declareAdjustmentQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post Declare Adjustment Question")
@@ -187,7 +187,7 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
     http("Get Adjustment List Page")
       .get(s"$baseUrl/$route/adjustments-to-previous-returns/1": String)
       .check(status.is(200))
-      .check(regex("Adjustments to previous returns"))
+      .check(regex("Adjustments from previous returns"))
 
   def postAdjustmentList(anyOtherAdjustmentQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post Adjustment List")
