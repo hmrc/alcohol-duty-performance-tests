@@ -16,13 +16,11 @@
 
 package uk.gov.hmrc.perftests.example
 
-import io.gatling.commons.validation.Validation
 import io.gatling.core.Predef._
-import io.gatling.core.check.Check.PreparedCache
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import io.gatling.core.check.{Check, CheckBuilder, CheckResult}
+import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
 
 import java.time.LocalDate
@@ -110,7 +108,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/do-you-need-to-declare-duty": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Declaring your alcohol duty"))
+      .check(regex("Declaring alcoholic products for duty"))
 
   def postDeclareAlcoholDutyQuestion(declareAlcoholDutyQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Declaring Your Alcohol Duty Page")
@@ -126,7 +124,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/which-types-do-you-need-to-declare": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("What alcohol do you need to declare on this return?"))
+      .check(regex("Which types of alcoholic products do you need to declare?"))
 
   def postAlcoholTypesToDeclare: HttpRequestBuilder =
     http("Post Alcohol Type to Declare Page")
@@ -301,7 +299,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/multiple-spr-list/Beer": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Small Producer Reliefs to declare"))
+      .check(regex("Beer with Small Producer Relief duty to declare"))
 
   def postMultipleSprListQuestionBeerPage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Beer Page")
@@ -465,7 +463,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/multiple-spr-list/Cider": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Small Producer Reliefs to declare"))
+      .check(regex("Cider with Small Producer Relief duty to declare"))
 
   def postMultipleSprListQuestionCiderPage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Cider Page")
@@ -637,7 +635,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/multiple-spr-list/Wine": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Small Producer Reliefs to declare"))
+      .check(regex("Wine with Small Producer Relief duty to declare"))
 
   def postMultipleSprListQuestionWinePage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Wine Page")
@@ -809,7 +807,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/multiple-spr-list/Spirits": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Small Producer Reliefs to declare"))
+      .check(regex("Spirits with Small Producer Relief duty to declare"))
 
   def postMultipleSprListQuestionSpiritsPage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Spirits Page")
@@ -992,7 +990,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/multiple-spr-list/OtherFermentedProduct": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Small Producer Reliefs to declare"))
+      .check(regex("Other fermented products with Small Producer Relief duty to declare"))
 
   def postMultipleSprListQuestionOtherFermentedProductPage(
     multipleSprListQuestion: Boolean = true
@@ -1006,4 +1004,24 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
         header("Location").is(s"/$route/${if (multipleSprListQuestion) "change-multiple-spr-rates/OtherFermentedProduct"
           else "return-check-your-answers/OtherFermentedProduct"}": String)
       )
+
+  def getReturnSummary(dutyDueAmount: String): HttpRequestBuilder =
+    http("Navigate to Return Summary Page")
+      .get(s"$baseUrl/$route/return-summary": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("The duty due for this return is "+dutyDueAmount))
+
+  def postReturnSummary: HttpRequestBuilder =
+    http("Post Return Summary Page")
+      .post(s"$baseUrl/$route/return-summary")
+      .formParam("csrfToken", "${csrfToken}")
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/return-submitted": String))
+
+  def getReturnSubmitted: HttpRequestBuilder =
+    http("Navigate to Return Submitted Page")
+      .get(s"$baseUrl/$route/return-submitted": String)
+      .check(status.is(200))
+      .check(regex("Return sent"))
 }
