@@ -74,7 +74,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
   def getClearReturnData: HttpRequestBuilder =
     http("Clear Data")
-      .get(baseUrl + "/" + route + "/test-only/clear-return/${appaId}/" + periodKey)
+      .get(baseUrl + "/" + route + "/test-only/clear-return/${appaId}/24AH")
       .check(status.is(200))
       .check(regex("All return data is cleared").exists)
 
@@ -99,9 +99,9 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("enrolment[0].name", "HMRC-AD-ORG")
       .formParam("enrolment[0].taxIdentifier[0].name", "APPAID")
       .formParam("enrolment[0].taxIdentifier[0].value", "${appaId}")
-      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey)
+      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/24AH")
       .check(status.is(303))
-      .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey: String))
+      .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/24AH": String))
 
   def getDeclareAlcoholDutyQuestion: HttpRequestBuilder =
     http("Navigate to Declaring Your Alcohol Duty Page")
