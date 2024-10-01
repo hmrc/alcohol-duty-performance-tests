@@ -33,7 +33,7 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
 
   def getBeforeYouStartPage: HttpRequestBuilder =
     http("Get Before You Start Page")
-      .get(s"$baseUrl/$route/before-you-start-your-return/24AH": String)
+      .get(s"$baseUrl/$route/before-you-start-your-return/24AF": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Before you start"))
