@@ -22,7 +22,6 @@ import io.gatling.core.check.regex.RegexCheckType
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests.periodKey
 
 object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
 
@@ -34,7 +33,7 @@ object DeclareDutySuspendedDeliveriesRequests extends ServicesConfiguration {
 
   def getBeforeYouStartPage: HttpRequestBuilder =
     http("Get Before You Start Page")
-      .get(s"$baseUrl/$route/before-you-start-your-return/" + periodKey: String)
+      .get(s"$baseUrl/$route/before-you-start-your-return/24AF": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Before you start"))
