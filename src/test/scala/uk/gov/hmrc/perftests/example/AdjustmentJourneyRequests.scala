@@ -191,14 +191,14 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(header("Location").is(s"/$route/${if (anyOtherAdjustmentQuestion) "type-of-adjustment"
         else "task-list/your-alcohol-duty-return"}": String))
 
-  def getRemoveAdjustmentProductPage: HttpRequestBuilder =
+  def getRemoveAdjustmentPage: HttpRequestBuilder =
     http(s"Navigate to Remove this adjustment?")
       .get(s"$baseUrl/$route/remove-adjustment?index=0": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Remove this adjustment?"))
 
-  def postRemoveAdjustmentProductPage(removeProduct: Boolean = true): HttpRequestBuilder =
+  def postRemoveAdjustmentPage(removeProduct: Boolean = true): HttpRequestBuilder =
     http(s"Post Remove this adjustment?")
       .post(s"$baseUrl/$route/remove-adjustment?index=0")
       .formParam("csrfToken", "${csrfToken}")
