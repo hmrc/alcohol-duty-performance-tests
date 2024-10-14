@@ -16,13 +16,10 @@
 
 package uk.gov.hmrc.perftests.example
 
-import io.gatling.commons.validation.Validation
 import io.gatling.core.Predef._
-import io.gatling.core.check.Check.PreparedCache
-import io.gatling.core.check.{Check, CheckBuilder, CheckResult}
+import io.gatling.core.check.CheckBuilder
 import io.gatling.core.check.regex.RegexCheckType
 import io.gatling.http.Predef._
-import io.gatling.http.check.{HttpCheck, HttpCheckScope}
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
@@ -37,14 +34,6 @@ object ViewPastReturnsRequests extends ServicesConfiguration {
   val CsrfPattern = """<input type="hidden" name="csrfToken" value="([^"]+)""""
   val authUrl: String = baseUrlFor("auth-login-stub")
   val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMMM yyyy").withLocale(Locale.UK)
-
-  class CustomHttpCheck extends Check[Response] {
-    override def check(response: Response, session: Session, preparedCache: PreparedCache): Validation[CheckResult] = {
-      println(s"response.status:${response.status}")
-      println(s"response.body:${response.body.string}")
-      CheckResult.NoopCheckResultSuccess
-    }
-  }
 
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
 
