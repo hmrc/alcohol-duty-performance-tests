@@ -19,16 +19,18 @@ package uk.gov.hmrc.perftests.example
 import io.gatling.core.Predef._
 import io.gatling.core.structure.ChainBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.AdjustmentJourneyRequests.{getAdjustmentDutyValuePage, getAdjustmentListPage, getAdjustmentReturnDatePage, getAdjustmentTaxTypeCodePage, getAdjustmentTypePage, getAdjustmentVolumeWithSprPage, getAdjustmentVolumeWithoutSprPage, getAdjustmentsCheckYourAnswersPage, getDeclareAdjustmentQuestionPage, getNewSprDutyRatePage, getNewTaxTypeCodePage, postAdjustmentList, postAdjustmentReturnDate, postAdjustmentTaxTypeCode, postAdjustmentType, postAdjustmentVolumeWithSpr, postAdjustmentVolumeWithoutSpr, postAdjustmentsCheckYourAnswers, postDeclareAdjustmentQuestionPage, postNewSprDutyRate, postNewTaxTypeCode}
+import uk.gov.hmrc.perftests.example.AdjustmentJourneyRequests.{getAdjustmentDutyValuePage, getAdjustmentListPage, getAdjustmentReturnDatePage, getAdjustmentTaxTypeCodePage, getAdjustmentTypePage, getAdjustmentVolumeWithSprPage, getAdjustmentVolumeWithoutSprPage, getAdjustmentsCheckYourAnswersPage, getDeclareAdjustmentQuestionPage, getNewSprDutyRatePage, getNewTaxTypeCodePage, getRemoveAdjustmentPage, postAdjustmentList, postAdjustmentReturnDate, postAdjustmentTaxTypeCode, postAdjustmentType, postAdjustmentVolumeWithSpr, postAdjustmentVolumeWithoutSpr, postAdjustmentsCheckYourAnswers, postDeclareAdjustmentQuestionPage, postNewSprDutyRate, postNewTaxTypeCode, postRemoveAdjustmentPage}
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
-import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests.{getCheckYourAnswersDutySuspendedDeliveries, _}
-import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests.{postQuarterlySpiritsReturnsGuidancePage, _}
+import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
+import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests._
+import uk.gov.hmrc.perftests.example.ViewPastPaymentsRequests.{getViewPastPaymentsPage, postAuthLoginPageForViewPastPayments}
+import uk.gov.hmrc.perftests.example.ViewPastReturnsRequests.{getViewSpecificReturnsPage, getViewPastReturnsPage, postAuthLoginPageForViewPastReturns}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
   val randomAppaIds: Iterator[Map[String, String]] =
     Iterator.continually(Map("appaId" -> s"${generateUniqueReference(5)}0000100208"))
-  def appaIdFeeder: ChainBuilder = feed(randomAppaIds)
+  def appaIdFeeder: ChainBuilder                   = feed(randomAppaIds)
 
   setup(
     "alcohol-duty-returns-journey-with-multiple-spr-is-set-to-no",
@@ -43,7 +45,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDeclareAlcoholDutyQuestion(),
     getAlcoholTypesToDeclare,
     postAlcoholTypesToDeclare,
-    //RETURNS JOURNEY - BEER
+    // RETURNS JOURNEY - BEER
     getWhatDoYouNeedToDeclareBeerPage,
     postWhatDoYouNeedToDeclareBeerPage,
     getHowMuchYouNeedToDeclareBeerPage,
@@ -56,7 +58,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueBeerPage("£14,749.75"),
     postDutyDueBeerPage,
     getTaskListPage,
-    //RETURNS JOURNEY - CIDER
+    // RETURNS JOURNEY - CIDER
     getWhatDoYouNeedToDeclareCiderPage,
     postWhatDoYouNeedToDeclareCiderPage,
     getHowMuchYouNeedToDeclareCiderPage,
@@ -69,7 +71,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueCiderPage("£8,436.43"),
     postDutyDueCiderPage,
     getTaskListPage,
-    //RETURNS JOURNEY - WINE
+    // RETURNS JOURNEY - WINE
     getWhatDoYouNeedToDeclareWinePage,
     postWhatDoYouNeedToDeclareWinePage,
     getHowMuchYouNeedToDeclareWinePage,
@@ -82,7 +84,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueWinePage("£15,041.34"),
     postDutyDueWinePage,
     getTaskListPage,
-    //RETURNS JOURNEY - SPIRITS
+    // RETURNS JOURNEY - SPIRITS
     getWhatDoYouNeedToDeclareSpiritsPage,
     postWhatDoYouNeedToDeclareSpiritsPage,
     getHowMuchYouNeedToDeclareSpiritsPage,
@@ -95,7 +97,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueSpiritsPage("£15,041.34"),
     postDutyDueSpiritsPage,
     getTaskListPage,
-    //RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
+    // RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
     getWhatDoYouNeedToDeclareOtherFermentedProductPage,
     postWhatDoYouNeedToDeclareOtherFermentedProductPage,
     getHowMuchYouNeedToDeclareOtherFermentedProductPage,
@@ -108,7 +110,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDutyDueOtherFermentedProductPage("£15,041.34"),
     postDutyDueOtherFermentedProductPage,
     getTaskListPage,
-    //ADJUSTMENT JOURNEY - UNDER DECLARATION
+    // ADJUSTMENT JOURNEY - UNDER DECLARATION
     getDeclareAdjustmentQuestionPage,
     postDeclareAdjustmentQuestionPage(),
     getAdjustmentTypePage,
@@ -123,8 +125,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getAdjustmentsCheckYourAnswersPage,
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
+    getRemoveAdjustmentPage,
+    postRemoveAdjustmentPage(false),
     postAdjustmentList(),
-    //ADJUSTMENT JOURNEY - OVER DECLARATION
+    // ADJUSTMENT JOURNEY - OVER DECLARATION
     getAdjustmentTypePage,
     postAdjustmentType("over-declaration"),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
@@ -138,7 +142,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
     postAdjustmentList(),
-    //ADJUSTMENT JOURNEY - SPOILT
+    // ADJUSTMENT JOURNEY - SPOILT
     getAdjustmentTypePage,
     postAdjustmentType("spoilt"),
     getAdjustmentReturnDatePage("To the nearest month, when did you pay duty on this?"),
@@ -152,7 +156,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
     postAdjustmentList(),
-    //ADJUSTMENT JOURNEY - DRAWBACK
+    // ADJUSTMENT JOURNEY - DRAWBACK
     getAdjustmentTypePage,
     postAdjustmentType("drawback"),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
@@ -166,7 +170,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,
     postAdjustmentList(),
-    //ADJUSTMENT JOURNEY - REPACKAGED
+    // ADJUSTMENT JOURNEY - REPACKAGED
     getAdjustmentTypePage,
     postAdjustmentType("repackaged-draught-products"),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
@@ -185,7 +189,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getAdjustmentListPage,
     postAdjustmentList(false),
     getTaskListPage,
-    //DSD JOURNEY
+    // DSD JOURNEY
     getDeclareDutySuspendedDeliveriesQuestion,
     postDeclareDutySuspendedDeliveriesQuestion(),
     getDutySuspendedDeliveriesGuidance,
@@ -201,7 +205,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDutySuspendedOtherFermentedProducts,
     getCheckYourAnswersDutySuspendedDeliveries,
     getTaskListPage,
-    //SPIRITS AND INGREDIENTS JOURNEY
+    // SPIRITS AND INGREDIENTS JOURNEY
     getQuarterlySpiritsReturnsGuidancePage,
     postQuarterlySpiritsReturnsGuidancePage(),
     getDeclareSpiritsTotalPage,
@@ -224,7 +228,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDeclareOtherIngredients,
     getQuarterlySpiritsCheckYourAnswersPage,
     getTaskListPage,
-    //RETURN SUMMARY PAGES
+    // RETURN SUMMARY PAGES
     getReturnSummary("£64,090.95"),
     postReturnSummary,
     getReturnSubmitted
@@ -243,7 +247,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postDeclareAlcoholDutyQuestion(),
     getAlcoholTypesToDeclare,
     postAlcoholTypesToDeclare,
-    //RETURNS JOURNEY - BEER
+    // RETURNS JOURNEY - BEER
     getWhatDoYouNeedToDeclareBeerPage,
     postWhatDoYouNeedToDeclareBeerPage,
     getHowMuchYouNeedToDeclareBeerPage,
@@ -254,12 +258,14 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getCheckYourAnswersSprBeerPage,
     postCheckYourAnswersSprBeerPage,
     getMultipleSprListQuestionBeerPage,
+    getRemoveProductPage("Beer"),
+    postRemoveProductPage(false, "Beer"),
     postMultipleSprListQuestionBeerPage(false),
     getCheckYourAnswersReturnsBeerPage,
     getDutyDueBeerPage("£10,717.14"),
     postDutyDueBeerPage,
     getTaskListPage,
-    //RETURNS JOURNEY - CIDER
+    // RETURNS JOURNEY - CIDER
     getWhatDoYouNeedToDeclareCiderPage,
     postWhatDoYouNeedToDeclareCiderPage,
     getHowMuchYouNeedToDeclareCiderPage,
@@ -270,12 +276,14 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getCheckYourAnswersSprCiderPage,
     postCheckYourAnswersSprCiderPage,
     getMultipleSprListQuestionCiderPage,
+    getRemoveProductPage("Cider"),
+    postRemoveProductPage(false, "Cider"),
     postMultipleSprListQuestionCiderPage(false),
     getCheckYourAnswersReturnsCiderPage,
     getDutyDueCiderPage("£4,403.82"),
     postDutyDueCiderPage,
     getTaskListPage,
-    //RETURNS JOURNEY - WINE
+    // RETURNS JOURNEY - WINE
     getWhatDoYouNeedToDeclareWinePage,
     postWhatDoYouNeedToDeclareWinePage,
     getHowMuchYouNeedToDeclareWinePage,
@@ -286,12 +294,14 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getCheckYourAnswersSprWinePage,
     postCheckYourAnswersSprWinePage,
     getMultipleSprListQuestionWinePage,
+    getRemoveProductPage("Wine"),
+    postRemoveProductPage(false, "Wine"),
     postMultipleSprListQuestionWinePage(false),
     getCheckYourAnswersReturnsWinePage,
     getDutyDueWinePage("£11,008.73"),
     postDutyDueWinePage,
     getTaskListPage,
-    //RETURNS JOURNEY - SPIRITS
+    // RETURNS JOURNEY - SPIRITS
     getWhatDoYouNeedToDeclareSpiritsPage,
     postWhatDoYouNeedToDeclareSpiritsPage,
     getHowMuchYouNeedToDeclareSpiritsPage,
@@ -302,12 +312,14 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getCheckYourAnswersSprSpiritsPage,
     postCheckYourAnswersSprSpiritsPage,
     getMultipleSprListQuestionSpiritsPage,
+    getRemoveProductPage("Spirits"),
+    postRemoveProductPage(false, "Spirits"),
     postMultipleSprListQuestionSpiritsPage(false),
     getCheckYourAnswersReturnsSpiritsPage,
     getDutyDueSpiritsPage("£11,008.73"),
     postDutyDueSpiritsPage,
     getTaskListPage,
-    //RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
+    // RETURNS JOURNEY - OTHER FERMENTED PRODUCTS
     getWhatDoYouNeedToDeclareOtherFermentedProductPage,
     postWhatDoYouNeedToDeclareOtherFermentedProductPage,
     getHowMuchYouNeedToDeclareOtherFermentedProductPage,
@@ -318,27 +330,49 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getCheckYourAnswersSprOtherFermentedProductPage,
     postCheckYourAnswersSprOtherFermentedProductPage,
     getMultipleSprListQuestionOtherFermentedProductPage,
+    getRemoveProductPage("OtherFermentedProduct"),
+    postRemoveProductPage(false, "OtherFermentedProduct"),
     postMultipleSprListQuestionOtherFermentedProductPage(false),
     getCheckYourAnswersReturnsOtherFermentedProductPage,
     getDutyDueOtherFermentedProductPage("£11,008.73"),
     postDutyDueOtherFermentedProductPage,
     getTaskListPage,
-    //ADJUSTMENT JOURNEY - WITH OPTION 'NO'
+    // ADJUSTMENT JOURNEY - WITH OPTION 'NO'
     getDeclareAdjustmentQuestionPage,
     postDeclareAdjustmentQuestionPage(false),
     getTaskListPage,
-    //DSD JOURNEY - WITH OPTION 'NO'
+    // DSD JOURNEY - WITH OPTION 'NO'
     getDeclareDutySuspendedDeliveriesQuestion,
     postDeclareDutySuspendedDeliveriesQuestion(false),
     getTaskListPage,
-    //SPIRITS AND INGREDIENTS JOURNEY - WITH OPTION 'NO'
+    // SPIRITS AND INGREDIENTS JOURNEY - WITH OPTION 'NO'
     getQuarterlySpiritsReturnsGuidancePage,
     postQuarterlySpiritsReturnsGuidancePage(false),
     getTaskListPage,
-    //RETURN SUMMARY PAGES
+    // RETURN SUMMARY PAGES
     getReturnSummary("£48,147.15 "),
     postReturnSummary,
     getReturnSubmitted
   )
+
+  setup(
+    "alcohol-duty-view-past-payments-journey",
+    "Alcohol Duty View Past Payments"
+  ) withRequests (
+    getAuthLoginPage,
+    postAuthLoginPageForViewPastPayments,
+    getViewPastPaymentsPage
+  )
+
+  setup(
+    "alcohol-duty-view-past-returns-journey",
+    "Alcohol Duty View Past Returns"
+  ) withRequests (
+    getAuthLoginPage,
+    postAuthLoginPageForViewPastReturns,
+    getViewPastReturnsPage,
+    getViewSpecificReturnsPage
+  )
+
   runSimulation()
 }

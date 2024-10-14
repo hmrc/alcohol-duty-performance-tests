@@ -301,6 +301,30 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(regex("Beer with Small Producer Relief duty to declare"))
 
+  def getRemoveProductPage(alcoholType: String): HttpRequestBuilder =
+    http(s"Navigate to Remove $alcoholType Page")
+      .get(s"$baseUrl/$route/delete-multiple-spr-entry/$alcoholType?index=0": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex {
+        if (alcoholType == "OtherFermentedProduct") s"Remove this other fermented products entry?"
+        else s"Remove this ${alcoholType.toLowerCase} entry?"
+      })
+
+  def postRemoveProductPage(removeProduct: Boolean = true, alcoholType: String): HttpRequestBuilder =
+    http(s"Post Remove $alcoholType Page")
+      .post(s"$baseUrl/$route/delete-multiple-spr-entry/$alcoholType?index=0")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("deleteMultipleSPREntry-yesNoValue", removeProduct)
+      .check(status.is(303))
+      .check(
+        header("Location")
+          .is(s"/$route/${
+            if (removeProduct) s"do-you-have-multiple-small-producer-relief-duty-rates/$alcoholType"
+            else s"multiple-spr-list/$alcoholType"
+          }": String)
+      )
+
   def postMultipleSprListQuestionBeerPage(multipleSprListQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Multiple SPR List Question Beer Page")
       .post(s"$baseUrl/$route/multiple-spr-list/Beer")
@@ -1010,7 +1034,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/return-summary": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("The duty due for this return is "+dutyDueAmount))
+      .check(regex("The duty due for this return is " + dutyDueAmount))
 
   def postReturnSummary: HttpRequestBuilder =
     http("Post Return Summary Page")
