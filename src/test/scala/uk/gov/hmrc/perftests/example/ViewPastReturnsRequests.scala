@@ -29,15 +29,18 @@ import java.util.Locale
 
 object ViewPastReturnsRequests extends ServicesConfiguration {
 
-  val baseUrl: String = baseUrlFor("alcohol-duty-returns-frontend")
-  val route: String = "manage-alcohol-duty"
-  val CsrfPattern = """<input type="hidden" name="csrfToken" value="([^"]+)""""
-  val authUrl: String = baseUrlFor("auth-login-stub")
+  val baseUrl: String              = baseUrlFor("alcohol-duty-returns-frontend")
+  val route: String                = "manage-alcohol-duty"
+  val CsrfPattern                  = """<input type="hidden" name="csrfToken" value="([^"]+)""""
+  val authUrl: String              = baseUrlFor("auth-login-stub")
   val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMMM yyyy").withLocale(Locale.UK)
 
   def saveCsrfToken(): CheckBuilder[RegexCheckType, String, String] = regex(_ => CsrfPattern).saveAs("csrfToken")
 
-  //This method returns a value five months past the current month
+  def getCompletedMonth1PeriodKey: String =
+    s"""${now.minusMonths(5).getYear.toString.takeRight(2)}A${(now.minusMonths(5).getMonthValue + 64).toChar}"""
+
+  // This method returns a value five months past the current month
   def getSpecificMonth: String = now.minusMonths(5).format(formatter)
 
   def postAuthLoginPageForViewPastReturns: HttpRequestBuilder =
@@ -66,7 +69,7 @@ object ViewPastReturnsRequests extends ServicesConfiguration {
 
   def getViewSpecificReturnsPage: HttpRequestBuilder =
     http("Navigate to May 2024 Alcohol Duty Return")
-      .get(s"$baseUrl/$route/view-your-return/24AE": String)
+      .get(s"$baseUrl/$route/view-your-return/" + getCompletedMonth1PeriodKey: String)
       .check(status.is(200))
       .check(regex(s"$getSpecificMonth Alcohol Duty Return"))
 }
