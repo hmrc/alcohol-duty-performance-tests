@@ -69,7 +69,7 @@ object ViewPastReturnsRequests extends ServicesConfiguration {
 
   def getViewSpecificReturnsPage: HttpRequestBuilder =
     http("Navigate to May 2024 Alcohol Duty Return")
-      .get(s"$baseUrl/$route/view-your-return/" + getCompletedMonth1PeriodKey: String)
+      .get(s"$baseUrl/$route/view-your-return/24AF": String)
       .check(status.is(200))
       .check(regex(s"$getSpecificMonth Alcohol Duty Return"))
 }
