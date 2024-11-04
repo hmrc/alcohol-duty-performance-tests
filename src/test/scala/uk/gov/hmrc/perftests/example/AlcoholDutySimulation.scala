@@ -19,12 +19,12 @@ package uk.gov.hmrc.perftests.example
 import io.gatling.core.Predef._
 import io.gatling.core.structure.ChainBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.AdjustmentJourneyRequests.{getAdjustmentDutyValuePage, getAdjustmentListPage, getAdjustmentReturnDatePage, getAdjustmentTaxTypeCodePage, getAdjustmentTypePage, getAdjustmentVolumeWithSprPage, getAdjustmentVolumeWithoutSprPage, getAdjustmentsCheckYourAnswersPage, getDeclareAdjustmentQuestionPage, getNewSprDutyRatePage, getNewTaxTypeCodePage, getRemoveAdjustmentPage, postAdjustmentList, postAdjustmentReturnDate, postAdjustmentTaxTypeCode, postAdjustmentType, postAdjustmentVolumeWithSpr, postAdjustmentVolumeWithoutSpr, postAdjustmentsCheckYourAnswers, postDeclareAdjustmentQuestionPage, postNewSprDutyRate, postNewTaxTypeCode, postRemoveAdjustmentPage}
+import uk.gov.hmrc.perftests.example.AdjustmentJourneyRequests.{getAdjustmentDutyValuePage, getAdjustmentListPage, getAdjustmentReturnDatePage, getAdjustmentTaxTypeCodePage, getAdjustmentTypePage, getAdjustmentVolumeWithSprPage, getAdjustmentVolumeWithoutSprPage, getAdjustmentsCheckYourAnswersPage, getDeclareAdjustmentQuestionPage, getNewSprDutyRatePage, getNewTaxTypeCodePage, getRemoveAdjustmentPage, getSpoiltAlcoholTypePage, getSpoiltAlcoholVolumePage, postAdjustmentList, postAdjustmentReturnDate, postAdjustmentTaxTypeCode, postAdjustmentType, postAdjustmentVolumeWithSpr, postAdjustmentVolumeWithoutSpr, postAdjustmentsCheckYourAnswers, postDeclareAdjustmentQuestionPage, postNewSprDutyRate, postNewTaxTypeCode, postRemoveAdjustmentPage, postSpoiltAlcoholTypePage, postSpoiltAlcoholVolume}
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
 import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests._
 import uk.gov.hmrc.perftests.example.ViewPastPaymentsRequests.{getViewPastPaymentsPage, postAuthLoginPageForViewPastPayments}
-import uk.gov.hmrc.perftests.example.ViewPastReturnsRequests.{getViewSpecificReturnsPage, getViewPastReturnsPage, postAuthLoginPageForViewPastReturns}
+import uk.gov.hmrc.perftests.example.ViewPastReturnsRequests.{getViewPastReturnsPage, getViewSpecificReturnsPage, postAuthLoginPageForViewPastReturns}
 
 class AlcoholDutySimulation extends PerformanceTestRunner {
 
@@ -145,13 +145,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     // ADJUSTMENT JOURNEY - SPOILT
     getAdjustmentTypePage,
     postAdjustmentType("spoilt"),
-    getAdjustmentReturnDatePage("To the nearest month, when did you pay duty on this?"),
-    postAdjustmentReturnDate,
-    getAdjustmentTaxTypeCodePage,
-    postAdjustmentTaxTypeCode(312, withSpr = false),
-    getAdjustmentVolumeWithoutSprPage,
-    postAdjustmentVolumeWithoutSpr,
-    getAdjustmentDutyValuePage("−£2,322.59"),
+    getSpoiltAlcoholTypePage,
+    postSpoiltAlcoholTypePage ("Spirits"),
+    getSpoiltAlcoholVolumePage,
+    postSpoiltAlcoholVolume,
     getAdjustmentsCheckYourAnswersPage,
     postAdjustmentsCheckYourAnswers,
     getAdjustmentListPage,

@@ -61,6 +61,21 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"/$route/adjustment-return-date": String))
 
+  def getSpoiltAlcoholTypePage: HttpRequestBuilder =
+    http("Get Spoilt Alcohol Type Page")
+      .get(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/spoilt-product/alcohol-type": String)
+      .formParam("csrfToken", "${csrfToken}")
+      .check(status.is(200))
+      .check(regex("Which alcoholic product is spoilt?"))
+
+  def postSpoiltAlcoholTypePage(spoiltAlcoholType: String): HttpRequestBuilder =
+    http("Post Spoilt Alcohol Type")
+      .post(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/spoilt-product/alcohol-type")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("alcoholic-product-type-value", spoiltAlcoholType)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/complete-return/adjustments/adjustment/declare/spoilt-product/volume": String))
+
   def getAdjustmentReturnDatePage(pageHeader: String): HttpRequestBuilder =
     http("Get Adjustment Return Date Page")
       .get(s"$baseUrl/$route/adjustment-return-date": String)
@@ -110,6 +125,23 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"/$route/${if (isRepackaged) "new-tax-type-code"
         else "adjustment-duty-value"}": String))
+
+  def getSpoiltAlcoholVolumePage: HttpRequestBuilder =
+    http("Get Spoilt Alcohol Volume Page")
+      .get(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/spoilt-product/volume": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Tell us about your spoilt spirits"))
+
+  def postSpoiltAlcoholVolume: HttpRequestBuilder =
+    http("Post Spoilt Alcohol Volume")
+      .post(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/spoilt-product/volume")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("volumes.totalLitresVolume", 3000.75)
+      .formParam("volumes.pureAlcoholVolume", 250.55)
+      .formParam("volumes.duty", 3255.55)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/complete-return/adjustments/adjustment/declare/check-your-answers": String))
 
   def getAdjustmentVolumeWithoutSprPage: HttpRequestBuilder =
     http("Get Adjustment Volume Without Spr Page")
