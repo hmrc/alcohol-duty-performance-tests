@@ -45,7 +45,7 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"/$route/${
         if (declareQSRQuestion) "what-is-the-total-volume-of-spirits-you-made-this-quarter"
-        else "task-list/your-alcohol-duty-return"
+        else "complete-return/task-list"
       }": String))
   }
 
