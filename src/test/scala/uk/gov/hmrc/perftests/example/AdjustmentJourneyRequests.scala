@@ -53,13 +53,16 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(status.is(200))
       .check(regex("What type of adjustment do you need to make?"))
 
-  def postAdjustmentType(adjustmentType: String): HttpRequestBuilder =
+  def postAdjustmentType(adjustmentType: String, spoiltAdjustment: Boolean = true): HttpRequestBuilder =
     http("Post Adjustment Type")
       .post(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/type")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("adjustment-type-value", adjustmentType)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/complete-return/adjustments/adjustment/declare/return-period": String))
+      .check(header("Location").is(s"/$route/${
+        if (spoiltAdjustment) "complete-return/adjustments/adjustment/declare/spoilt-product/alcohol-type"
+        else "complete-return/adjustments/adjustment/declare/return-period"
+      }": String))
 
   def getSpoiltAlcoholTypePage: HttpRequestBuilder =
     http("Get Spoilt Alcohol Type Page")

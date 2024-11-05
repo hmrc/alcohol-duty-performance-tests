@@ -114,7 +114,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getDeclareAdjustmentQuestionPage,
     postDeclareAdjustmentQuestionPage(),
     getAdjustmentTypePage,
-    postAdjustmentType("under-declaration"),
+    postAdjustmentType("under-declaration", false),
     getAdjustmentReturnDatePage("When should you have paid duty?"),
     postAdjustmentReturnDate,
     getAdjustmentTaxTypeCodePage,
@@ -130,7 +130,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentList(),
     // ADJUSTMENT JOURNEY - OVER DECLARATION
     getAdjustmentTypePage,
-    postAdjustmentType("over-declaration"),
+    postAdjustmentType("over-declaration", false),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
     postAdjustmentReturnDate,
     getAdjustmentTaxTypeCodePage,
@@ -155,7 +155,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentList(),
     // ADJUSTMENT JOURNEY - DRAWBACK
     getAdjustmentTypePage,
-    postAdjustmentType("drawback"),
+    postAdjustmentType("drawback", false),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
     postAdjustmentReturnDate,
     getAdjustmentTaxTypeCodePage,
@@ -169,7 +169,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     postAdjustmentList(),
     // ADJUSTMENT JOURNEY - REPACKAGED
     getAdjustmentTypePage,
-    postAdjustmentType("repackaged-draught-products"),
+    postAdjustmentType("repackaged-draught-products", false),
     getAdjustmentReturnDatePage("When did you pay duty on this?"),
     postAdjustmentReturnDate,
     getAdjustmentTaxTypeCodePage,
@@ -226,7 +226,7 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getQuarterlySpiritsCheckYourAnswersPage,
     getTaskListPage,
     // RETURN SUMMARY PAGES
-    getReturnSummary("£64,090.95"),
+    getReturnSummary("£63,157.99"),
     postReturnSummary,
     getReturnSubmitted
   )
