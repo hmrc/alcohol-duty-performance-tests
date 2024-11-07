@@ -68,8 +68,8 @@ object ViewPastReturnsRequests extends ServicesConfiguration {
       .check(regex("Your returns"))
 
   def getViewSpecificReturnsPage: HttpRequestBuilder =
-    http("Navigate to May 2024 Alcohol Duty Return")
-      .get(s"$baseUrl/$route/view-your-return/24AF": String)
+    http("Navigate to View Specific Return Page")
+      .get(s"$baseUrl/$route/view-your-return/" + getCompletedMonth1PeriodKey: String)
       .check(status.is(200))
       .check(regex(s"$getSpecificMonth Alcohol Duty Return"))
 }

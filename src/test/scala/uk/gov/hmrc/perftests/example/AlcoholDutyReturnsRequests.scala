@@ -34,6 +34,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
   val Year: Int       = LocalDate.now().getYear
   val Month: Int      = LocalDate.now().getMonthValue
 
+  // The below method generates a valid period key based on valid month and year value
   val periodKey: String =
     s"""${generateYear(Year: Int).toString.takeRight(2)}A${(generateMonth(Month: Int) + 64).toChar}"""
 
@@ -43,6 +44,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
     else
       Year
 
+  // The below method returns a month value which is valid for all journeys including quarterly spirits return journey
   def generateMonth(Month: Int): Int =
     if ((Month - 1) == 3 || (Month - 1) == 4 || (Month - 1) == 5)
       3
