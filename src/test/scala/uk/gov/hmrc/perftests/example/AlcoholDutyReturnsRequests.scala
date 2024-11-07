@@ -99,9 +99,10 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .formParam("enrolment[0].name", "HMRC-AD-ORG")
       .formParam("enrolment[0].taxIdentifier[0].name", "APPAID")
       .formParam("enrolment[0].taxIdentifier[0].value", "${appaId}")
-      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/24AI")
+//      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/24AI")
+      .formParam("redirectionUrl", s"$baseUrl/$route/before-you-start-your-return/" + periodKey )
       .check(status.is(303))
-      .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/24AI": String))
+      .check(header("Location").is(s"$baseUrl/$route/before-you-start-your-return/" + periodKey: String))
 
   def getDeclareAlcoholDutyQuestion: HttpRequestBuilder =
     http("Navigate to Declaring Your Alcohol Duty Page")
