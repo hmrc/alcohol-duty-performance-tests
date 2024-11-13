@@ -46,14 +46,14 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
 
   // The below method returns a month value which is valid for all journeys including quarterly spirits return journey
   def generateMonth(Month: Int): Int =
-    if ((Month - 1) == 3 || (Month - 1) == 4 || (Month - 1) == 5)
-      3
+    if ((Month - 1) == 0 || (Month - 1) == 1 || (Month - 1) == 2)
+      1
+    else if ((Month - 1) == 3 || (Month - 1) == 4 || (Month - 1) == 5)
+      4
     else if ((Month - 1) == 6 || (Month - 1) == 7 || (Month - 1) == 8)
-      6
-    else if ((Month - 1) == 9 || (Month - 1) == 10 || (Month - 1) == 11)
-      9
+      7
     else
-      12
+      10
 
   private val characters     = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   private val random         = new Random()
