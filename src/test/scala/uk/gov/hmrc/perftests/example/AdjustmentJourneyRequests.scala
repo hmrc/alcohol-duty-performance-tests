@@ -167,7 +167,7 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route//complete-return/adjustments/declare/repackaged/new-tax-type-code": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("What is the original tax type code for the alcohol you are repackaging?"))
+      .check(regex("What is the tax type code for the newly repackaged products?"))
 
   def postNewTaxTypeCode: HttpRequestBuilder =
     http("Post New Tax Type Code")
