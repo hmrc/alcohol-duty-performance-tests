@@ -35,7 +35,7 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
     http("Get Declare Adjustment Question Page")
       .get(s"$baseUrl/$route/complete-return/adjustments/do-you-need-to-declare": String)
       .check(status.is(200))
-      .check(regex("Do you need to declare an adjustment from a previously submitted return?"))
+      .check(regex("Declare adjustments from earlier returns"))
 
   def postDeclareAdjustmentQuestionPage(declareAdjustmentQuestion: Boolean = true): HttpRequestBuilder =
     http("Post Declare Adjustment Question")
@@ -51,7 +51,7 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/type": String)
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(200))
-      .check(regex("What type of adjustment do you need to make?"))
+      .check(regex("What type of adjustment are you declaring?"))
 
   def postAdjustmentType(adjustmentType: String, spoiltAdjustment: Boolean = true): HttpRequestBuilder =
     http("Post Adjustment Type")
@@ -167,7 +167,7 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route//complete-return/adjustments/declare/repackaged/new-tax-type-code": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("What is the tax type code for the newly repackaged products?"))
+      .check(regex("What is the original tax type code for the alcohol you are repackaging?"))
 
   def postNewTaxTypeCode: HttpRequestBuilder =
     http("Post New Tax Type Code")
