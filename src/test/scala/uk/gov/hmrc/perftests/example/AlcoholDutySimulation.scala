@@ -19,7 +19,7 @@ package uk.gov.hmrc.perftests.example
 import io.gatling.core.Predef._
 import io.gatling.core.structure.ChainBuilder
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.AdjustmentJourneyRequests.{getAdjustmentDutyValuePage, getAdjustmentListPage, getAdjustmentReturnDatePage, getAdjustmentTaxTypeCodePage, getAdjustmentTypePage, getAdjustmentVolumeWithSprPage, getAdjustmentVolumeWithoutSprPage, getAdjustmentsCheckYourAnswersPage, getDeclareAdjustmentQuestionPage, getNewSprDutyRatePage, getNewTaxTypeCodePage, getRemoveAdjustmentPage, getSpoiltAlcoholTypePage, getSpoiltAlcoholVolumePage, postAdjustmentList, postAdjustmentReturnDate, postAdjustmentTaxTypeCode, postAdjustmentType, postAdjustmentVolumeWithSpr, postAdjustmentVolumeWithoutSpr, postAdjustmentsCheckYourAnswers, postDeclareAdjustmentQuestionPage, postNewSprDutyRate, postNewTaxTypeCode, postRemoveAdjustmentPage, postSpoiltAlcoholTypePage, postSpoiltAlcoholVolume}
+import uk.gov.hmrc.perftests.example.AdjustmentJourneyRequests.{getAdjustmentDutyValuePage, getAdjustmentListPage, getAdjustmentReturnDatePage, getAdjustmentTaxTypeCodePage, getAdjustmentTypePage, getAdjustmentVolumeWithSprPage, getAdjustmentVolumeWithoutSprPage, getAdjustmentsCheckYourAnswersPage, getDeclareAdjustmentQuestionPage, getNewSprDutyRatePage, getNewTaxTypeCodePage, getReasonForOverDeclarationPage, getReasonForUnderDeclarationPage, getRemoveAdjustmentPage, getSpoiltAlcoholTypePage, getSpoiltAlcoholVolumePage, postAdjustmentList, postAdjustmentReturnDate, postAdjustmentTaxTypeCode, postAdjustmentType, postAdjustmentVolumeWithSpr, postAdjustmentVolumeWithoutSpr, postAdjustmentsCheckYourAnswers, postDeclareAdjustmentQuestionPage, postNewSprDutyRate, postNewTaxTypeCode, postReasonForOverDeclarationPage, postReasonForUnderDeclarationPage, postRemoveAdjustmentPage, postSpoiltAlcoholTypePage, postSpoiltAlcoholVolume}
 import uk.gov.hmrc.perftests.example.AlcoholDutyReturnsRequests._
 import uk.gov.hmrc.perftests.example.DeclareDutySuspendedDeliveriesRequests._
 import uk.gov.hmrc.perftests.example.DeclareQuarterlySpiritsQuestionsRequests._
@@ -186,6 +186,10 @@ class AlcoholDutySimulation extends PerformanceTestRunner {
     getAdjustmentListPage,
     postAdjustmentList(false),
     getTaskListPage,
+    getReasonForUnderDeclarationPage,
+    postReasonForUnderDeclarationPage("Reason for under-declaration"),
+    getReasonForOverDeclarationPage,
+    postReasonForOverDeclarationPage("Reason for over-declaration"),
     // DSD JOURNEY
     getDeclareDutySuspendedDeliveriesQuestion,
     postDeclareDutySuspendedDeliveriesQuestion(),

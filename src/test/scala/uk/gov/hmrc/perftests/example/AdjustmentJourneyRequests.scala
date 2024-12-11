@@ -240,4 +240,34 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .formParam("delete-adjustment-yes-no-value", removeProduct)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/complete-return/adjustments/1": String))
+
+  def getReasonForUnderDeclarationPage: HttpRequestBuilder =
+    http(s"Navigate to Reason for under declaration page")
+      .get(s"$baseUrl/$route/complete-return/adjustments/declare/reason-under-declared": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Why were the alcoholic products not declared until now?"))
+
+  def postReasonForUnderDeclarationPage(reasonText: String): HttpRequestBuilder =
+    http(s"Post Reason for under declaration page")
+      .post(s"$baseUrl/$route/complete-return/adjustments/declare/reason-under-declared")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("under-declaration-reason-input", reasonText)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/complete-return/task-list": String))
+
+  def getReasonForOverDeclarationPage: HttpRequestBuilder =
+    http(s"Navigate to Reason for over declaration page")
+      .get(s"$baseUrl/$route/complete-return/adjustments/declare/reason-over-declared": String)
+      .check(status.is(200))
+      .check(saveCsrfToken())
+      .check(regex("Why were alcoholic products over-declared?"))
+
+  def postReasonForOverDeclarationPage(reasonText: String): HttpRequestBuilder =
+    http(s"Post Reason for over declaration page")
+      .post(s"$baseUrl/$route/complete-return/adjustments/declare/reason-over-declared")
+      .formParam("csrfToken", "${csrfToken}")
+      .formParam("over-declaration-reason-input", reasonText)
+      .check(status.is(303))
+      .check(header("Location").is(s"/$route/complete-return/task-list": String))
 }
