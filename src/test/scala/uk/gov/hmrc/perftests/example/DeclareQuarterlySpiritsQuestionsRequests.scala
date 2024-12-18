@@ -33,64 +33,64 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
 
   def getQuarterlySpiritsReturnsGuidancePage: HttpRequestBuilder =
     http("Get Quarterly Spirits Returns Guidance Page")
-      .get(s"$baseUrl/$route/tell-us-about-the-spirits-and-ingredients-you-have-used": String)
+      .get(s"$baseUrl/$route/complete-return/quarterly-spirits-production/have-you-produced-spirits": String)
       .check(status.is(200))
       .check(regex("Tell us about the spirits you have produced from raw ingredients"))
 
   def postQuarterlySpiritsReturnsGuidancePage(declareQSRQuestion: Boolean = true): HttpRequestBuilder = {
     http("Post Quarterly Spirits Returns Guidance")
-      .post(s"$baseUrl/$route/tell-us-about-the-spirits-and-ingredients-you-have-used")
+      .post(s"$baseUrl/$route/complete-return/quarterly-spirits-production/have-you-produced-spirits")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declareQuarterlySpirits-yesNoValue", declareQSRQuestion)
       .check(status.is(303))
       .check(header("Location").is(s"/$route/${
-        if (declareQSRQuestion) "what-is-the-total-volume-of-spirits-you-made-this-quarter"
+        if (declareQSRQuestion) "complete-return/quarterly-spirits-production/report/total-volume"
         else "complete-return/task-list"
       }": String))
   }
 
   def getDeclareSpiritsTotalPage: HttpRequestBuilder =
     http("Get Declare Spirits Total Page")
-      .get(s"$baseUrl/$route/what-is-the-total-volume-of-spirits-you-made-this-quarter": String)
+      .get(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/total-volume": String)
       .formParam("csrfToken", "${csrfToken}")
       .check(status.is(200))
       .check(regex("What is the total of all spirits taken this quarter?"))
 
   def postDeclareSpiritsTotal: HttpRequestBuilder =
     http("Post Declare Spirits Total")
-      .post(s"$baseUrl/$route/what-is-the-total-volume-of-spirits-you-made-this-quarter")
+      .post(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/total-volume")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("declare-spirits-total-input", 35)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/how-much-whiskey-have-you-made": String))
+      .check(header("Location").is(s"/$route/complete-return/quarterly-spirits-production/report/scotch-whisky-and-irish-whiskey-volumes": String))
 
 
   def getDeclareWhiskeyPage: HttpRequestBuilder =
     http("Get Declare Whiskey Page")
-      .get(s"$baseUrl/$route/how-much-whiskey-have-you-made": String)
+      .get(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/scotch-whisky-and-irish-whiskey-volumes": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("How much Scotch Whisky and Irish Whiskey have you produced?"))
 
   def postDeclareWhiskey: HttpRequestBuilder =
     http("Post Declare Whiskey")
-      .post(s"$baseUrl/$route/how-much-whiskey-have-you-made")
+      .post(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/scotch-whisky-and-irish-whiskey-volumes")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("scotchWhisky", 11)
       .formParam("irishWhiskey", 11)
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/which-of-these-spirits-have-you-made": String))
+      .check(header("Location").is(s"/$route/complete-return/quarterly-spirits-production/report/spirits-produced": String))
 
   def getWhichOfTheseSpiritsHaveYouProducedPage: HttpRequestBuilder =
     http("Get Which Of These Spirits Have You Produced Page")
-      .get(s"$baseUrl/$route/which-of-these-spirits-have-you-made": String)
+      .get(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/spirits-produced": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Which of these spirits have you produced?"))
 
   def postWhichOfTheseSpiritsHaveYouProduced: HttpRequestBuilder =
     http("Post Which Of These Spirits Have You Produced")
-      .post(s"$baseUrl/$route/which-of-these-spirits-have-you-made")
+      .post(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/spirits-produced")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("value[0]", "maltSpirits")
       .formParam("value[1]", "grainSpirits")
@@ -101,26 +101,26 @@ object DeclareQuarterlySpiritsQuestionsRequests extends ServicesConfiguration {
       .formParam("value[6]", "ciderOrPerry")
       .formParam("value[7]", "other")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/tell-us-about-the-other-spirits-you-have-produced": String))
+      .check(header("Location").is(s"/$route/complete-return/quarterly-spirits-production/report/other-spirits-produced": String))
 
   def getOtherSpiritsProducedPage: HttpRequestBuilder =
     http("Get Other Spirits Produced Page")
-      .get(s"$baseUrl/$route/tell-us-about-the-other-spirits-you-have-produced": String)
+      .get(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/other-spirits-produced": String)
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Which other types of spirits have you produced?"))
 
   def postOtherSpiritsProduced: HttpRequestBuilder =
     http("Post Other Spirits Produced")
-      .post(s"$baseUrl/$route/tell-us-about-the-other-spirits-you-have-produced")
+      .post(s"$baseUrl/$route/complete-return/quarterly-spirits-production/report/other-spirits-produced")
       .formParam("csrfToken", "${csrfToken}")
       .formParam("otherSpiritsProduced", "Test Spirits")
       .check(status.is(303))
-      .check(header("Location").is(s"/$route/spirits-check-your-answers": String))
+      .check(header("Location").is(s"/$route/complete-return/quarterly-spirits-production/check-your-answers": String))
 
   def getQuarterlySpiritsCheckYourAnswersPage: HttpRequestBuilder =
     http("Get Quarterly Spirits Check Your Answers Page")
-      .get(s"$baseUrl/$route/spirits-check-your-answers": String)
+      .get(s"$baseUrl/$route/complete-return/quarterly-spirits-production/check-your-answers": String)
       .check(status.is(200))
       .check(regex("Check your answers"))
 }

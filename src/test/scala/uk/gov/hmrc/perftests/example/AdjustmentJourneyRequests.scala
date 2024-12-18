@@ -95,12 +95,12 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
       .check(status.is(303))
       .check(header("Location").is(s"/$route/complete-return/adjustments/adjustment/declare/tax-type-code": String))
 
-  def getAdjustmentTaxTypeCodePage: HttpRequestBuilder =
+  def getAdjustmentTaxTypeCodePage(pageHeader: String): HttpRequestBuilder =
     http("Get Adjustment Tax Type Code Page")
       .get(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/tax-type-code": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("What is the tax type code for the alcohol you are adjusting?"))
+      .check(regex(pageHeader))
 
   def postAdjustmentTaxTypeCode(taxTypeCode: Int, withSpr: Boolean = true): HttpRequestBuilder =
     http("Post Adjustment Tax Type Code")

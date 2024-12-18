@@ -269,7 +269,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/complete-return/alcoholic-products/Beer/declare/spr/multiple-duty-rates/eligible-volume": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Tell us about the beer you need to declare that are eligible for Small Producer Relief"))
+      .check(regex("Tell us about the beer that is eligible for Small Producer Relief"))
 
   def postMultipleSprRateBeerPage: HttpRequestBuilder =
     http("Post Multiple Small Producer Relief Rate Beer Page")
@@ -457,7 +457,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/complete-return/alcoholic-products/Cider/declare/spr/multiple-duty-rates/eligible-volume": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Tell us about the cider you need to declare that are eligible for Small Producer Relief"))
+      .check(regex("Tell us about the cider that is eligible for Small Producer Relief"))
 
   def postMultipleSprRateCiderPage: HttpRequestBuilder =
     http("Post Multiple Small Producer Relief Rate Cider Page")
@@ -629,7 +629,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/complete-return/alcoholic-products/Wine/declare/spr/multiple-duty-rates/eligible-volume": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Tell us about the wine you need to declare that are eligible for Small Producer Relief"))
+      .check(regex("Tell us about the wine that is eligible for Small Producer Relief"))
 
   def postMultipleSprRateWinePage: HttpRequestBuilder =
     http("Post Multiple Small Producer Relief Rate Wine Page")
@@ -801,7 +801,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .get(s"$baseUrl/$route/complete-return/alcoholic-products/Spirits/declare/spr/multiple-duty-rates/eligible-volume": String)
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(regex("Tell us about the spirits you need to declare that are eligible for Small Producer Relief"))
+      .check(regex("Tell us about the spirits that is eligible for Small Producer Relief"))
 
   def postMultipleSprRateSpiritsPage: HttpRequestBuilder =
     http("Post Multiple Small Producer Relief Rate Spirits Page")
@@ -982,7 +982,7 @@ object AlcoholDutyReturnsRequests extends ServicesConfiguration {
       .check(saveCsrfToken())
       .check(
         regex(
-          "Tell us about the other fermented products you need to declare that are eligible for Small Producer Relief"
+          "Tell us about the other fermented products that is eligible for Small Producer Relief"
         )
       )
 
