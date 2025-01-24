@@ -97,8 +97,8 @@ object AdjustmentJourneyRequests extends ServicesConfiguration {
     http("Post Adjustment Return Date")
       .post(s"$baseUrl/$route/complete-return/adjustments/adjustment/declare/return-period")
       .formParam("csrfToken", "${csrfToken}")
-      .formParam("when-did-you-pay-duty-input.month", "09")
-      .formParam("when-did-you-pay-duty-input.year", "2023")
+      .formParam("when-did-you-pay-duty-input.month", "02")
+      .formParam("when-did-you-pay-duty-input.year", "2025")
       .check(status.is(303))
       .check(header("Location").is(s"/$route/complete-return/adjustments/adjustment/declare/tax-type-code": String))
 
